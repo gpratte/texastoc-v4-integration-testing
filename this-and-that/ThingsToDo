@@ -1,0 +1,40 @@
+
+Travis CI not deploying to Heroku
+Refactor cucumber tests into JUnit tests.
+Distinguish between texastoc and davebpoker
+Move past season history out of json file
+Get rid of the season estimated payouts
+
+Use case: want to change the season settings mid-season
+Create a game save off the season settings with the game.
+When reoopen a game optionally use the new season settings.
+
+Gradle?
+Remove spring fox?
+
+====== DONE =======
+Travis CICD
+  Heroku deploy - rest calls instead of messaging?
+
+moved to zsh
+  https://scriptingosx.com/2019/06/moving-to-zsh/
+
+Java 11
+  brew tap AdoptOpenJDK/openjdk
+  brew install --cask adoptopenjdk8
+  brew install --cask adoptopenjdk11
+  brew install jenv
+  Added to .zshrc
+    export PATH="$HOME/.jenv/bin:$PATH"
+    eval "$(jenv init -)"
+  close all terminals and start a new terminal
+  jenv enable-plugin export
+  jenv enable-plugin maven
+  close all terminals and start a new terminal
+  for version in 8 11
+  do
+     jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-$version.jdk/Contents/Home
+  done
+  jenv versions
+  jenv global 11
+  jenv global

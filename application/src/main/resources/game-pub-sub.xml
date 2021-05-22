@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:int="http://www.springframework.org/schema/integration"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.springframework.org/schema/integration
+                http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+  <!-- producer -->
+  <bean id="gameEventProducer" class="com.texastoc.module.game.event.GameEventProducer">
+    <constructor-arg name="gameEventing" ref="gameEventing"/>
+  </bean>
+
+  <!-- Simple facade method which accepts messages into channel -->
+  <int:gateway id="gameEventing"
+    service-interface="com.texastoc.module.game.event.GameEventing"
+    default-request-channel="gameFinalized"/>
+
+  <!-- Channel for incoming orders -->
+  <int:publish-subscribe-channel id="gameFinalized"/>
+
+  <!-- Subscriber -->
+  <int:service-activator
+    id="gameListener1"
+    input-channel="gameFinalized"
+    ref="seasonListener"
+    method="handleGameFinalized"/>
+
+  <bean id="seasonListener" class="com.texastoc.module.season.event.GameFinalizedHandler"/>
+
+  <!-- Subscriber -->
+  <int:service-activator
+    id="gameListener2"
+    input-channel="gameFinalized"
+    ref="quarterlySeasonListener"
+    method="handleGameFinalized"/>
+
+  <bean id="quarterlySeasonListener"
+    class="com.texastoc.module.quarterly.event.GameFinalizedHandler"/>
+
+</beans>

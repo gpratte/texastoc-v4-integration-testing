@@ -1,0 +1,3 @@
+logging.level.org.springframework.jdbc.core = TRACE
+
+spring.profiles.active=test

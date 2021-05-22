@@ -1,0 +1,1485 @@
+{
+	"info": {
+		"_postman_id": "66b7ddad-e9bb-4b35-9d2c-afac914775f1",
+		"name": "texastoc-v3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"token\", jsonData.token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@texastoc.com\", \n  \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "password forgot",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/vnd.texastoc.password-forgot+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"gilpratte@texastoc.com\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/password/reset",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"password",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "password reset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/vnd.texastoc.password-reset+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"code\": \"WKOUT\", \n  \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/password/reset",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"password",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Seasons",
+			"item": [
+				{
+					"name": "create season",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData) {",
+									"    pm.environment.set(\"seasonId\", jsonData.id);",
+									"    console.log('seasonId set to created season id ' + jsonData.id)",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"startYear\": 2021\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/seasons",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"seasons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get seasons",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"seasonId\", jsonData[0].id);",
+									"console.log('seasonId set to ' + jsonData[0].id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/seasons",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"seasons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get season",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/seasons/{{seasonId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"seasons",
+								"{{seasonId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get season current",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"seasonId\", jsonData.id);",
+									"console.log('seasonId set to ' + jsonData.id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/seasons/current",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"seasons",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get historical seasons",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/seasons/history",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"seasons",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finalize season",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/vnd.texastoc.finalize+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/seasons/{{seasonId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"seasons",
+								"{{seasonId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unfinalize season",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/vnd.texastoc.unfinalize+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/seasons/{{seasonId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"seasons",
+								"{{seasonId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Games",
+			"item": [
+				{
+					"name": "Game Players",
+					"item": [
+						{
+							"name": "create game player",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"if (jsonData) {",
+											"    pm.environment.set(\"gamePlayerId\", jsonData.id);",
+											"    console.log('gamePlayerId set to created game player id ' + jsonData.id)",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"playerId\": 1,\n    \"boughtIn\": true,\n    \"annualTocParticipant\": true,\n    \"quarterlyTocParticipant\": true\n}"
+								},
+								"url": {
+									"raw": "{{url}}/api/v3/games/{{gameId}}/players",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"v3",
+										"games",
+										"{{gameId}}",
+										"players"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create first time game player",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"pm.environment.set(\"gamePlayerId\", jsonData.id);",
+											"console.log('gamePlayerId set to ' + jsonData.id)",
+											"pm.environment.set(\"playerId\", jsonData.playerId);",
+											"console.log('playerId set to ' + jsonData.playerId)",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/vnd.texastoc.first-time+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"first-{{$timestamp}}\",\n    \"lastName\": \"last-{{$timestamp}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"boughtIn\": true,\n    \"annualTocParticipant\": true,\n    \"quarterlyTocParticipant\": true\n}"
+								},
+								"url": {
+									"raw": "{{url}}/api/v3/games/{{gameId}}/players",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"v3",
+										"games",
+										"{{gameId}}",
+										"players"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update game player",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"place\": 2,\n    \"knockedOut\": true,\n    \"roundUpdates\": true,\n    \"boughtIn\": true,\n    \"rebought\": true,\n    \"annualTocParticipant\": true,\n    \"quarterlyTocParticipant\": true,\n    \"chop\": 11000\n}"
+								},
+								"url": {
+									"raw": "{{url}}/api/v3/games/{{gameId}}/players/{{gamePlayerId}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"v3",
+										"games",
+										"{{gameId}}",
+										"players",
+										"{{gamePlayerId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "toggle knocked out game player",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/vnd.texastoc.knockout+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/v3/games/{{gameId}}/players/{{gamePlayerId}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"v3",
+										"games",
+										"{{gameId}}",
+										"players",
+										"{{gamePlayerId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "toggle rebuy game player",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/vnd.texastoc.rebuy+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/v3/games/{{gameId}}/players/{{gamePlayerId}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"v3",
+										"games",
+										"{{gameId}}",
+										"players",
+										"{{gamePlayerId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete game player",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/v3/games/{{gameId}}/players/{{gamePlayerId}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"v3",
+										"games",
+										"{{gameId}}",
+										"players",
+										"{{gamePlayerId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Seats",
+					"item": [
+						{
+							"name": "create seating",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/vnd.texastoc.assign-seats+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"gameId\": {{gameId}},\n    \"seatsPerTables\": [\n        {\n            \"numSeats\": 6,\n            \"tableNum\": 1\n        }\n    ],\n    \"tableRequests\": [{\n        \"gamePlayerId\": {{gamePlayerId}},\n        \"playerName\": \"John Doe\",\n        \"tableNum\": 1\n    }]\n}"
+								},
+								"url": {
+									"raw": "{{url}}/api/v3/games/{{gameId}}/seats",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"v3",
+										"games",
+										"{{gameId}}",
+										"seats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "notify seating",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/vnd.texastoc.notify-seating+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/api/v3/games/{{gameId}}/seats",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"v3",
+										"games",
+										"{{gameId}}",
+										"seats"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "create game",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData) {",
+									"    pm.environment.set(\"gameId\", jsonData.id);",
+									"    console.log('gameId set to created game id ' + jsonData.id)",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let now = new Date();",
+									"let month = '' + now.getMonth() + 1;",
+									"if (month.length === 1) {",
+									"    month = '0' + month;",
+									"}",
+									"let day = '' + now.getDate();",
+									"if (day.length === 1) {",
+									"    day = '0' + day;",
+									"}",
+									"",
+									"let todaysDate = now.getFullYear() + '-' + month + '-' + day;",
+									"console.log(\"today's date \" + todaysDate)",
+									"pm.environment.set(\"todaysDate\", todaysDate); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"hostId\": 1,\n    \"date\": \"2021-07-01\",\n    \"transportRequired\": false\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/games",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get games",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.length > 0) {",
+									"    pm.environment.set(\"gameId\", jsonData[jsonData.length-1].id);",
+									"    console.log('gameId set to ' + jsonData[jsonData.length-1].id)",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/games",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"games"
+							],
+							"query": [
+								{
+									"key": "seasonId",
+									"value": "{{seasonId}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get game",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/games/{{gameId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"games",
+								"{{gameId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get current game",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"gameId\", jsonData.id);",
+									"console.log('gameId set to ' + jsonData.id)",
+									"if (jsonData.players && jsonData.players.length > 0) {",
+									"    pm.environment.set(\"gamePlayerId\", jsonData.players[0].id);",
+									"console.log('gamePlayerId set to ' + jsonData.players[0].id)",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/vnd.texastoc.current+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/games",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update game",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"hostId\": 2,\n    \"date\": \"2021-07-02\",\n    \"transportRequired\": true\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/games/{{gameId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"games",
+								"{{gameId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finalize game",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/vnd.texastoc.finalize+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/games/{{gameId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"games",
+								"{{gameId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unfinalize game",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/vnd.texastoc.unfinalize+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/games/{{gameId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"games",
+								"{{gameId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Players",
+			"item": [
+				{
+					"name": "create player",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData) {",
+									"    pm.environment.set(\"playerId\", jsonData.id);",
+									"    console.log('playerId set to ' + jsonData.id)",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"#email\": \"<string>\",\n    \"firstName\": \"first-{{$timestamp}}\",\n    \"lastName\": \"last-{{$timestamp}}\",\n    \"#password\": \"<string>\",\n    \"#phone\": \"<string>\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/players",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get players",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"playerId\", jsonData[0].id);",
+									"console.log('playerId set to ' + jsonData[0].id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/players",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get player",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/players/{{playerId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"players",
+								"{{playerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update player",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n   \"firstName\":\"first-updated\",\n   \"lastName\":\"last-updated\",\n   \"phone\":\"updated\",\n   \"email\":\"email-updated@abc.com\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/players/{{playerId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"players",
+								"{{playerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete player",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/players/{{playerId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"players",
+								"{{playerId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Settings",
+			"item": [
+				{
+					"name": "get settings",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/v3/settings",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"settings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,18 @@
+
+# All target directories
+target/
+
+# Log files
+**/*.log
+
+# game summary files
+game-summary.html
+
+# Test results
+test.results
+
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr

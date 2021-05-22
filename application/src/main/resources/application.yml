@@ -1,0 +1,185 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+#logging:
+#  level:
+#    org.springframework.jdbc.core: TRACE
+
+payouts:
+  fileName: payouts-percentages.json
+
+points:
+  numPlayers: 2
+  tenthPlaceIncr: 0.5
+  tenthPlacePoints: 3
+  multiplier: 1.291
+
+clock:
+  rounds:
+    - name: Round 1
+      smallBlind: 25
+      bigBlind: 50
+      ante: 0
+      duration: 20
+    - name: Round 2
+      smallBlind: 50
+      bigBlind: 100
+      ante: 0
+      duration: 20
+    - name: Round 3
+      smallBlind: 100
+      bigBlind: 200
+      ante: 0
+      duration: 20
+    - name: Round 4
+      smallBlind: 100
+      bigBlind: 200
+      ante: 100
+      duration: 20
+    - name: Round 5
+      smallBlind: 150
+      bigBlind: 300
+      ante: 150
+      duration: 20
+    - name: Round 6
+      smallBlind: 200
+      bigBlind: 400
+      ante: 200
+      duration: 20
+    - name: Round 7
+      smallBlind: 300
+      bigBlind: 600
+      ante: 300
+      duration: 20
+    - name: Break 1
+      smallBlind: 0
+      bigBlind: 0
+      ante: 0
+      duration: 5
+    - name: Round 8
+      smallBlind: 400
+      bigBlind: 800
+      ante: 400
+      duration: 20
+    - name: Round 9
+      smallBlind: 600
+      bigBlind: 1200
+      ante: 600
+      duration: 20
+    - name: Round 10
+      smallBlind: 800
+      bigBlind: 1600
+      ante: 800
+      duration: 20
+    - name: Round 11
+      smallBlind: 1000
+      bigBlind: 2000
+      ante: 1000
+      duration: 20
+    - name: Round 12
+      smallBlind: 1500
+      bigBlind: 3000
+      ante: 1500
+      duration: 20
+    - name: Break 2
+      smallBlind: 0
+      bigBlind: 0
+      ante: 0
+      duration: 5
+    - name: Round 13
+      smallBlind: 2000
+      bigBlind: 4000
+      ante: 2000
+      duration: 20
+    - name: Round 14
+      smallBlind: 3000
+      bigBlind: 6000
+      ante: 3000
+      duration: 20
+    - name: Round 15
+      smallBlind: 4000
+      bigBlind: 8000
+      ante: 4000
+      duration: 20
+    - name: Round 16
+      smallBlind: 5000
+      bigBlind: 10000
+      ante: 5000
+      duration: 20
+    - name: Break 3
+      smallBlind: 0
+      bigBlind: 0
+      ante: 0
+      duration: 5
+    - name: Round 17
+      smallBlind: 6000
+      bigBlind: 12000
+      ante: 6000
+      duration: 20
+    - name: Round 18
+      smallBlind: 8000
+      bigBlind: 16000
+      ante: 8000
+      duration: 20
+    - name: Round 19
+      smallBlind: 10000
+      bigBlind: 20000
+      ante: 10000
+      duration: 20
+    - name: Round 20
+      smallBlind: 12000
+      bigBlind: 24000
+      ante: 12000
+      duration: 20
+    - name: Round 21
+      smallBlind: 15000
+      bigBlind: 30000
+      ante: 15000
+      duration: 20
+    - name: Round 22
+      smallBlind: 20000
+      bigBlind: 40000
+      ante: 20000
+      duration: 20
+    - name: Round 23
+      smallBlind: 25000
+      bigBlind: 50000
+      ante: 25000
+      duration: 20
+    - name: Round 24
+      smallBlind: 30000
+      bigBlind: 60000
+      ante: 30000
+      duration: 20
+    - name: Round 25
+      smallBlind: 40000
+      bigBlind: 80000
+      ante: 40000
+      duration: 20
+    - name: Round 26
+      smallBlind: 50000
+      bigBlind: 100000
+      ante: 50000
+      duration: 20
+    - name: Round 27
+      smallBlind: 50000
+      bigBlind: 100000
+      ante: 50000
+      duration: 20
+    - name: Round 28
+      smallBlind: 50000
+      bigBlind: 100000
+      ante: 50000
+      duration: 20
+    - name: Round 29
+      smallBlind: 50000
+      bigBlind: 100000
+      ante: 50000
+      duration: 20
+    - name: Round 30
+      smallBlind: 50000
+      bigBlind: 100000
+      ante: 50000
+      duration: 20

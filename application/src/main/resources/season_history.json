@@ -1,0 +1,1426 @@
+[
+  {
+    "startYear": 2020,
+    "endYear": 2021,
+    "players": [
+      {
+        "name": "Freddy Murphy",
+        "points": 1728,
+        "entries": 52
+      },
+      {
+        "name": "Clint Evans",
+        "points": 1609,
+        "entries": 51
+      },
+      {
+        "name": "Paulie Schuman",
+        "points": 1523,
+        "entries": 52
+      },
+      {
+        "name": "Andy Thomas",
+        "points": 1503,
+        "entries": 49
+      },
+      {
+        "name": "Beau Edge",
+        "points": 1493,
+        "entries": 52
+      },
+      {
+        "name": "Kyle Stein",
+        "points": 1347,
+        "entries": 50
+      },
+      {
+        "name": "Nat Tucker",
+        "points": 1276,
+        "entries": 52
+      },
+      {
+        "name": "Antero Rivero",
+        "points": 929,
+        "entries": 43
+      },
+      {
+        "name": "Ray Avery",
+        "points": 793,
+        "entries": 44
+      },
+      {
+        "name": "Chad Shields",
+        "points": 653,
+        "entries": 23
+      },
+      {
+        "name": "Fred Murphy Sr.",
+        "points": 402,
+        "entries": 15
+      },
+      {
+        "name": "Dave Benavidez",
+        "points": 334,
+        "entries": 9
+      },
+      {
+        "name": "Frank Bevka",
+        "points": 181,
+        "entries": 10
+      },
+      {
+        "name": "Brad Bresnehan",
+        "points": 128,
+        "entries": 4
+      }
+    ]
+  },
+  {
+    "startYear": 2019,
+    "endYear": 2020,
+    "players": [
+      {
+        "name": "Paulie Schuman",
+        "points": 1723,
+        "entries": 43
+      },
+      {
+        "name": "Andy Thomas",
+        "points": 1631,
+        "entries": 43
+      },
+      {
+        "name": "Clint Evans",
+        "points": 1280,
+        "entries": 48
+      },
+      {
+        "name": "Kyle Stein",
+        "points": 1174,
+        "entries": 45
+      },
+      {
+        "name": "Freddy Murphy",
+        "points": 1157,
+        "entries": 44
+      },
+      {
+        "name": "Frank Bevka",
+        "points": 1110,
+        "entries": 47
+      },
+      {
+        "name": "Beau Edge",
+        "points": 1044,
+        "entries": 45
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 1042,
+        "entries": 35
+      },
+      {
+        "name": "Ray Avery",
+        "points": 938,
+        "entries": 39
+      },
+      {
+        "name": "Tim Smith",
+        "points": 932,
+        "entries": 42
+      },
+      {
+        "name": "Will Shef",
+        "points": 855,
+        "entries": 30
+      },
+      {
+        "name": "Antero Rivero",
+        "points": 778,
+        "entries": 34
+      },
+      {
+        "name": "Roy Feigel",
+        "points": 515,
+        "entries": 23
+      },
+      {
+        "name": "Chris Bess",
+        "points": 457,
+        "entries": 15
+      },
+      {
+        "name": "Adam Vaughn",
+        "points": 285,
+        "entries": 13
+      },
+      {
+        "name": "Kevin Bender",
+        "points": 248,
+        "entries": 13
+      }
+    ]
+  },
+  {
+    "startYear": 2018,
+    "endYear": 2019,
+    "players": [
+      {
+        "name": "Kyle Stein",
+        "points": 1593,
+        "entries": 48
+      },
+      {
+        "name": "Andy Thomas",
+        "points": 1430,
+        "entries": 42
+      },
+      {
+        "name": "Clint Evans",
+        "points": 1424,
+        "entries": 46
+      },
+      {
+        "name": "Beau Edge",
+        "points": 1366,
+        "entries": 45
+      },
+      {
+        "name": "Tim Smith",
+        "points": 1331,
+        "entries": 49
+      },
+      {
+        "name": "Frank Bevka",
+        "points": 1272,
+        "entries": 51
+      },
+      {
+        "name": "Paulie Schuman",
+        "points": 1228,
+        "entries": 47
+      },
+      {
+        "name": "Ray Avery",
+        "points": 1174,
+        "entries": 41
+      },
+      {
+        "name": "Jason Dick",
+        "points": 1088,
+        "entries": 23
+      },
+      {
+        "name": "Willie Hendrix",
+        "points": 1075,
+        "entries": 47
+      },
+      {
+        "name": "Gil Pratte",
+        "points": 980,
+        "entries": 28
+      },
+      {
+        "name": "Freddy Murphy",
+        "points": 825,
+        "entries": 37
+      },
+      {
+        "name": "Brian Baker",
+        "points": 636,
+        "entries": 21
+      },
+      {
+        "name": "Antero Rivero",
+        "points": 542,
+        "entries": 20
+      },
+      {
+        "name": "Dave Benavidez",
+        "points": 459,
+        "entries": 21
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 357,
+        "entries": 22
+      },
+      {
+        "name": "Kelly Grooms",
+        "points": 293,
+        "entries": 14
+      },
+      {
+        "name": "Chad Shields",
+        "points": 263,
+        "entries": 11
+      },
+      {
+        "name": "Chris Bess",
+        "points": 216,
+        "entries": 8
+      },
+      {
+        "name": "Blair Howell",
+        "points": 129,
+        "entries": 4
+      },
+      {
+        "name": "Jeremiah Banek",
+        "points": 69,
+        "entries": 7
+      },
+      {
+        "name": "David Styles",
+        "points": 59,
+        "entries": 4
+      },
+      {
+        "name": "John Hiatt",
+        "points": 24,
+        "entries": 5
+      },
+      {
+        "name": "Rob Lesieur",
+        "points": 22,
+        "entries": 5
+      }
+    ]
+  },
+  {
+    "startYear": 2017,
+    "endYear": 2018,
+    "players": [
+      {
+        "name": "Paulie Schuman",
+        "points": 1669,
+        "entries": 45
+      },
+      {
+        "name": "Brian Baker",
+        "points": 1503,
+        "entries": 42
+      },
+      {
+        "name": "Andy Thomas",
+        "points": 1450,
+        "entries": 49
+      },
+      {
+        "name": "Freddy Murphy",
+        "points": 1399,
+        "entries": 44
+      },
+      {
+        "name": "Tim Smith",
+        "points": 1321,
+        "entries": 41
+      },
+      {
+        "name": "Clint Evans",
+        "points": 1288,
+        "entries": 44
+      },
+      {
+        "name": "Dave Benavidez",
+        "points": 1284,
+        "entries": 38
+      },
+      {
+        "name": "Alan Weiner",
+        "points": 1274,
+        "entries": 49
+      },
+      {
+        "name": "Kyle Stein",
+        "points": 1230,
+        "entries": 41
+      },
+      {
+        "name": "Ray Avery",
+        "points": 1164,
+        "entries": 37
+      },
+      {
+        "name": "Antero Rivero",
+        "points": 1137,
+        "entries": 44
+      },
+      {
+        "name": "Willie Hendrix",
+        "points": 1136,
+        "entries": 45
+      },
+      {
+        "name": "Frank Bevka",
+        "points": 1044,
+        "entries": 49
+      },
+      {
+        "name": "Beau Edge",
+        "points": 1040,
+        "entries": 44
+      },
+      {
+        "name": "Brian Kincaid",
+        "points": 863,
+        "entries": 40
+      },
+      {
+        "name": "Nirnay Sinha",
+        "points": 640,
+        "entries": 25
+      },
+      {
+        "name": "Brian Lendecky",
+        "points": 469,
+        "entries": 22
+      },
+      {
+        "name": "Chad Shields",
+        "points": 372,
+        "entries": 23
+      },
+      {
+        "name": "Daniel Sparrow",
+        "points": 351,
+        "entries": 20
+      },
+      {
+        "name": "Kelly Grooms",
+        "points": 239,
+        "entries": 19
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 160,
+        "entries": 19
+      },
+      {
+        "name": "Gil Pratte",
+        "points": 144,
+        "entries": 8
+      },
+      {
+        "name": "Nat Tucker",
+        "points": 78,
+        "entries": 11
+      },
+      {
+        "name": "Rob Lesieur",
+        "points": 26,
+        "entries": 5
+      },
+      {
+        "name": "Chris Bess",
+        "points": 14,
+        "entries": 7
+      },
+      {
+        "name": "John Shaffer",
+        "points": 13,
+        "entries": 5
+      }
+    ]
+  },
+  {
+    "startYear": 2016,
+    "endYear": 2017,
+    "players": [
+      {
+        "name": "Andy Thomas",
+        "points": 1696,
+        "entries": 44
+      },
+      {
+        "name": "Paulie Schuman",
+        "points": 1598,
+        "entries": 44
+      },
+      {
+        "name": "Kyle Stein",
+        "points": 1401,
+        "entries": 46
+      },
+      {
+        "name": "Beau Edge",
+        "points": 1339,
+        "entries": 46
+      },
+      {
+        "name": "Alan Weiner",
+        "points": 1252,
+        "entries": 43
+      },
+      {
+        "name": "Dave Benavidez",
+        "points": 1216,
+        "entries": 36
+      },
+      {
+        "name": "Chris Bess",
+        "points": 1082,
+        "entries": 36
+      },
+      {
+        "name": "Frank Bevka",
+        "points": 1077,
+        "entries": 40
+      },
+      {
+        "name": "Freddy Murphy",
+        "points": 1053,
+        "entries": 43
+      },
+      {
+        "name": "Tim Smith",
+        "points": 1019,
+        "entries": 44
+      },
+      {
+        "name": "James Garinger",
+        "points": 984,
+        "entries": 29
+      },
+      {
+        "name": "Ray Avery",
+        "points": 875,
+        "entries": 32
+      },
+      {
+        "name": "Nat Tucker",
+        "points": 850,
+        "entries": 43
+      },
+      {
+        "name": "Willie Hendrix",
+        "points": 827,
+        "entries": 46
+      },
+      {
+        "name": "Roy Feigel",
+        "points": 702,
+        "entries": 29
+      },
+      {
+        "name": "David Styles",
+        "points": 637,
+        "entries": 21
+      },
+      {
+        "name": "Terry Lyons",
+        "points": 592,
+        "entries": 27
+      },
+      {
+        "name": "Brian Baker",
+        "points": 551,
+        "entries": 22
+      },
+      {
+        "name": "Gil Pratte",
+        "points": 527,
+        "entries": 19
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 491,
+        "entries": 33
+      },
+      {
+        "name": "Antero Rivero",
+        "points": 483,
+        "entries": 35
+      },
+      {
+        "name": "Joe Marerro",
+        "points": 455,
+        "entries": 18
+      },
+      {
+        "name": "Brian Lendecky",
+        "points": 299,
+        "entries": 25
+      },
+      {
+        "name": "Rob Lesieur",
+        "points": 255,
+        "entries": 15
+      },
+      {
+        "name": "Jeremy Almen",
+        "points": 245,
+        "entries": 12
+      },
+      {
+        "name": "Chad Shields",
+        "points": 234,
+        "entries": 18
+      },
+      {
+        "name": "JD Hefner",
+        "points": 220,
+        "entries": 16
+      },
+      {
+        "name": "Kelly Grooms",
+        "points": 160,
+        "entries": 8
+      },
+      {
+        "name": "Kyle Wickham",
+        "points": 153,
+        "entries": 7
+      }
+    ]
+  },
+  {
+    "startYear": 2015,
+    "endYear": 2016,
+    "players": [
+      {
+        "name": "Freddy Murphy",
+        "points": 1872,
+        "entries": 44
+      },
+      {
+        "name": "James Garinger",
+        "points": 1413,
+        "entries": 48
+      },
+      {
+        "name": "Kyle Stein",
+        "points": 1405,
+        "entries": 47
+      },
+      {
+        "name": "Gil Pratte",
+        "points": 1401,
+        "entries": 44
+      },
+      {
+        "name": "Beau Edge",
+        "points": 1384,
+        "entries": 49
+      },
+      {
+        "name": "Rob Lesieur",
+        "points": 1361,
+        "entries": 36
+      },
+      {
+        "name": "Kelly Grooms",
+        "points": 1313,
+        "entries": 44
+      },
+      {
+        "name": "Alan Weiner",
+        "points": 1178,
+        "entries": 46
+      },
+      {
+        "name": "Tim Smith",
+        "points": 1172,
+        "entries": 47
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 1130,
+        "entries": 43
+      },
+      {
+        "name": "Willie Hendrix",
+        "points": 1120,
+        "entries": 45
+      },
+      {
+        "name": "Dave Benavidez",
+        "points": 1030,
+        "entries": 37
+      },
+      {
+        "name": "Ross Lodge",
+        "points": 791,
+        "entries": 27
+      },
+      {
+        "name": "David Styles",
+        "points": 717,
+        "entries": 37
+      },
+      {
+        "name": "Ray Avery",
+        "points": 682,
+        "entries": 27
+      },
+      {
+        "name": "Brian Lendecky",
+        "points": 567,
+        "entries": 21
+      },
+      {
+        "name": "Jason Hablinski",
+        "points": 510,
+        "entries": 20
+      },
+      {
+        "name": "Chris Bess",
+        "points": 430,
+        "entries": 25
+      },
+      {
+        "name": "Antero Rivero",
+        "points": 390,
+        "entries": 33
+      },
+      {
+        "name": "Shane Torgerson",
+        "points": 308,
+        "entries": 13
+      },
+      {
+        "name": "John Hiatt",
+        "points": 305,
+        "entries": 37
+      },
+      {
+        "name": "John Shaffer",
+        "points": 287,
+        "entries": 25
+      },
+      {
+        "name": "Chad Shields",
+        "points": 191,
+        "entries": 16
+      },
+      {
+        "name": "Nat Tucker",
+        "points": 189,
+        "entries": 13
+      },
+      {
+        "name": "Chris Leschber",
+        "points": 47,
+        "entries": 6
+      }
+    ]
+  },
+  {
+    "startYear": 2014,
+    "endYear": 2015,
+    "players": [
+      {
+        "name": "Gil Pratte",
+        "points": 1842,
+        "entries": 48
+      },
+      {
+        "name": "Freddy Murphy",
+        "points": 1590,
+        "entries": 43
+      },
+      {
+        "name": "Tim Smith",
+        "points": 1401,
+        "entries": 47
+      },
+      {
+        "name": "Andy Thomas",
+        "points": 1342,
+        "entries": 39
+      },
+      {
+        "name": "Beau Edge",
+        "points": 1309,
+        "entries": 47
+      },
+      {
+        "name": "James Garinger",
+        "points": 1193,
+        "entries": 46
+      },
+      {
+        "name": "Terry Lyons",
+        "points": 1167,
+        "entries": 45
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 1131,
+        "entries": 43
+      },
+      {
+        "name": "Ray Avery",
+        "points": 1041,
+        "entries": 29
+      },
+      {
+        "name": "Antero Rivero",
+        "points": 920,
+        "entries": 40
+      },
+      {
+        "name": "Jason Hablinski",
+        "points": 920,
+        "entries": 33
+      },
+      {
+        "name": "Kyle Stein",
+        "points": 900,
+        "entries": 47
+      },
+      {
+        "name": "Brian Lendecky",
+        "points": 753,
+        "entries": 35
+      },
+      {
+        "name": "David Styles",
+        "points": 624,
+        "entries": 27
+      },
+      {
+        "name": "Willie Hendrix",
+        "points": 588,
+        "entries": 25
+      },
+      {
+        "name": "Kelly Grooms",
+        "points": 579,
+        "entries": 31
+      },
+      {
+        "name": "Chad Shields",
+        "points": 574,
+        "entries": 25
+      },
+      {
+        "name": "Rob Lesieur",
+        "points": 380,
+        "entries": 20
+      },
+      {
+        "name": "John Shaffer",
+        "points": 352,
+        "entries": 17
+      },
+      {
+        "name": "Don Harris",
+        "points": 343,
+        "entries": 13
+      },
+      {
+        "name": "Lee Harris",
+        "points": 248,
+        "entries": 7
+      },
+      {
+        "name": "Dave Benavidez",
+        "points": 229,
+        "entries": 21
+      },
+      {
+        "name": "John Hiatt",
+        "points": 134,
+        "entries": 36
+      },
+      {
+        "name": "Joe Marerro",
+        "points": 104,
+        "entries": 21
+      }
+    ]
+  },
+  {
+    "startYear": 2013,
+    "endYear": 2014,
+    "players": [
+      {
+        "name": "Gil Pratte",
+        "points": 1584,
+        "entries": 51
+      },
+      {
+        "name": "Freddy Murphy",
+        "points": 1575,
+        "entries": 45
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 1556,
+        "entries": 47
+      },
+      {
+        "name": "Riccardo Camera",
+        "points": 1357,
+        "entries": 31
+      },
+      {
+        "name": "James Garinger",
+        "points": 1273,
+        "entries": 48
+      },
+      {
+        "name": "Coung Pham",
+        "points": 1256,
+        "entries": 45
+      },
+      {
+        "name": "Brian Lendecky",
+        "points": 1139,
+        "entries": 32
+      },
+      {
+        "name": "Ray Avery",
+        "points": 1138,
+        "entries": 37
+      },
+      {
+        "name": "Dave Benavidez",
+        "points": 1042,
+        "entries": 30
+      },
+      {
+        "name": "Beau Edge",
+        "points": 1041,
+        "entries": 46
+      },
+      {
+        "name": "Tim Smith",
+        "points": 985,
+        "entries": 51
+      },
+      {
+        "name": "Jason Hablinski",
+        "points": 837,
+        "entries": 36
+      },
+      {
+        "name": "Kyle Stein",
+        "points": 821,
+        "entries": 46
+      },
+      {
+        "name": "Brad Bresnehen",
+        "points": 765,
+        "entries": 23
+      },
+      {
+        "name": "Herby Romero",
+        "points": 742,
+        "entries": 13
+      },
+      {
+        "name": "Chris Bess",
+        "points": 712,
+        "entries": 32
+      },
+      {
+        "name": "Antero Rivero",
+        "points": 651,
+        "entries": 32
+      },
+      {
+        "name": "John Shaffer",
+        "points": 515,
+        "entries": 24
+      },
+      {
+        "name": "Rob Lesieur",
+        "points": 513,
+        "entries": 26
+      },
+      {
+        "name": "David Styles",
+        "points": 506,
+        "entries": 27
+      }
+    ]
+  },
+  {
+    "startYear": 2012,
+    "endYear": 2013,
+    "players": [
+      {
+        "name": "Riccardo Camera",
+        "points": 1756,
+        "entries": 45
+      },
+      {
+        "name": "Ray Avery",
+        "points": 1742,
+        "entries": 41
+      },
+      {
+        "name": "Dave Benavidez",
+        "points": 1375,
+        "entries": 42
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 1363,
+        "entries": 47
+      },
+      {
+        "name": "Chris Bess",
+        "points": 1361,
+        "entries": 41
+      },
+      {
+        "name": "Kyle Stein",
+        "points": 1313,
+        "entries": 48
+      },
+      {
+        "name": "Brian Lendecky",
+        "points": 1237,
+        "entries": 37
+      },
+      {
+        "name": "Aaron Pullman",
+        "points": 1208,
+        "entries": 49
+      },
+      {
+        "name": "Tim Smith",
+        "points": 1187,
+        "entries": 49
+      },
+      {
+        "name": "Nirnay Sinha",
+        "points": 1182,
+        "entries": 38
+      },
+      {
+        "name": "Rob Lesieur",
+        "points": 1069,
+        "entries": 36
+      },
+      {
+        "name": "Freddy Murphy",
+        "points": 1032,
+        "entries": 43
+      },
+      {
+        "name": "Amin Zangi",
+        "points": 1002,
+        "entries": 29
+      },
+      {
+        "name": "Kyle Wickham",
+        "points": 748,
+        "entries": 34
+      },
+      {
+        "name": "Beau Edge",
+        "points": 684,
+        "entries": 35
+      },
+      {
+        "name": "Herby Romero",
+        "points": 661,
+        "entries": 19
+      },
+      {
+        "name": "David Styles",
+        "points": 600,
+        "entries": 37
+      },
+      {
+        "name": "Jason Hablinski",
+        "points": 595,
+        "entries": 32
+      },
+      {
+        "name": "Antero Rivero",
+        "points": 555,
+        "entries": 17
+      },
+      {
+        "name": "Don Harris",
+        "points": 469,
+        "entries": 18
+      }
+    ]
+  },
+  {
+    "startYear": 2011,
+    "endYear": 2012,
+    "players": [
+      {
+        "name": "Tim Smith",
+        "points": 1604,
+        "entries": 49
+      },
+      {
+        "name": "Nirnay Sinha",
+        "points": 1569,
+        "entries": 43
+      },
+      {
+        "name": "Freddy Murphy",
+        "points": 1562,
+        "entries": 46
+      },
+      {
+        "name": "Rob Lesieur",
+        "points": 1540,
+        "entries": 41
+      },
+      {
+        "name": "Ray Avery",
+        "points": 1485,
+        "entries": 44
+      },
+      {
+        "name": "Aaron Pullman",
+        "points": 1482,
+        "entries": 47
+      },
+      {
+        "name": "Brian Lendecky",
+        "points": 1424,
+        "entries": 37
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 1382,
+        "entries": 49
+      },
+      {
+        "name": "Andy Thomas",
+        "points": 1381,
+        "entries": 46
+      },
+      {
+        "name": "Justin Parker",
+        "points": 1232,
+        "entries": 39
+      },
+      {
+        "name": "Coung Pham",
+        "points": 1156,
+        "entries": 41
+      },
+      {
+        "name": "Kyle Stein",
+        "points": 943,
+        "entries": 47
+      },
+      {
+        "name": "Chris Bess",
+        "points": 856,
+        "entries": 22
+      },
+      {
+        "name": "Kyle Wickham",
+        "points": 848,
+        "entries": 34
+      },
+      {
+        "name": "David Styles",
+        "points": 722,
+        "entries": 39
+      },
+      {
+        "name": "Brad Bresnehen",
+        "points": 671,
+        "entries": 15
+      },
+      {
+        "name": "Kelly Grooms",
+        "points": 668,
+        "entries": 33
+      },
+      {
+        "name": "Matt Buchanan",
+        "points": 622,
+        "entries": 24
+      },
+      {
+        "name": "John Shaffer",
+        "points": 550,
+        "entries": 40
+      },
+      {
+        "name": "Herby Romero",
+        "points": 540,
+        "entries": 30
+      }
+    ]
+  },
+  {
+    "startYear": 2010,
+    "endYear": 2011,
+    "players": [
+      {
+        "name": "Aaron Pullman",
+        "points": 1704,
+        "entries": 47
+      },
+      {
+        "name": "Tim Smith",
+        "points": 1428,
+        "entries": 49
+      },
+      {
+        "name": "Beau Edge",
+        "points": 1206,
+        "entries": 33
+      },
+      {
+        "name": "Ray Avery",
+        "points": 1091,
+        "entries": 30
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 1055,
+        "entries": 42
+      },
+      {
+        "name": "Herby Romero",
+        "points": 974,
+        "entries": 36
+      },
+      {
+        "name": "Brian Lendecky",
+        "points": 954,
+        "entries": 32
+      },
+      {
+        "name": "Freddy Murphy",
+        "points": 945,
+        "entries": 25
+      },
+      {
+        "name": "Brad Bresnehen",
+        "points": 908,
+        "entries": 33
+      },
+      {
+        "name": "Chad Shields",
+        "points": 779,
+        "entries": 33
+      },
+      {
+        "name": "Roy Feigel",
+        "points": 756,
+        "entries": 42
+      },
+      {
+        "name": "Curtis Stahler",
+        "points": 729,
+        "entries": 19
+      },
+      {
+        "name": "Andy Thomas",
+        "points": 666,
+        "entries": 29
+      },
+      {
+        "name": "Justin Parker",
+        "points": 613,
+        "entries": 35
+      },
+      {
+        "name": "Don Harris",
+        "points": 590,
+        "entries": 27
+      },
+      {
+        "name": "David Styles",
+        "points": 572,
+        "entries": 35
+      },
+      {
+        "name": "Nirnay Sinha",
+        "points": 517,
+        "entries": 28
+      },
+      {
+        "name": "Gil Pratte",
+        "points": 512,
+        "entries": 25
+      },
+      {
+        "name": "Dave Benavidez",
+        "points": 500,
+        "entries": 23
+      },
+      {
+        "name": "Kelly Grooms",
+        "points": 497,
+        "entries": 24
+      }
+    ]
+  },
+  {
+    "startYear": 2009,
+    "endYear": 2010,
+    "players": [
+      {
+        "name": "Freddy Murphy",
+        "points": 1715,
+        "entries": 45
+      },
+      {
+        "name": "Ray Avery",
+        "points": 1569,
+        "entries": 47
+      },
+      {
+        "name": "Don Harris",
+        "points": 1468,
+        "entries": 45
+      },
+      {
+        "name": "Brian Lendecky",
+        "points": 1291,
+        "entries": 35
+      },
+      {
+        "name": "Gil Pratte",
+        "points": 1173,
+        "entries": 44
+      },
+      {
+        "name": "Nirnay Sinha",
+        "points": 1029,
+        "entries": 42
+      },
+      {
+        "name": "Robert Garinger",
+        "points": 971,
+        "entries": 38
+      },
+      {
+        "name": "Rob Lesieur",
+        "points": 966,
+        "entries": 40
+      },
+      {
+        "name": "Roy Feigel",
+        "points": 951,
+        "entries": 46
+      },
+      {
+        "name": "Aaron Pullman",
+        "points": 943,
+        "entries": 41
+      }
+    ]
+  },
+  {
+    "startYear": 2008,
+    "endYear": 2009,
+    "players": [
+      {
+        "name": "Brian Lendecky",
+        "points": 1643,
+        "entries": 42
+      },
+      {
+        "name": "Curtis Stahler",
+        "points": 1385,
+        "entries": 43
+      },
+      {
+        "name": "Nirnay Sinha",
+        "points": 1370,
+        "entries": 47
+      },
+      {
+        "name": "Rob Lesieur",
+        "points": 1323,
+        "entries": 43
+      },
+      {
+        "name": "Rich Chen",
+        "points": 1273,
+        "entries": 26
+      },
+      {
+        "name": "Matt Buchanan",
+        "points": 1180,
+        "entries": 36
+      },
+      {
+        "name": "Chris Leschber",
+        "points": 1075,
+        "entries": 27
+      },
+      {
+        "name": "Jeremy Cobb",
+        "points": 1068,
+        "entries": 38
+      },
+      {
+        "name": "Freddy Murphy",
+        "points": 1038,
+        "entries": 34
+      },
+      {
+        "name": "John Shaffer",
+        "points": 1019,
+        "entries": 40
+      }
+    ]
+  },
+  {
+    "startYear": 2007,
+    "endYear": 2008,
+    "players": [
+      {
+        "name": "Nirnay Sinha",
+        "points": 1673,
+        "entries": 43
+      },
+      {
+        "name": "Jeremy Cobb",
+        "points": 1579,
+        "entries": 45
+      },
+      {
+        "name": "Terry Lyons",
+        "points": 1449,
+        "entries": 41
+      },
+      {
+        "name": "Ray Avery",
+        "points": 1371,
+        "entries": 43
+      },
+      {
+        "name": "Dave Benavidez",
+        "points": 1210,
+        "entries": 38
+      },
+      {
+        "name": "John Orbison",
+        "points": 1156,
+        "entries": 46
+      },
+      {
+        "name": "Chris Leschber",
+        "points": 980,
+        "entries": 40
+      },
+      {
+        "name": "Albert Rappelet",
+        "points": 970,
+        "entries": 33
+      },
+      {
+        "name": "Justin Parker",
+        "points": 964,
+        "entries": 37
+      },
+      {
+        "name": "Brian Lendecky",
+        "points": 938,
+        "entries": 36
+      }
+    ]
+  }
+]

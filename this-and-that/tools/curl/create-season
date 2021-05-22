@@ -1,0 +1,5 @@
+
+curl -X POST \
+  http://localhost:8080/api/v3/seasons \
+  -H 'Content-Type: application/json' \
+  -d '[2018,12,20]'

@@ -1,0 +1,4 @@
+
+Run spring boot from command line:
+From application directory: mvn spring-boot:run -Dspring-boot.run.profiles=test
+From project directory: mvn -pl application spring-boot:run -Dspring-boot.run.profiles=test

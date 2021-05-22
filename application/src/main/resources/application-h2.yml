@@ -1,0 +1,7 @@
+use:
+  h2: true
+
+spring:
+  h2:
+    console:
+      enabled: true

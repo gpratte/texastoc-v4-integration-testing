@@ -18,32 +18,32 @@ public class ClockRestController {
     this.clockService = clockService;
   }
 
-  @GetMapping("/api/v3/games/{id}/clock")
+  @GetMapping("/api/v4/games/{id}/clock")
   public Clock getClock(@PathVariable("id") int id) {
     return clockService.get(id);
   }
 
-  @PostMapping(value = "/api/v3/games/{id}/clock", consumes = "application/vnd.texastoc.clock-resume+json")
+  @PostMapping(value = "/api/v4/games/{id}/clock", consumes = "application/vnd.texastoc.clock-resume+json")
   public void resume(@PathVariable("id") int id) {
     clockService.resume(id);
   }
 
-  @PostMapping(value = "/api/v3/games/{id}/clock", consumes = "application/vnd.texastoc.clock-pause+json")
+  @PostMapping(value = "/api/v4/games/{id}/clock", consumes = "application/vnd.texastoc.clock-pause+json")
   public void pause(@PathVariable("id") int id) {
     clockService.pause(id);
   }
 
-  @PostMapping(value = "/api/v3/games/{id}/clock", consumes = "application/vnd.texastoc.clock-back+json")
+  @PostMapping(value = "/api/v4/games/{id}/clock", consumes = "application/vnd.texastoc.clock-back+json")
   public void back(@PathVariable("id") int id) {
     clockService.back(id);
   }
 
-  @PostMapping(value = "/api/v3/games/{id}/clock", consumes = "application/vnd.texastoc.clock-forward+json")
+  @PostMapping(value = "/api/v4/games/{id}/clock", consumes = "application/vnd.texastoc.clock-forward+json")
   public void forward(@PathVariable("id") int id) {
     clockService.forward(id);
   }
 
-  @GetMapping("/api/v3/clock/rounds")
+  @GetMapping("/api/v4/clock/rounds")
   public List<Round> getRounds() {
     return clockService.getRounds();
   }

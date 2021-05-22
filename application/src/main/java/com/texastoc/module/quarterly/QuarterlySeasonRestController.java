@@ -17,7 +17,7 @@ public class QuarterlySeasonRestController {
     this.qSeasonService = qSeasonService;
   }
 
-  @GetMapping("/api/v3/seasons/{id}/quarterlies")
+  @GetMapping("/api/v4/seasons/{id}/quarterlies")
   public List<QuarterlySeason> getQuarterlySeasons(@PathVariable("id") int seasonId) {
     return qSeasonService.getBySeasonId(seasonId);
   }

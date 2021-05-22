@@ -34,12 +34,12 @@ public class PlayerRestController implements PlayerModule {
   }
 
   @Override
-  @PostMapping("/api/v3/players")
+  @PostMapping("/api/v4/players")
   public Player create(@RequestBody Player player) {
     return playerService.create(player);
   }
 
-  @PutMapping("/api/v3/players/{id}")
+  @PutMapping("/api/v4/players/{id}")
   public Player update(@PathVariable("id") int id, @RequestBody @Valid Player player,
       HttpServletRequest request) {
     player.setId(id);
@@ -52,19 +52,19 @@ public class PlayerRestController implements PlayerModule {
   }
 
   @Override
-  @GetMapping("/api/v3/players")
+  @GetMapping("/api/v4/players")
   public List<Player> getAll() {
     return playerService.getAll();
   }
 
   @Override
-  @GetMapping("/api/v3/players/{id}")
+  @GetMapping("/api/v4/players/{id}")
   public Player get(@PathVariable("id") int id) {
     return playerService.get(id);
   }
 
   @Override
-  @DeleteMapping("/api/v3/players/{id}")
+  @DeleteMapping("/api/v4/players/{id}")
   public void delete(@PathVariable("id") int id) {
     playerService.delete(id);
   }
@@ -90,13 +90,13 @@ public class PlayerRestController implements PlayerModule {
   }
 
   @Override
-  @PostMapping("/api/v3/players/{id}/roles")
+  @PostMapping("/api/v4/players/{id}/roles")
   public Player addRole(@PathVariable("id") int id, @RequestBody @Valid Role role) {
     return playerService.addRole(id, role);
   }
 
   @Override
-  @DeleteMapping("/api/v3/players/{id}/roles/{roleId}")
+  @DeleteMapping("/api/v4/players/{id}/roles/{roleId}")
   public Player removeRole(@PathVariable("id") int id, @PathVariable("roleId") int roleId) {
     return playerService.removeRole(id, roleId);
   }

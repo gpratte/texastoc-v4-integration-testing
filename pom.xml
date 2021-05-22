@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.texastoc</groupId>
-  <artifactId>texastoc-v3</artifactId>
+  <artifactId>texastoc-v4</artifactId>
   <version>1.0</version>
   <packaging>pom</packaging>
-  <name>texastoc v3 parent</name>
+  <name>texastoc v4 parent</name>
   <description>Texas Tournament Of Champions</description>
 
   <modules>

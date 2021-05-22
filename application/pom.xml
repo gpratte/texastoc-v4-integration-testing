@@ -4,16 +4,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>texastoc-v3-application</artifactId>
+  <artifactId>texastoc-v4-application</artifactId>
   <version>1.0</version>
   <packaging>war</packaging>
 
-  <name>texastoc v3 application</name>
+  <name>texastoc v4 application</name>
   <description>Texas Tournament Of Champions</description>
 
   <parent>
     <groupId>com.texastoc</groupId>
-    <artifactId>texastoc-v3</artifactId>
+    <artifactId>texastoc-v4</artifactId>
     <version>1.0</version>
   </parent>
 

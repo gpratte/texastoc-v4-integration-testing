@@ -15,7 +15,7 @@ public class SettingsRestController implements SettingsModule {
   }
 
   @Override
-  @GetMapping("/api/v3/settings")
+  @GetMapping("/api/v4/settings")
   public SystemSettings get() {
     return settingsService.get();
   }

@@ -32,40 +32,40 @@ public class SeasonRestController {
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @PostMapping("/api/v3/seasons")
+  @PostMapping("/api/v4/seasons")
   public Season createSeason(@RequestBody SeasonStart seasonStart) {
     return seasonService.create(seasonStart.getStartYear());
   }
 
-  @GetMapping("/api/v3/seasons/{id}")
+  @GetMapping("/api/v4/seasons/{id}")
   public Season getSeason(@PathVariable("id") int id) {
     return seasonService.get(id);
   }
 
-  @GetMapping("/api/v3/seasons")
+  @GetMapping("/api/v4/seasons")
   public List<Season> getSeasons() {
     return seasonService.getAll();
   }
 
-  @GetMapping("/api/v3/seasons/current")
+  @GetMapping("/api/v4/seasons/current")
   public Season getCurrentSeason() {
     int id = seasonService.getCurrent().getId();
     return seasonService.get(id);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @PutMapping(value = "/api/v3/seasons/{id}", consumes = "application/vnd.texastoc.finalize+json")
+  @PutMapping(value = "/api/v4/seasons/{id}", consumes = "application/vnd.texastoc.finalize+json")
   public Season finalizeSeason(@PathVariable("id") int id) {
     return seasonService.end(id);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @PutMapping(value = "/api/v3/seasons/{id}", consumes = "application/vnd.texastoc.unfinalize+json")
+  @PutMapping(value = "/api/v4/seasons/{id}", consumes = "application/vnd.texastoc.unfinalize+json")
   public Season unfinalizeSeason(@PathVariable("id") int id) {
     return seasonService.open(id);
   }
 
-  @GetMapping("/api/v3/seasons/history")
+  @GetMapping("/api/v4/seasons/history")
   public List<HistoricalSeason> getPastSeasons() {
     return historicalSeasonService.getPastSeasons();
   }

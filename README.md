@@ -1,17 +1,11 @@
-# texastoc-v3
+# texastoc-v4
 
-Refactor version 2 to version 3.
+Refactor version 3 to version 4.
 
-Version 3 will employ a modular monolith architecture.
-
-Break the code into modules by
-
-* determining the bounded context of the data.
-* use Spring Data JDBC for accessing the aggregate
-* use Java packaging to encapsulate a module
-* use ArchUnit to enforce package separation
-* access modules via a single module interface (sideway calls)
-* use Spring Integration for messaging
+Version 4 will
+* refactor the cucumber integration tests to JUnit
+* allow multiple season for a year for testing only
+* require the season Id for the url paths for game endpoints
 
 # Profiles, Building and Running
 
@@ -105,7 +99,7 @@ Note that the `-pl application` part of the command instructs maven to run the a
 The war can be run in webapp-runner. This is how the server is run when deployed to Heroku.
 
 * Build a war file by typing `mvn -P h2-embedded-tomcat -pl application clean package`. In this example the war is built the same way it is built when running on Heroku (i.e. H2 and embedded tomcat).
-* Run the server by typing `java -Dspring.profiles.active=h2,populate,message-rest -jar application/target/dependency/webapp-runner.jar application/target/texastoc-v3-application-1.0.war`. In this example the war is run the same way it is run on Heroku (i.e. H2, populate the data and user REST for messaging).
+* Run the server by typing `java -Dspring.profiles.active=h2,populate,message-rest -jar application/target/dependency/webapp-runner.jar application/target/texastoc-v4-application-1.0.war`. In this example the war is run the same way it is run on Heroku (i.e. H2, populate the data and user REST for messaging).
 
 #### war deployed to Heroku
 

@@ -8,12 +8,12 @@
   <version>1.0</version>
   <packaging>pom</packaging>
 
-  <name>texastoc v3 integration</name>
+  <name>texastoc v4 integration</name>
   <description>Texas Tournament Of Champions</description>
 
   <parent>
     <groupId>com.texastoc</groupId>
-    <artifactId>texastoc-v3</artifactId>
+    <artifactId>texastoc-v4</artifactId>
     <version>1.0</version>
   </parent>
 
@@ -24,7 +24,7 @@
   <dependencies>
     <dependency>
       <groupId>com.texastoc</groupId>
-      <artifactId>texastoc-v3-application</artifactId>
+      <artifactId>texastoc-v4-application</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

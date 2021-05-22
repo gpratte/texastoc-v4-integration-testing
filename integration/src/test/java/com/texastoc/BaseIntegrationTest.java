@@ -30,7 +30,7 @@ import org.springframework.web.client.RestTemplate;
 public abstract class BaseIntegrationTest implements TestConstants {
 
   private final String SERVER_URL = "http://localhost";
-  private String V3_ENDPOINT;
+  private String V4_ENDPOINT;
 
   private final int port = 8080;
 
@@ -47,10 +47,10 @@ public abstract class BaseIntegrationTest implements TestConstants {
   }
 
   protected String endpoint() {
-    if (V3_ENDPOINT == null) {
-      V3_ENDPOINT = SERVER_URL + ":" + port + "/api/v3";
+    if (V4_ENDPOINT == null) {
+      V4_ENDPOINT = SERVER_URL + ":" + port + "/api/v4";
     }
-    return V3_ENDPOINT;
+    return V4_ENDPOINT;
   }
 
   protected String endpointRoot() {

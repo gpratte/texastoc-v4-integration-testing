@@ -36,7 +36,6 @@ public class GameSeatingStepdefs extends BaseIntegrationTest {
 
   @Before
   public void before() {
-    super.before();
     gameId = null;
     seating = null;
     exception = null;

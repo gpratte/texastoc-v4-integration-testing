@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/v4")
 public class GameRestController {
 
   public static final String CONTENT_TYPE_CURRENT_GAME = "application/vnd.texastoc.current+json";
@@ -45,65 +47,65 @@ public class GameRestController {
     this.gameService = gameService;
   }
 
-  @PostMapping(value = "/api/v4/games", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/games", consumes = MediaType.APPLICATION_JSON_VALUE)
   public Game createGame(@RequestBody Game game) {
     return gameModule.create(game);
   }
 
-  @PatchMapping(value = "/api/v4/games/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PatchMapping(value = "/games/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public Game updateGame(@PathVariable("id") int id, @RequestBody Game game) {
     game.setId(id);
     return gameModule.update(game);
   }
 
-  @GetMapping("/api/v4/games/{id}")
+  @GetMapping("/games/{id}")
   public Game getGame(@PathVariable("id") int id) {
     return gameModule.get(id);
   }
 
-  @GetMapping(value = "/api/v4/games", consumes = CONTENT_TYPE_CURRENT_GAME)
+  @GetMapping(value = "/games", consumes = CONTENT_TYPE_CURRENT_GAME)
   public Game getCurrentGame() {
     return gameModule.getCurrent();
   }
 
   // TODO this needs to go away
-  @GetMapping(value = "/api/v4/games", consumes = CONTENT_TYPE_CLEAR_CACHE)
+  @GetMapping(value = "/games", consumes = CONTENT_TYPE_CLEAR_CACHE)
   public String getCurrentNoCacheGame() {
     gameService.clearCacheGame();
     return "done";
   }
 
-  @GetMapping("/api/v4/games")
+  @GetMapping("/games")
   public List<Game> getGamesBySeasonId(@RequestParam(required = false) Integer seasonId) {
     return gameModule.getBySeasonId(seasonId);
   }
 
-  @PutMapping(value = "/api/v4/games/{id}", consumes = CONTENT_TYPE_FINALIZE)
+  @PutMapping(value = "/games/{id}", consumes = CONTENT_TYPE_FINALIZE)
   public Game finalizeGame(@PathVariable("id") int id) {
     return gameModule.finalize(id);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @PutMapping(value = "/api/v4/games/{id}", consumes = CONTENT_TYPE_UNFINALIZE)
+  @PutMapping(value = "/games/{id}", consumes = CONTENT_TYPE_UNFINALIZE)
   public Game unfinalizeGame(@PathVariable("id") int id) {
     return gameModule.unfinalize(id);
   }
 
-  @PostMapping(value = "/api/v4/games/{id}/players", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/games/{id}/players", consumes = MediaType.APPLICATION_JSON_VALUE)
   public GamePlayer createGamePlayer(@PathVariable("id") int id,
       @RequestBody GamePlayer gamePlayer) {
     gamePlayer.setGameId(id);
     return gameModule.createGamePlayer(gamePlayer);
   }
 
-  @PostMapping(value = "/api/v4/games/{id}/players", consumes = CONTENT_TYPE_NEW_GAME_PLAYER)
+  @PostMapping(value = "/games/{id}/players", consumes = CONTENT_TYPE_NEW_GAME_PLAYER)
   public GamePlayer createFirstTimeGamePlayer(@PathVariable("id") int id,
       @RequestBody GamePlayer gamePlayer) {
     gamePlayer.setGameId(id);
     return gameModule.createFirstTimeGamePlayer(gamePlayer);
   }
 
-  @PatchMapping(value = "/api/v4/games/{gameId}/players/{gamePlayerId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PatchMapping(value = "/games/{gameId}/players/{gamePlayerId}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public GamePlayer updateGamePlayer(@PathVariable("gameId") int gameId,
       @PathVariable("gamePlayerId") int gamePlayerId, @RequestBody GamePlayer gamePlayer) {
     gamePlayer.setGameId(gameId);
@@ -111,31 +113,31 @@ public class GameRestController {
     return gameModule.updateGamePlayer(gamePlayer);
   }
 
-  @PutMapping(value = "/api/v4/games/{gameId}/players/{gamePlayerId}", consumes = CONTENT_TYPE_KNOCKOUT)
+  @PutMapping(value = "/games/{gameId}/players/{gamePlayerId}", consumes = CONTENT_TYPE_KNOCKOUT)
   public GamePlayer toggleKnockedOut(@PathVariable("gameId") int gameId,
       @PathVariable("gamePlayerId") int gamePlayerId) {
     return gameModule.toggleGamePlayerKnockedOut(gameId, gamePlayerId);
   }
 
-  @PutMapping(value = "/api/v4/games/{gameId}/players/{gamePlayerId}", consumes = CONTENT_TYPE_REBUY)
+  @PutMapping(value = "/games/{gameId}/players/{gamePlayerId}", consumes = CONTENT_TYPE_REBUY)
   public GamePlayer toggleRebuy(@PathVariable("gameId") int gameId,
       @PathVariable("gamePlayerId") int gamePlayerId) {
     return gameModule.toggleGamePlayerRebuy(gameId, gamePlayerId);
   }
 
-  @DeleteMapping("/api/v4/games/{gameId}/players/{gamePlayerId}")
+  @DeleteMapping("/games/{gameId}/players/{gamePlayerId}")
   public void deleteGamePlayer(@PathVariable("gameId") int gameId,
       @PathVariable("gamePlayerId") int gamePlayerId) {
     gameModule.deleteGamePlayer(gameId, gamePlayerId);
   }
 
-  @PostMapping(value = "/api/v4/games/{gameId}/seats", consumes = CONTENT_TYPE_ASSIGN_SEATS)
+  @PostMapping(value = "/games/{gameId}/seats", consumes = CONTENT_TYPE_ASSIGN_SEATS)
   public Seating seating(@PathVariable("gameId") int gameId, @RequestBody Seating seating) {
     seating.setGameId(gameId);
     return gameModule.seatGamePlayers(seating);
   }
 
-  @PostMapping(value = "/api/v4/games/{gameId}/seats", consumes = CONTENT_TYPE_NOTIFY_SEATING)
+  @PostMapping(value = "/games/{gameId}/seats", consumes = CONTENT_TYPE_NOTIFY_SEATING)
   public void notifySeating(@PathVariable("gameId") int gameId) {
     gameModule.notifySeating(gameId);
   }

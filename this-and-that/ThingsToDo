@@ -1,7 +1,6 @@
 
-Travis CI not deploying to Heroku
 Refactor cucumber tests into JUnit tests.
-Distinguish between texastoc and davebpoker
+Remove update password in UI (have to use the forgot password flow)
 Move past season history out of json file
 Get rid of the season estimated payouts
 
@@ -11,6 +10,7 @@ When reoopen a game optionally use the new season settings.
 
 Gradle?
 Remove spring fox?
+CI/CD again
 
 ====== DONE =======
 Travis CICD

@@ -12,7 +12,6 @@ public abstract class BaseSeasonStepdefs extends BaseIntegrationTest {
   protected Game gameCreated;
 
   public void before() {
-    super.before();
     startYear = null;
     seasonCreated = null;
     seasonRetrieved = null;

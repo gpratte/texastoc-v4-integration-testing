@@ -7,28 +7,22 @@ import com.texastoc.BaseIntegrationTest;
 import com.texastoc.module.settings.model.Payout;
 import com.texastoc.module.settings.model.SystemSettings;
 import com.texastoc.module.settings.model.TocConfig;
-import io.cucumber.java.Before;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
 
-public class SettingsStepdefs extends BaseIntegrationTest {
+public class SettingsIT extends BaseIntegrationTest {
 
   SystemSettings settings;
 
   @Before
   public void before() {
-    super.before();
     settings = null;
   }
 
-  @When("^the settings are retrieved$")
-  public void settings() throws Exception {
+  @Test
+  public void verifySettings() throws Exception {
     settings = getSettings();
-  }
-
-  @Then("^the settings are correct$")
-  public void validateSettings() throws Exception {
     assertNotNull(settings);
     assertNotNull(settings.getVersion());
 

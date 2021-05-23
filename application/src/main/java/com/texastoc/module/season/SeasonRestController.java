@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/v4")
 public class SeasonRestController {
 
   private final SeasonService seasonService;
@@ -32,40 +34,40 @@ public class SeasonRestController {
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @PostMapping("/api/v4/seasons")
+  @PostMapping("/seasons")
   public Season createSeason(@RequestBody SeasonStart seasonStart) {
     return seasonService.create(seasonStart.getStartYear());
   }
 
-  @GetMapping("/api/v4/seasons/{id}")
+  @GetMapping("/seasons/{id}")
   public Season getSeason(@PathVariable("id") int id) {
     return seasonService.get(id);
   }
 
-  @GetMapping("/api/v4/seasons")
+  @GetMapping("/seasons")
   public List<Season> getSeasons() {
     return seasonService.getAll();
   }
 
-  @GetMapping("/api/v4/seasons/current")
+  @GetMapping("/seasons/current")
   public Season getCurrentSeason() {
     int id = seasonService.getCurrent().getId();
     return seasonService.get(id);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @PutMapping(value = "/api/v4/seasons/{id}", consumes = "application/vnd.texastoc.finalize+json")
+  @PutMapping(value = "/seasons/{id}", consumes = "application/vnd.texastoc.finalize+json")
   public Season finalizeSeason(@PathVariable("id") int id) {
     return seasonService.end(id);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @PutMapping(value = "/api/v4/seasons/{id}", consumes = "application/vnd.texastoc.unfinalize+json")
+  @PutMapping(value = "/seasons/{id}", consumes = "application/vnd.texastoc.unfinalize+json")
   public Season unfinalizeSeason(@PathVariable("id") int id) {
     return seasonService.open(id);
   }
 
-  @GetMapping("/api/v4/seasons/history")
+  @GetMapping("/seasons/history")
   public List<HistoricalSeason> getPastSeasons() {
     return historicalSeasonService.getPastSeasons();
   }

@@ -14,7 +14,6 @@ public abstract class BaseGameStepdefs extends BaseIntegrationTest {
 
   protected void before() {
     // Before each scenario
-    super.before();
     gameToCreate = null;
     gameCreated = null;
     gameRetrieved = null;

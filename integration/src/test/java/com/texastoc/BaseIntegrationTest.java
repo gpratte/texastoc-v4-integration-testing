@@ -42,10 +42,6 @@ public abstract class BaseIntegrationTest implements TestConstants {
     restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
   }
 
-  protected void before() {
-    DBUtils.cleanDb();
-  }
-
   protected String endpoint() {
     if (V4_ENDPOINT == null) {
       V4_ENDPOINT = SERVER_URL + ":" + port + "/api/v4";

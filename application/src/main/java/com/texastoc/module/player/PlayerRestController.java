@@ -21,10 +21,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@SuppressWarnings("unused")
 @RestController
+@RequestMapping("/api/v4")
 public class PlayerRestController implements PlayerModule {
 
   private final PlayerService playerService;
@@ -34,12 +35,12 @@ public class PlayerRestController implements PlayerModule {
   }
 
   @Override
-  @PostMapping("/api/v4/players")
+  @PostMapping("/players")
   public Player create(@RequestBody Player player) {
     return playerService.create(player);
   }
 
-  @PutMapping("/api/v4/players/{id}")
+  @PutMapping("/players/{id}")
   public Player update(@PathVariable("id") int id, @RequestBody @Valid Player player,
       HttpServletRequest request) {
     player.setId(id);
@@ -52,19 +53,19 @@ public class PlayerRestController implements PlayerModule {
   }
 
   @Override
-  @GetMapping("/api/v4/players")
+  @GetMapping("/players")
   public List<Player> getAll() {
     return playerService.getAll();
   }
 
   @Override
-  @GetMapping("/api/v4/players/{id}")
+  @GetMapping("/players/{id}")
   public Player get(@PathVariable("id") int id) {
     return playerService.get(id);
   }
 
   @Override
-  @DeleteMapping("/api/v4/players/{id}")
+  @DeleteMapping("/players/{id}")
   public void delete(@PathVariable("id") int id) {
     playerService.delete(id);
   }
@@ -90,13 +91,13 @@ public class PlayerRestController implements PlayerModule {
   }
 
   @Override
-  @PostMapping("/api/v4/players/{id}/roles")
+  @PostMapping("/players/{id}/roles")
   public Player addRole(@PathVariable("id") int id, @RequestBody @Valid Role role) {
     return playerService.addRole(id, role);
   }
 
   @Override
-  @DeleteMapping("/api/v4/players/{id}/roles/{roleId}")
+  @DeleteMapping("/players/{id}/roles/{roleId}")
   public Player removeRole(@PathVariable("id") int id, @PathVariable("roleId") int roleId) {
     return playerService.removeRole(id, roleId);
   }

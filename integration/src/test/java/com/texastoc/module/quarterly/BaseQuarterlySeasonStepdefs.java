@@ -15,7 +15,6 @@ public abstract class BaseQuarterlySeasonStepdefs extends BaseIntegrationTest {
   protected Game gameCreated;
 
   public void before() {
-    super.before();
     startYear = null;
     seasonCreated = null;
     qSeasonRetrieved = null;

@@ -18,10 +18,11 @@ public interface GameModule {
    * </ul>
    * If transportRequired is not provided the default value is false.
    *
-   * @param game a game with the hostId, date and transportRequired fields set
+   * @param game     a game with the hostId, date and transportRequired fields set
+   * @param seasonId the season to which the game will belong
    * @return the newly created game
    */
-  Game create(Game game);
+  Game create(Game game, Integer seasonId);
 
   /**
    * Update a game. The only fields of the Game that are pertinent are
@@ -47,18 +48,7 @@ public interface GameModule {
   Game get(int id);
 
   /**
-   * Get the current game. The current game is the only game for the current season that is not
-   * finalized. If no unfinalized game is found the the most current game of the current season will
-   * be returned.
-   *
-   * @return the current game
-   * @throws NotFoundException
-   */
-  Game getCurrent();
-
-  /**
-   * Get the games for the given season Id. If the season Id is null then get the games of the
-   * current season.
+   * Get the games for the given season Id.
    *
    * @param seasonId the season Id
    * @return the games for the corresponding season

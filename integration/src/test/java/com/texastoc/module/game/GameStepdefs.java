@@ -58,7 +58,7 @@ public class GameStepdefs extends BaseGameStepdefs {
           .date(LocalDate.now().plusDays(1))
           .hostId(1)
           .transportRequired(true)
-          .build(), token);
+          .build(), seasonCreated.getId(), token);
     } catch (HttpClientErrorException e) {
       exception = e;
     }
@@ -93,7 +93,7 @@ public class GameStepdefs extends BaseGameStepdefs {
   @When("^the game is created and retrieved$")
   public void the_game_is_created_and_retrieved() throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
-    gameCreated = createGame(gameToCreate, token);
+    gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
     gameRetrieved = getGame(gameCreated.getId(), token);
   }
 

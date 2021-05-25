@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +30,6 @@ public class GamePlayerService {
     this.gameHelper = gameHelper;
   }
 
-  @CacheEvict(value = "currentGame", allEntries = true, beforeInvocation = false)
   @Transactional
   public GamePlayer createGamePlayer(GamePlayer gamePlayer) {
     // TODO bean validation https://www.baeldung.com/javax-validation
@@ -44,7 +42,6 @@ public class GamePlayerService {
     return gamePlayerCreated;
   }
 
-  @CacheEvict(value = "currentGame", allEntries = true, beforeInvocation = false)
   @Transactional
   public GamePlayer createFirstTimeGamePlayer(GamePlayer gamePlayer) {
     // TODO bean validation https://www.baeldung.com/javax-validation
@@ -70,7 +67,6 @@ public class GamePlayerService {
     return gamePlayerCreated;
   }
 
-  @CacheEvict(value = "currentGame", allEntries = true, beforeInvocation = false)
   @Transactional
   public GamePlayer updateGamePlayer(GamePlayer gamePlayer) {
     Game game = gameHelper.get(gamePlayer.getGameId());
@@ -129,7 +125,6 @@ public class GamePlayerService {
     return existingGamePlayer;
   }
 
-  @CacheEvict(value = "currentGame", allEntries = true, beforeInvocation = false)
   @Transactional
   public GamePlayer toggleGamePlayerKnockedOut(int gameId, int gamePlayerId) {
     Game game = gameHelper.get(gameId);
@@ -148,7 +143,6 @@ public class GamePlayerService {
     return gamePlayer;
   }
 
-  @CacheEvict(value = "currentGame", allEntries = true, beforeInvocation = false)
   @Transactional
   public GamePlayer toggleGamePlayerRebuy(int gameId, int gamePlayerId) {
     Game game = gameHelper.get(gameId);
@@ -168,7 +162,6 @@ public class GamePlayerService {
     return gamePlayer;
   }
 
-  @CacheEvict(value = "currentGame", allEntries = true, beforeInvocation = false)
   @Transactional
   public void deleteGamePlayer(int gameId, int gamePlayerId) {
     Game game = gameHelper.get(gameId);

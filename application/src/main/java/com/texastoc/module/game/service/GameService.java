@@ -18,9 +18,9 @@ import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Slf4j
 @Service
@@ -41,11 +41,10 @@ public class GameService {
     this.gameEventProducer = gameEventProducer;
   }
 
-  @CacheEvict(value = "currentGame", allEntries = true, beforeInvocation = false)
   @Transactional
-  public Game create(Game game) {
+  public Game create(Game game, int seasonId) {
     // TODO bean validation https://www.baeldung.com/javax-validation
-    Season currentSeason = getSeasonModule().getCurrent();
+    Season currentSeason = getSeasonModule().get(seasonId);
 
     // TODO check that date is allowed - not before an existing game and not beyond the season.
 
@@ -85,7 +84,6 @@ public class GameService {
     return game;
   }
 
-  @CacheEvict(value = "currentGame", allEntries = true, beforeInvocation = false)
   @Transactional
   public Game update(Game game) {
     // TODO bean validation https://www.baeldung.com/javax-validation
@@ -103,7 +101,6 @@ public class GameService {
   }
 
 
-  @CacheEvict(value = "currentGame", allEntries = true, beforeInvocation = false)
   @Transactional
   public Game updateCanRebuy(int id, boolean value) {
     Game game = get(id);
@@ -124,26 +121,9 @@ public class GameService {
     return game;
   }
 
-  @Cacheable("currentGame")
-  @Transactional(readOnly = true)
-  public Game getCurrent() {
-    Game game = gameHelper.getCurrent();
-    if (game.getPlayers() != null) {
-      Collections.sort(game.getPlayers());
-    }
-    return game;
-  }
-
-
-  @CacheEvict(value = "currentGame", allEntries = true)
-  public void clearCacheGame() {
-  }
-
   @Transactional(readOnly = true)
   public List<Game> getBySeasonId(Integer seasonId) {
-    if (seasonId == null) {
-      seasonId = getSeasonModule().getCurrentId();
-    }
+    Assert.notNull(seasonId, "season Id required");
 
     List<Game> games = gameRepository.findBySeasonId(seasonId);
     games.forEach(game -> {
@@ -182,8 +162,7 @@ public class GameService {
     return games;
   }
 
-  @CacheEvict(value = {"currentGame", "currentSeason",
-      "seasonById", "allSeasons"}, allEntries = true, beforeInvocation = false)
+  @CacheEvict(value = {"seasonById", "allSeasons"}, allEntries = true, beforeInvocation = false)
   @Transactional
   public Game finalize(int id) {
     // TODO check that the game has the appropriate finishes (e.g. 1st, 2nd, ...)
@@ -211,8 +190,7 @@ public class GameService {
     return game;
   }
 
-  @CacheEvict(value = {"currentGame", "currentSeason",
-      "seasonById", "allSeasons"}, allEntries = true, beforeInvocation = false)
+  @CacheEvict(value = {"seasonById", "allSeasons"}, allEntries = true, beforeInvocation = false)
   public Game unfinalize(int id) {
     Game gameToOpen = get(id);
 

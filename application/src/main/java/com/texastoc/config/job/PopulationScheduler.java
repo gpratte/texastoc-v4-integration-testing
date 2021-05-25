@@ -136,7 +136,7 @@ public class PopulationScheduler {
           .hostId(player.getId())
           .date(gameDate)
           .transportRequired(false)
-          .build());
+          .build(), season.getId());
 
       addGamePlayers(game.getId());
       seatGamePlayers(game.getId());

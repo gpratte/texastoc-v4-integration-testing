@@ -45,7 +45,7 @@ public class QuarterlySeasonCalculationsStepdefs extends BaseQuarterlySeasonStep
         .build();
 
     String token = login(USER_EMAIL, USER_PASSWORD);
-    gameCreated = createGame(gameToCreate, token);
+    gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
 
     List<GamePlayer> gamePlayers = OBJECT_MAPPER.readValue(
         json, new TypeReference<List<GamePlayer>>() {
@@ -76,7 +76,7 @@ public class QuarterlySeasonCalculationsStepdefs extends BaseQuarterlySeasonStep
         .build();
 
     String token = login(USER_EMAIL, USER_PASSWORD);
-    gameCreated = createGame(gameToCreate, token);
+    gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
 
     List<QuarterlySeasonPlayer> qSeasonPlayers = super
         .getCurrentQuarterlySeason(seasonCreated.getId(), token).getPlayers();

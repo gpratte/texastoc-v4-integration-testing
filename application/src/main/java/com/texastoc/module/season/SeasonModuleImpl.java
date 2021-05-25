@@ -34,16 +34,6 @@ public class SeasonModuleImpl implements SeasonModule {
   }
 
   @Override
-  public Season getCurrent() {
-    return seasonService.getCurrent();
-  }
-
-  @Override
-  public int getCurrentId() {
-    return seasonService.getCurrentId();
-  }
-
-  @Override
   public void end(int seasonId) {
     seasonService.end(seasonId);
   }

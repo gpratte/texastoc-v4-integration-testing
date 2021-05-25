@@ -34,6 +34,4 @@ VALUES (1, '3.11');
 INSERT INTO settings
 VALUES (1, 1);
 INSERT INTO toc_config
-VALUES (1, 10, 20, 20, 3, 40, 40, 20, 2020, 1);
-INSERT INTO toc_config
-VALUES (2, 0, 20, 20, 3, 40, 40, 20, 2021, 1);
+VALUES (1, 10, 20, 20, 3, 40, 40, 20, 2021, 1);

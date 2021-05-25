@@ -12,6 +12,7 @@ import com.texastoc.module.game.model.Seat;
 import com.texastoc.module.game.model.Seating;
 import com.texastoc.module.game.model.SeatsPerTable;
 import com.texastoc.module.game.model.TableRequest;
+import com.texastoc.module.season.model.Season;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -30,6 +31,7 @@ public class GameSeatingStepdefs extends BaseIntegrationTest {
   static final Random RANDOM = new Random(System.currentTimeMillis());
 
   Integer gameId;
+  Season seasonCreated;
   Seating seating;
   List<GamePlayer> gamePlayers = new LinkedList<>();
   HttpClientErrorException exception;
@@ -37,6 +39,7 @@ public class GameSeatingStepdefs extends BaseIntegrationTest {
   @Before
   public void before() {
     gameId = null;
+    seasonCreated = null;
     seating = null;
     exception = null;
     gamePlayers.clear();
@@ -45,13 +48,13 @@ public class GameSeatingStepdefs extends BaseIntegrationTest {
   @Given("^a game has (\\d+) players$")
   public void aGameHasPlayers(int numPlayers) throws Exception {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
-    createSeason(getSeasonStart().getYear(), token);
+    seasonCreated = createSeason(getSeasonStart().getYear(), token);
 
     Game game = createGame(Game.builder()
         .date(LocalDate.now())
         .hostId(1)
         .transportRequired(false)
-        .build(), token);
+        .build(), seasonCreated.getId(), token);
 
     gameId = game.getId();
 

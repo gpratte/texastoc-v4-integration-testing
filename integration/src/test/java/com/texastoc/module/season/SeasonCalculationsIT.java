@@ -11,7 +11,6 @@ import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.season.model.Season;
 import com.texastoc.module.season.model.SeasonPlayer;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,167 +40,23 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
     checkSeasonCalculations(SEASON_CALCULATIONS.get(0));
   }
 
-//
-//  Scenario: calculate a season with two games
-//  Two games with enough players to generate estimated payouts
-//  Given a season started encompassing today
-//  And a running game has players
-//    """
-//[
-//  {
-//    "firstName":"abe",
-//    "lastName":"abeson",
-//    "boughtIn":true,
-//    "annualTocParticipant":true,
-//    "quarterlyTocParticipant":true,
-//    "rebought":true,
-//    "place":1,
-//    "chop":null
-//  },
-//  {
-//    "firstName":"bob",
-//    "lastName":"bobson",
-//    "boughtIn":true,
-//    "annualTocParticipant":true,
-//    "quarterlyTocParticipant":true,
-//    "rebought":true,
-//    "place":2,
-//    "chop":null
-//  },
-//  {
-//    "firstName":"coy",
-//    "lastName":"coyson",
-//    "boughtIn":true,
-//    "annualTocParticipant":true,
-//    "quarterlyTocParticipant":true,
-//    "rebought":true,
-//    "place":3,
-//    "chop":null
-//  }
-//]
-//    """
-//  And the running game is finalized
-//  And a running game has existing players
-//    """
-//[
-//  {
-//    "firstName":"abe",
-//    "lastName":"abeson",
-//    "boughtIn":true,
-//    "annualTocParticipant":true,
-//    "quarterlyTocParticipant":true,
-//    "rebought":true,
-//    "place":1,
-//    "chop":null
-//  },
-//  {
-//    "firstName":"bob",
-//    "lastName":"bobson",
-//    "boughtIn":true,
-//    "annualTocParticipant":true,
-//    "quarterlyTocParticipant":true,
-//    "rebought":true,
-//    "place":2,
-//    "chop":null
-//  },
-//  {
-//    "firstName":"coy",
-//    "lastName":"coyson",
-//    "boughtIn":true,
-//    "annualTocParticipant":true,
-//    "quarterlyTocParticipant":true,
-//    "rebought":true,
-//    "place":3,
-//    "chop":null
-//  }
-//]
-//    """
-//  When the finalized game triggers the season to recalculate
-//  Then the calculated season is retrieved with 2 games played
-//  Then the season calculations should be
-//    """
-//{
-//  "buyInCollected":240,
-//  "rebuyAddOnCollected":240,
-//  "annualTocCollected":120,
-//  "totalCollected":720,
-//  "annualTocFromRebuyAddOnCalculated":120,
-//  "rebuyAddOnLessAnnualTocCalculated":120,
-//  "totalCombinedAnnualTocCalculated":240,
-//  "kittyCalculated":20,
-//  "prizePotCalculated":340,
-//  "numGames":52,
-//  "numGamesPlayed":2,
-//  "finalized":false,
-//  "players":[
-//    {
-//      "name":"abe abeson",
-//      "place":1,
-//      "points":70,
-//      "entries":2
-//    },
-//    {
-//      "name":"bob bobson",
-//      "place":2,
-//      "points":54,
-//      "entries":2
-//    },
-//    {
-//      "name":"coy coyson",
-//      "place":3,
-//      "points":42,
-//      "entries":2
-//    }
-//  ],
-//  "payouts":[],
-//  "estimatedPayouts":[
-//    {
-//      "place":1,
-//      "amount":1649,
-//      "guaranteed":true,
-//      "estimated":true,
-//      "cash":false
-//    },
-//    {
-//      "place":2,
-//      "amount":1598,
-//      "guaranteed":false,
-//      "estimated":true,
-//      "cash":false
-//    },
-//    {
-//      "place":3,
-//      "amount":1348,
-//      "guaranteed":false,
-//      "estimated":true,
-//      "cash":false
-//    },
-//    {
-//      "place":4,
-//      "amount":1273,
-//      "guaranteed":false,
-//      "estimated":true,
-//      "cash":false
-//    },
-//    {
-//      "place":5,
-//      "amount":372,
-//      "guaranteed":false,
-//      "estimated":true,
-//      "cash":true
-//    }
-//  ]
-//}
-//    """
+  @Test
+  public void calculateASeasonWithTwoGames() throws Exception {
+    // Two games with enough players to generate estimated payouts
+    seasonExists();
+    gameHasPlayers(GAME_PLAYERS.get(1));
+    finalizedGame();
+    gameInProgressAddExistingPlayer(GAME_PLAYERS.get(2));
+    finalizeGame();
+    getCalcuatedSeason(2);
+    checkSeasonCalculations(SEASON_CALCULATIONS.get(1));
+  }
 
-
-  //@Given("^a season started encompassing today$")
-  public void seasonExists() throws Exception {
+  private void seasonExists() throws Exception {
     aSeasonExists();
   }
 
-  //@And("^a running game has players$")
-  public void gameHasPlayers(String json) throws Exception {
+  private void gameHasPlayers(String json) throws Exception {
     // Create a game
     Game gameToCreate = Game.builder()
         .date(LocalDate.now())
@@ -231,9 +86,7 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
     }
   }
 
-  @And("^a running game has existing players$")
-  public void gameInProgressAddExistingPlayer(String json) throws Exception {
-    // Create a game
+  private void gameInProgressAddExistingPlayer(String json) throws Exception {
     Game gameToCreate = Game.builder()
         .date(LocalDate.now())
         .hostId(1)
@@ -266,20 +119,17 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
     }
   }
 
-  @And("^the running game is finalized$")
-  public void finalizedGame() throws JsonProcessingException {
+  private void finalizedGame() throws JsonProcessingException {
     String token = login(USER_EMAIL, USER_PASSWORD);
     super.finalizeGame(gameCreated.getId(), token);
   }
 
-  //@When("^the finalized game triggers the season to recalculate$")
-  public void finalizeGame() throws Exception {
+  private void finalizeGame() throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
     finalizeGame(gameCreated.getId(), token);
   }
 
-  //@Given("^the calculated season is retrieved with (\\d+) games played$")
-  public void getCalcuatedSeason(int numGames) throws Exception {
+  private void getCalcuatedSeason(int numGames) throws Exception {
     final String token = login(USER_EMAIL, USER_PASSWORD);
     Awaitility.await()
         .atMost(15, TimeUnit.SECONDS)
@@ -290,8 +140,7 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
         });
   }
 
-  //@Then("^the season calculations should be$")
-  public void checkSeasonCalculations(String json) throws Exception {
+  private void checkSeasonCalculations(String json) throws Exception {
     Season expectedSeason = OBJECT_MAPPER.readValue(json, Season.class);
 
     assertEquals(expectedSeason.getBuyInCollected(), seasonRetrieved.getBuyInCollected());
@@ -373,6 +222,70 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
         "\"chop\":null" +
         "}" +
         "]");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"firstName\":\"abe\","
+        + "    \"lastName\":\"abeson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":1,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"bob\","
+        + "    \"lastName\":\"bobson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":2,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"coy\","
+        + "    \"lastName\":\"coyson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":3,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"firstName\":\"abe\","
+        + "    \"lastName\":\"abeson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":1,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"bob\","
+        + "    \"lastName\":\"bobson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":2,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"coy\","
+        + "    \"lastName\":\"coyson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":3,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
 
     SEASON_CALCULATIONS.add("{" +
         "\"buyInCollected\":40," +
@@ -398,5 +311,79 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
         "\"payouts\":[]," +
         "\"estimatedPayouts\":[]" +
         "}");
+    SEASON_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":240,"
+        + "  \"rebuyAddOnCollected\":240,"
+        + "  \"annualTocCollected\":120,"
+        + "  \"totalCollected\":720,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":120,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":120,"
+        + "  \"totalCombinedAnnualTocCalculated\":240,"
+        + "  \"kittyCalculated\":20,"
+        + "  \"prizePotCalculated\":340,"
+        + "  \"numGames\":52,"
+        + "  \"numGamesPlayed\":2,"
+        + "  \"finalized\":false,"
+        + "  \"players\":["
+        + "    {"
+        + "      \"name\":\"abe abeson\","
+        + "      \"place\":1,"
+        + "      \"points\":70,"
+        + "      \"entries\":2"
+        + "    },"
+        + "    {"
+        + "      \"name\":\"bob bobson\","
+        + "      \"place\":2,"
+        + "      \"points\":54,"
+        + "      \"entries\":2"
+        + "    },"
+        + "    {"
+        + "      \"name\":\"coy coyson\","
+        + "      \"place\":3,"
+        + "      \"points\":42,"
+        + "      \"entries\":2"
+        + "    }"
+        + "  ],"
+        + "  \"payouts\":["
+        + "    "
+        + "  ],"
+        + "  \"estimatedPayouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":1649,"
+        + "      \"guaranteed\":true,"
+        + "      \"estimated\":true,"
+        + "      \"cash\":false"
+        + "    },"
+        + "    {"
+        + "      \"place\":2,"
+        + "      \"amount\":1598,"
+        + "      \"guaranteed\":false,"
+        + "      \"estimated\":true,"
+        + "      \"cash\":false"
+        + "    },"
+        + "    {"
+        + "      \"place\":3,"
+        + "      \"amount\":1348,"
+        + "      \"guaranteed\":false,"
+        + "      \"estimated\":true,"
+        + "      \"cash\":false"
+        + "    },"
+        + "    {"
+        + "      \"place\":4,"
+        + "      \"amount\":1273,"
+        + "      \"guaranteed\":false,"
+        + "      \"estimated\":true,"
+        + "      \"cash\":false"
+        + "    },"
+        + "    {"
+        + "      \"place\":5,"
+        + "      \"amount\":372,"
+        + "      \"guaranteed\":false,"
+        + "      \"estimated\":true,"
+        + "      \"cash\":true"
+        + "    }"
+        + "  ]"
+        + "}");
   }
 }

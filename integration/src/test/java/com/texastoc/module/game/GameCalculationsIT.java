@@ -14,7 +14,7 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import org.junit.Assert;
 
-public class GameCalculationsStepdefs extends BaseGameStepdefs {
+public class GameCalculationsIT extends BaseGameIT {
 
   static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
   private Integer gameId;
@@ -39,7 +39,7 @@ public class GameCalculationsStepdefs extends BaseGameStepdefs {
     List<GamePlayer> gamePlayers = OBJECT_MAPPER.readValue(
         json, new TypeReference<List<GamePlayer>>() {
         });
-    super.getCurrentGame();
+    // ;;!! super.getCurrentGame();
     String token = login(USER_EMAIL, USER_PASSWORD);
     for (GamePlayer gp : gamePlayers) {
       GamePlayer gamePlayer = GamePlayer.builder()
@@ -59,7 +59,7 @@ public class GameCalculationsStepdefs extends BaseGameStepdefs {
 
   @When("^adding a player$")
   public void addingPlayer(String json) throws Exception {
-    super.getCurrentGame();
+    //;;!! super.getCurrentGame();
     String token = login(USER_EMAIL, USER_PASSWORD);
     GamePlayer gamePlayer = OBJECT_MAPPER.readValue(json, GamePlayer.class);
     gamePlayer.setGameId(gameId);
@@ -71,7 +71,7 @@ public class GameCalculationsStepdefs extends BaseGameStepdefs {
   @When("^updating a player$")
   public void updatePlayer(String json) throws Exception {
     GamePlayer updateGamePlayerInfo = OBJECT_MAPPER.readValue(json, GamePlayer.class);
-    super.getCurrentGame();
+    //;;!! super.getCurrentGame();
     String token = login(USER_EMAIL, USER_PASSWORD);
     for (GamePlayer gp : gameRetrieved.getPlayers()) {
       if (gp.getFirstName().equals(updateGamePlayerInfo.getFirstName()) &&
@@ -90,7 +90,7 @@ public class GameCalculationsStepdefs extends BaseGameStepdefs {
 
   @When("^deleting a player$")
   public void deletePlayer() throws Exception {
-    super.getCurrentGame();
+    //;;!! super.getCurrentGame();
     String token = login(USER_EMAIL, USER_PASSWORD);
     GamePlayer gamePlayer = gameRetrieved.getPlayers().get(0);
     super.deletePlayerFromGame(gameRetrieved.getId(), gamePlayer.getId(), token);
@@ -98,7 +98,7 @@ public class GameCalculationsStepdefs extends BaseGameStepdefs {
 
   @And("^the current calculated game is retrieved$")
   public void getCurrentGame() throws Exception {
-    super.getCurrentGame();
+    //;;!! super.getCurrentGame();
   }
 
   @Then("^the game calculated is$")

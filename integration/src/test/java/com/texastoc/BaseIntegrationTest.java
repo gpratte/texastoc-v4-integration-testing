@@ -331,20 +331,6 @@ public abstract class BaseIntegrationTest implements TestConstants {
     return response.getBody();
   }
 
-  protected Game getCurrentGame(String token) throws JsonProcessingException {
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("Authorization", "Bearer " + token);
-    headers.set("Content-Type", "application/vnd.texastoc.current+json");
-    HttpEntity<String> entity = new HttpEntity<>("", headers);
-
-    ResponseEntity<Game> response = restTemplate.exchange(
-        endpoint() + "/games",
-        HttpMethod.GET,
-        entity,
-        Game.class);
-    return response.getBody();
-  }
-
   protected Season getSeason(int id, String token) throws JsonProcessingException {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", "Bearer " + token);
@@ -352,19 +338,6 @@ public abstract class BaseIntegrationTest implements TestConstants {
 
     ResponseEntity<Season> response = restTemplate.exchange(
         endpoint() + "/seasons/" + id,
-        HttpMethod.GET,
-        entity,
-        Season.class);
-    return response.getBody();
-  }
-
-  protected Season getCurrentSeason(String token) throws JsonProcessingException {
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("Authorization", "Bearer " + token);
-    HttpEntity<String> entity = new HttpEntity<>("", headers);
-
-    ResponseEntity<Season> response = restTemplate.exchange(
-        endpoint() + "/seasons/current",
         HttpMethod.GET,
         entity,
         Season.class);

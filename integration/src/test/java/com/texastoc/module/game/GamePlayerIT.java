@@ -12,7 +12,7 @@ import io.cucumber.java.en.When;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GamePlayerStepdefs extends BaseGameStepdefs {
+public class GamePlayerIT extends BaseGameIT {
 
   private Integer gameId;
   private List<GamePlayer> gamePlayers = new LinkedList<>();
@@ -100,7 +100,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
 
   @When("^the game is updated with the players$")
   public void theGameIsUpdatedWithThePlayers() throws Exception {
-    super.getCurrentGame();
+    //;;!! super.getCurrentGame();
     gameRetrieved.setPlayers(gamePlayers);
     String token = login(USER_EMAIL, USER_PASSWORD);
     updateGame(gameRetrieved.getId(), gameRetrieved, token);
@@ -108,7 +108,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
 
   @When("^the game is updated with the updated players$")
   public void theGameIsUpdatedWithTheUpdatedPlayers() throws Exception {
-    super.getCurrentGame();
+    //;;!! super.getCurrentGame();
     gameRetrieved.setPlayers(retrievedGamePlayers);
     String token = login(USER_EMAIL, USER_PASSWORD);
     updateGame(gameRetrieved.getId(), gameRetrieved, token);
@@ -116,7 +116,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
 
   @When("^all players are deleted$")
   public void allPlayersAreDeleted() throws Exception {
-    super.getCurrentGame();
+    //;;!! super.getCurrentGame();
     String token = login(USER_EMAIL, USER_PASSWORD);
     for (GamePlayer gamePlayer : gameRetrieved.getPlayers()) {
       deletePlayerFromGame(gameRetrieved.getId(), gamePlayer.getId(), token);
@@ -125,7 +125,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
 
   @And("^the current players are retrieved$")
   public void theCurrentPlayersAreRetrieved() throws Exception {
-    super.getCurrentGame();
+    //;;!! super.getCurrentGame();
     retrievedGamePlayers = gameRetrieved.getPlayers();
   }
 
@@ -247,7 +247,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
 
   @Then("^there are no players$")
   public void thereAreNoPlayers() throws Exception {
-    super.getCurrentGame();
+    //;;!! super.getCurrentGame();
     assertEquals("number of players should be zero", 0, gameRetrieved.getPlayers().size());
   }
 }

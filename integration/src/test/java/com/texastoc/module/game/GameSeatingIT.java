@@ -26,7 +26,7 @@ import java.util.Random;
 import java.util.UUID;
 import org.springframework.web.client.HttpClientErrorException;
 
-public class GameSeatingStepdefs extends BaseIntegrationTest {
+public class GameSeatingIT extends BaseIntegrationTest {
 
   static final Random RANDOM = new Random(System.currentTimeMillis());
 

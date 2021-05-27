@@ -6,7 +6,7 @@ import com.texastoc.module.season.model.Season;
 import java.time.LocalDate;
 import org.springframework.web.client.HttpClientErrorException;
 
-public abstract class BaseGameStepdefs extends BaseIntegrationTest {
+public abstract class BaseGameIT extends BaseIntegrationTest {
 
   protected Game gameToCreate;
   protected Game gameCreated;
@@ -41,9 +41,9 @@ public abstract class BaseGameStepdefs extends BaseIntegrationTest {
     gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
   }
 
-  protected void getCurrentGame() throws Exception {
+  protected void getGame(int id) throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
-    gameRetrieved = getCurrentGame(token);
+    gameRetrieved = getGame(id, token);
   }
 
 }

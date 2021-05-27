@@ -6,33 +6,35 @@ import static org.junit.Assert.fail;
 
 import com.texastoc.module.quarterly.model.QuarterlySeason;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import org.junit.Test;
 
-public class QuarterlySeasonStepdefs extends BaseQuarterlySeasonStepdefs {
+public class QuarterlySeasonIT extends BaseQuarterlySeasonIT {
 
   @Before
   public void before() {
     super.before();
   }
 
-  @Given("^the season start year encompassing today$")
-  public void seasonStarts() throws Exception {
+  @Test
+  public void createQuarterlySeasons() throws Exception {
+    seasonStarts();
+    createTheSeason();
+    verifyQuarters();
+  }
+
+  private void seasonStarts() throws Exception {
     startYear = getSeasonStart().getYear();
   }
 
-  @When("^the current season is created$")
-  public void createTheSeason() throws Exception {
+  private void createTheSeason() throws Exception {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     seasonCreated = createSeason(startYear, token);
   }
 
-  @Then("^four quarterly seasons should be created$")
-  public void verifyQuarters() throws Exception {
+  private void verifyQuarters() throws Exception {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     List<QuarterlySeason> quarters = getQuarterlySeasons(seasonCreated.getId(), token);
     assertEquals(4, quarters.size());

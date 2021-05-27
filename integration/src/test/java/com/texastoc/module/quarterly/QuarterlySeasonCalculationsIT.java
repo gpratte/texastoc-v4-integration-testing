@@ -3,7 +3,6 @@ package com.texastoc.module.quarterly;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.module.game.model.Game;
@@ -11,32 +10,54 @@ import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.quarterly.model.QuarterlySeason;
 import com.texastoc.module.quarterly.model.QuarterlySeasonPlayer;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.assertj.core.api.Assertions;
 import org.awaitility.Awaitility;
+import org.junit.Test;
 
-public class QuarterlySeasonCalculationsStepdefs extends BaseQuarterlySeasonStepdefs {
+public class QuarterlySeasonCalculationsIT extends BaseQuarterlySeasonIT {
 
   static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+  static final List<String> GAME_PLAYERS = new LinkedList<>();
+  static final List<String> QUARTERLY_SEASON_CALCULATIONS = new LinkedList<>();
 
   @Before
   public void before() {
     super.before();
   }
 
-  @Given("^a quarterly season started encompassing today$")
-  public void seasonExists() throws Exception {
+  @Test
+  public void calculateAQuarterlySeasonWithOneGame() throws Exception {
+    seasonExists();
+    gameHasPlayers(GAME_PLAYERS.get(0));
+    finalizeGame();
+    getCalcuatedQuarterlySeason(1);
+    checkQuarterlySeasonCalculations(QUARTERLY_SEASON_CALCULATIONS.get(0));
+  }
+
+  @Test
+  public void calculateAQuarterlySeasonWithTwoGames() throws Exception {
+    // Two games with enough players to generate estimated payouts
+    seasonExists();
+    gameHasPlayers(GAME_PLAYERS.get(1));
+    finalizeGame();
+    gameInProgressAddExistingPlayer(GAME_PLAYERS.get(2));
+    finalizeGame();
+    getCalcuatedQuarterlySeason(2);
+    checkQuarterlySeasonCalculations(QUARTERLY_SEASON_CALCULATIONS.get(1));
+  }
+
+  // A quarterly season started encompassing today
+  private void seasonExists() throws Exception {
     aSeasonExists();
   }
 
-  @And("^a running quarterly game has players$")
-  public void gameInProgress(String json) throws Exception {
+  // A running quarterly game has players
+  private void gameHasPlayers(String json) throws Exception {
     // Create a game
     Game gameToCreate = Game.builder()
         .date(LocalDate.now())
@@ -66,8 +87,8 @@ public class QuarterlySeasonCalculationsStepdefs extends BaseQuarterlySeasonStep
     }
   }
 
-  @And("^a running quarterly game has existing players$")
-  public void gameInProgressAddExistingPlayer(String json) throws Exception {
+  // A running quarterly game has existing players
+  private void gameInProgressAddExistingPlayer(String json) throws Exception {
     // Create a game
     Game gameToCreate = Game.builder()
         .date(LocalDate.now())
@@ -99,20 +120,14 @@ public class QuarterlySeasonCalculationsStepdefs extends BaseQuarterlySeasonStep
     }
   }
 
-  @And("^the running quarterly game is finalized$")
-  public void finalizedGame() throws JsonProcessingException {
-    String token = login(USER_EMAIL, USER_PASSWORD);
-    super.finalizeGame(gameCreated.getId(), token);
-  }
-
-  @When("^the finalized game triggers the quarterly season to recalculate$")
-  public void finalizeGame() throws Exception {
+  // The finalized game triggers the quarterly season to recalculate
+  private void finalizeGame() throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
     finalizeGame(gameCreated.getId(), token);
   }
 
-  @Given("^the calculated quarterly season is retrieved with (\\d+) games played$")
-  public void getCalcuatedQuarterlySeason(int numGames) throws Exception {
+  // The calculated quarterly season is retrieved with (\\d+) games played
+  private void getCalcuatedQuarterlySeason(int numGames) throws Exception {
     final String token = login(USER_EMAIL, USER_PASSWORD);
     Awaitility.await()
         .atMost(15, TimeUnit.SECONDS)
@@ -124,8 +139,8 @@ public class QuarterlySeasonCalculationsStepdefs extends BaseQuarterlySeasonStep
         });
   }
 
-  @Then("^the quarterly season calculations should be$")
-  public void checkSeasonCalculations(String json) throws Exception {
+  // The quarterly season calculations should be
+  private void checkQuarterlySeasonCalculations(String json) throws Exception {
     QuarterlySeason expectedSeason = OBJECT_MAPPER.readValue(json, QuarterlySeason.class);
 
     assertEquals(expectedSeason.getQTocCollected(), qSeasonRetrieved.getQTocCollected());
@@ -162,4 +177,127 @@ public class QuarterlySeasonCalculationsStepdefs extends BaseQuarterlySeasonStep
           qSeasonRetrieved.getPayouts().get(i).getAmount());
     }
   }
+
+  static {
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"firstName\":\"abe\","
+        + "    \"lastName\":\"abeson\","
+        + "    \"boughtIn\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"place\":1,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"firstName\":\"abe\","
+        + "    \"lastName\":\"abeson\","
+        + "    \"boughtIn\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"place\":1,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"bob\","
+        + "    \"lastName\":\"bobson\","
+        + "    \"boughtIn\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"place\":2,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"coy\","
+        + "    \"lastName\":\"coyson\","
+        + "    \"boughtIn\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"place\":3,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"name\":\"abe abeson\","
+        + "    \"place\":1"
+        + "  },"
+        + "  {"
+        + "    \"name\":\"bob bobson\","
+        + "    \"place\":2"
+        + "  },"
+        + "  {"
+        + "    \"name\":\"coy coyson\","
+        + "    \"place\":3"
+        + "  }"
+        + "]");
+
+    QUARTERLY_SEASON_CALCULATIONS.add("{"
+        + "  \"qtocCollected\":20,"
+        + "  \"numGames\":13,"
+        + "  \"numGamesPlayed\":1,"
+        + "  \"finalized\":false,"
+        + "  \"players\":["
+        + "    {"
+        + "      \"name\":\"abe abeson\","
+        + "      \"place\":1,"
+        + "      \"points\":30,"
+        + "      \"entries\":1"
+        + "    }"
+        + "  ],"
+        + "  \"payouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":10"
+        + "    },"
+        + "    {"
+        + "      \"place\":2,"
+        + "      \"amount\":6"
+        + "    },"
+        + "    {"
+        + "      \"place\":3,"
+        + "      \"amount\":4"
+        + "    }"
+        + "  ]"
+        + "}");
+    QUARTERLY_SEASON_CALCULATIONS.add("{"
+        + "  \"qtocCollected\":120,"
+        + "  \"numGames\":13,"
+        + "  \"numGamesPlayed\":2,"
+        + "  \"finalized\":false,"
+        + "  \"players\":["
+        + "    {"
+        + "      \"name\":\"abe abeson\","
+        + "      \"place\":1,"
+        + "      \"points\":70,"
+        + "      \"entries\":2"
+        + "    },"
+        + "    {"
+        + "      \"name\":\"bob bobson\","
+        + "      \"place\":2,"
+        + "      \"points\":54,"
+        + "      \"entries\":2"
+        + "    },"
+        + "    {"
+        + "      \"name\":\"coy coyson\","
+        + "      \"place\":3,"
+        + "      \"points\":42,"
+        + "      \"entries\":2"
+        + "    }"
+        + "  ],"
+        + "  \"payouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":60"
+        + "    },"
+        + "    {"
+        + "      \"place\":2,"
+        + "      \"amount\":36"
+        + "    },"
+        + "    {"
+        + "      \"place\":3,"
+        + "      \"amount\":24"
+        + "    }"
+        + "  ]"
+        + "}");
+  }
+
 }

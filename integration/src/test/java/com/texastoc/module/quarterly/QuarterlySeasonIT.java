@@ -20,8 +20,11 @@ public class QuarterlySeasonIT extends BaseQuarterlySeasonIT {
 
   @Test
   public void createQuarterlySeasons() throws Exception {
+    // Arrange
     seasonStarts();
+    // Act
     createTheSeason();
+    // Assert
     verifyQuarters();
   }
 

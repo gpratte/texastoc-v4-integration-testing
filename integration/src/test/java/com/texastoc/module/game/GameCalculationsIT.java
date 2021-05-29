@@ -33,8 +33,11 @@ public class GameCalculationsIT extends BaseGameIT {
    */
   @Test
   public void gameWithOneEmptyPlayer() throws Exception {
+    // Arrange
     aGameIsCreated();
+    // Act
     addGamePlayers(GAME_PLAYERS.get(0));
+    // Assert
     getCalculatedGame();
     calcualatedGame(GAME_CALCULATIONS.get(0));
   }

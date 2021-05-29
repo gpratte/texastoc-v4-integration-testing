@@ -25,12 +25,17 @@ public class GamePlayerIT extends BaseGameIT {
     retrievedGamePlayers = null;
   }
 
+  /**
+   * Add an existing player as a game player with minimal fields set
+   */
   @Test
   public void addEmptyExistingPlayer() throws Exception {
-    // Add an existing player as a game player with minimal fields set
+    // Arrange
     aGameIsCreated();
     aPlayerIsAddedWithNothingSet();
+    // Act
     theGameIsUpdatedWithThePlayers();
+    // Assert
     theGamePlayersAreRetrieved();
     theRetrievedGamePlayersHaveNothingSet();
   }

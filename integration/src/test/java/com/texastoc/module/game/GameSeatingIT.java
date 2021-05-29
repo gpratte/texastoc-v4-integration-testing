@@ -47,9 +47,12 @@ public class GameSeatingIT extends BaseIntegrationTest {
    */
   @Test
   public void zeroAtOneNoRequests() throws Exception {
+    // Arrange
     aGameHasGamePlayers(0);
     seatingIsDoneWithTableAndSeatsAndRequests(1, 10, 0, 0);
+    // Act
     gamePlayersAreSeatedAtTable(0, 1);
+    // Assert
     tableHasDeadStacks(1, 10);
   }
 

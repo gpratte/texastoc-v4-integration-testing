@@ -33,9 +33,12 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
 
   @Test
   public void calculateASeasonWithOneGame() throws Exception {
+    // Arrange
     seasonExists();
     gameHasPlayers(GAME_PLAYERS.get(0));
+    // Act
     finalizeGame();
+    // Assert
     getCalcuatedSeason(1);
     checkSeasonCalculations(SEASON_CALCULATIONS.get(0));
   }

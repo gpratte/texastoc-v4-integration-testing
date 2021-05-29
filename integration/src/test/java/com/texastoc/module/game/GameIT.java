@@ -25,12 +25,12 @@ public class GameIT extends BaseGameIT {
 
   @Test
   public void createSimpleGame() throws Exception {
-    // arrange
+    // Arrange
     aSeasonExists();
     theGameStartsNow();
-    // act
+    // Act
     theGameIsCreated();
-    // assert
+    // Assert
     theGameIsNormal();
     theGameIsNotTransportRequired();
   }

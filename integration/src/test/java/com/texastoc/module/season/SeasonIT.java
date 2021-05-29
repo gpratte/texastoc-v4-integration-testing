@@ -18,9 +18,11 @@ public class SeasonIT extends BaseSeasonIT {
 
   @Test
   public void createASeason() throws Exception {
-    // create a season
+    // Arrange
     seasonStarts();
+    // Act
     theSeasonIsCreated();
+    // Assert
     verifyStartDate();
     verifySeasonCosts();
   }

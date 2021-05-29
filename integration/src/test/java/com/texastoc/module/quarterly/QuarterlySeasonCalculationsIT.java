@@ -32,9 +32,12 @@ public class QuarterlySeasonCalculationsIT extends BaseQuarterlySeasonIT {
 
   @Test
   public void calculateAQuarterlySeasonWithOneGame() throws Exception {
+    // Arrange
     seasonExists();
     gameHasPlayers(GAME_PLAYERS.get(0));
+    // Act
     finalizeGame();
+    // Assert
     getCalcuatedQuarterlySeason(1);
     checkQuarterlySeasonCalculations(QUARTERLY_SEASON_CALCULATIONS.get(0));
   }

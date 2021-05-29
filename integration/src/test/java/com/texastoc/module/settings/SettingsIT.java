@@ -22,7 +22,9 @@ public class SettingsIT extends BaseIntegrationTest {
 
   @Test
   public void verifySettings() throws Exception {
+    // Arrange and Act
     settings = getSettings();
+    // Assert
     assertNotNull(settings);
     assertNotNull(settings.getVersion());
 

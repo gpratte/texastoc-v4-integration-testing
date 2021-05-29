@@ -62,7 +62,7 @@ public class GameServiceTest implements TestConstants {
   @Test
   public void testCreateGame() {
     // Arrange
-    when(seasonModule.getCurrent())
+    when(seasonModule.get(16))
         .thenReturn(Season.builder()
             .id(16)
             .kittyPerGameCost(KITTY_PER_GAME)
@@ -106,7 +106,7 @@ public class GameServiceTest implements TestConstants {
         .build();
 
     // Act
-    gameService.create(expected);
+    gameService.create(expected, 16);
 
     // Assert
     // Game repository called once
@@ -171,7 +171,7 @@ public class GameServiceTest implements TestConstants {
   public void testCannotCreateGame() {
     // Arrange
     // Current season
-    when(seasonModule.getCurrent())
+    when(seasonModule.get(16))
         .thenReturn(Season.builder()
             .id(16)
             .build());
@@ -184,7 +184,7 @@ public class GameServiceTest implements TestConstants {
 
     // Act & Assert
     assertThatThrownBy(() -> {
-      gameService.create(new Game());
+      gameService.create(new Game(), 16);
     }).isInstanceOf(GameInProgressException.class)
         .hasMessageContaining("Action cannot be completed because there is a game in progress");
   }
@@ -246,36 +246,13 @@ public class GameServiceTest implements TestConstants {
   @Test
   public void testGetCurrent() {
     // Arrange
-    when(gameHelper.getCurrent()).thenReturn(Game.builder().id(123).build());
+    when(gameHelper.get(123)).thenReturn(Game.builder().id(123).build());
 
     // Act
-    Game game = gameService.getCurrent();
+    Game game = gameService.get(123);
 
     // Assert
     assertEquals(123, game.getId());
-  }
-
-  @Test
-  public void testClearCacheGame() {
-    // Act
-    gameService.clearCacheGame();
-  }
-
-  @Test
-  public void testGetByNoSeasonId() {
-    // Arrange
-    when(seasonModule.getCurrentId()).thenReturn(1);
-
-    when(gameRepository.findBySeasonId(1))
-        .thenReturn(ImmutableList.of(Game.builder().id(1).build(),
-            Game.builder().id(2).build(),
-            Game.builder().id(3).build()));
-
-    // Act
-    List<Game> games = gameService.getBySeasonId(null);
-
-    // Assert
-    assertEquals("expect three games", 3, games.size());
   }
 
   @Test

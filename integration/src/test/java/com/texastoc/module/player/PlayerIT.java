@@ -43,7 +43,9 @@ public class PlayerIT extends BaseIntegrationTest {
 
   @Test
   public void createAndGet() throws Exception {
+    // Arrange and Act
     newPlayer();
+    // Assert
     getPlayer();
     thePlayerMatches();
   }

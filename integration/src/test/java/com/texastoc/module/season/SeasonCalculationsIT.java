@@ -11,32 +11,55 @@ import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.season.model.Season;
 import com.texastoc.module.season.model.SeasonPlayer;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.assertj.core.api.Assertions;
 import org.awaitility.Awaitility;
+import org.junit.Test;
 
-public class SeasonCalculationsStepdefs extends BaseSeasonStepdefs {
+public class SeasonCalculationsIT extends BaseSeasonIT {
 
   static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+  static final List<String> GAME_PLAYERS = new LinkedList<>();
+  static final List<String> SEASON_CALCULATIONS = new LinkedList<>();
 
   @Before
   public void before() {
     super.before();
   }
 
-  @Given("^a season started encompassing today$")
-  public void seasonExists() throws Exception {
+  @Test
+  public void calculateASeasonWithOneGame() throws Exception {
+    // Arrange
+    seasonExists();
+    gameHasPlayers(GAME_PLAYERS.get(0));
+    // Act
+    finalizeGame();
+    // Assert
+    getCalcuatedSeason(1);
+    checkSeasonCalculations(SEASON_CALCULATIONS.get(0));
+  }
+
+  @Test
+  public void calculateASeasonWithTwoGames() throws Exception {
+    // Two games with enough players to generate estimated payouts
+    seasonExists();
+    gameHasPlayers(GAME_PLAYERS.get(1));
+    finalizedGame();
+    gameInProgressAddExistingPlayer(GAME_PLAYERS.get(2));
+    finalizeGame();
+    getCalcuatedSeason(2);
+    checkSeasonCalculations(SEASON_CALCULATIONS.get(1));
+  }
+
+  private void seasonExists() throws Exception {
     aSeasonExists();
   }
 
-  @And("^a running game has players$")
-  public void gameInProgress(String json) throws Exception {
+  private void gameHasPlayers(String json) throws Exception {
     // Create a game
     Game gameToCreate = Game.builder()
         .date(LocalDate.now())
@@ -45,7 +68,7 @@ public class SeasonCalculationsStepdefs extends BaseSeasonStepdefs {
         .build();
 
     String token = login(USER_EMAIL, USER_PASSWORD);
-    gameCreated = createGame(gameToCreate, token);
+    gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
 
     List<GamePlayer> gamePlayers = OBJECT_MAPPER.readValue(
         json, new TypeReference<List<GamePlayer>>() {
@@ -66,9 +89,7 @@ public class SeasonCalculationsStepdefs extends BaseSeasonStepdefs {
     }
   }
 
-  @And("^a running game has existing players$")
-  public void gameInProgressAddExistingPlayer(String json) throws Exception {
-    // Create a game
+  private void gameInProgressAddExistingPlayer(String json) throws Exception {
     Game gameToCreate = Game.builder()
         .date(LocalDate.now())
         .hostId(1)
@@ -76,7 +97,7 @@ public class SeasonCalculationsStepdefs extends BaseSeasonStepdefs {
         .build();
 
     String token = login(USER_EMAIL, USER_PASSWORD);
-    gameCreated = createGame(gameToCreate, token);
+    gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
 
     List<SeasonPlayer> seasonPlayers = super.getSeason(seasonCreated.getId(), token).getPlayers();
 
@@ -101,32 +122,28 @@ public class SeasonCalculationsStepdefs extends BaseSeasonStepdefs {
     }
   }
 
-  @And("^the running game is finalized$")
-  public void finalizedGame() throws JsonProcessingException {
+  private void finalizedGame() throws JsonProcessingException {
     String token = login(USER_EMAIL, USER_PASSWORD);
     super.finalizeGame(gameCreated.getId(), token);
   }
 
-  @When("^the finalized game triggers the season to recalculate$")
-  public void finalizeGame() throws Exception {
+  private void finalizeGame() throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
     finalizeGame(gameCreated.getId(), token);
   }
 
-  @Given("^the calculated season is retrieved with (\\d+) games played$")
-  public void getCalcuatedSeason(int numGames) throws Exception {
+  private void getCalcuatedSeason(int numGames) throws Exception {
     final String token = login(USER_EMAIL, USER_PASSWORD);
     Awaitility.await()
         .atMost(15, TimeUnit.SECONDS)
         .pollInterval(1, TimeUnit.SECONDS)
         .untilAsserted(() -> {
-          seasonRetrieved = super.getCurrentSeason(token);
+          seasonRetrieved = super.getSeason(seasonCreated.getId(), token);
           Assertions.assertThat(seasonRetrieved.getNumGamesPlayed()).isEqualTo(numGames);
         });
   }
 
-  @Then("^the season calculations should be$")
-  public void checkSeasonCalculations(String json) throws Exception {
+  private void checkSeasonCalculations(String json) throws Exception {
     Season expectedSeason = OBJECT_MAPPER.readValue(json, Season.class);
 
     assertEquals(expectedSeason.getBuyInCollected(), seasonRetrieved.getBuyInCollected());
@@ -193,6 +210,183 @@ public class SeasonCalculationsStepdefs extends BaseSeasonStepdefs {
       assertEquals(expectedSeason.getEstimatedPayouts().get(i).isCash(),
           seasonRetrieved.getEstimatedPayouts().get(i).isCash());
     }
+  }
 
+  static {
+    GAME_PLAYERS.add("[" +
+        "{" +
+        "\"firstName\":\"abe\"," +
+        "\"lastName\":\"abeson\"," +
+        "\"boughtIn\":true," +
+        "\"annualTocParticipant\":true," +
+        "\"quarterlyTocParticipant\":true," +
+        "\"rebought\":true," +
+        "\"place\":1," +
+        "\"chop\":null" +
+        "}" +
+        "]");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"firstName\":\"abe\","
+        + "    \"lastName\":\"abeson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":1,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"bob\","
+        + "    \"lastName\":\"bobson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":2,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"coy\","
+        + "    \"lastName\":\"coyson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":3,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"firstName\":\"abe\","
+        + "    \"lastName\":\"abeson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":1,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"bob\","
+        + "    \"lastName\":\"bobson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":2,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"coy\","
+        + "    \"lastName\":\"coyson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":3,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+
+    SEASON_CALCULATIONS.add("{" +
+        "\"buyInCollected\":40," +
+        "\"rebuyAddOnCollected\":40," +
+        "\"annualTocCollected\":20," +
+        "\"totalCollected\":120," +
+        "\"annualTocFromRebuyAddOnCalculated\":20," +
+        "\"rebuyAddOnLessAnnualTocCalculated\":20," +
+        "\"totalCombinedAnnualTocCalculated\":40," +
+        "\"kittyCalculated\":10," +
+        "\"prizePotCalculated\":50," +
+        "\"numGames\":52," +
+        "\"numGamesPlayed\":1," +
+        "\"finalized\":false," +
+        "\"players\":[" +
+        "{" +
+        "\"name\":\"abe abeson\"," +
+        "\"place\":1," +
+        "\"points\":30," +
+        "\"entries\":1" +
+        "}" +
+        "]," +
+        "\"payouts\":[]," +
+        "\"estimatedPayouts\":[]" +
+        "}");
+    SEASON_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":240,"
+        + "  \"rebuyAddOnCollected\":240,"
+        + "  \"annualTocCollected\":120,"
+        + "  \"totalCollected\":720,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":120,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":120,"
+        + "  \"totalCombinedAnnualTocCalculated\":240,"
+        + "  \"kittyCalculated\":20,"
+        + "  \"prizePotCalculated\":340,"
+        + "  \"numGames\":52,"
+        + "  \"numGamesPlayed\":2,"
+        + "  \"finalized\":false,"
+        + "  \"players\":["
+        + "    {"
+        + "      \"name\":\"abe abeson\","
+        + "      \"place\":1,"
+        + "      \"points\":70,"
+        + "      \"entries\":2"
+        + "    },"
+        + "    {"
+        + "      \"name\":\"bob bobson\","
+        + "      \"place\":2,"
+        + "      \"points\":54,"
+        + "      \"entries\":2"
+        + "    },"
+        + "    {"
+        + "      \"name\":\"coy coyson\","
+        + "      \"place\":3,"
+        + "      \"points\":42,"
+        + "      \"entries\":2"
+        + "    }"
+        + "  ],"
+        + "  \"payouts\":["
+        + "    "
+        + "  ],"
+        + "  \"estimatedPayouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":1649,"
+        + "      \"guaranteed\":true,"
+        + "      \"estimated\":true,"
+        + "      \"cash\":false"
+        + "    },"
+        + "    {"
+        + "      \"place\":2,"
+        + "      \"amount\":1598,"
+        + "      \"guaranteed\":false,"
+        + "      \"estimated\":true,"
+        + "      \"cash\":false"
+        + "    },"
+        + "    {"
+        + "      \"place\":3,"
+        + "      \"amount\":1348,"
+        + "      \"guaranteed\":false,"
+        + "      \"estimated\":true,"
+        + "      \"cash\":false"
+        + "    },"
+        + "    {"
+        + "      \"place\":4,"
+        + "      \"amount\":1273,"
+        + "      \"guaranteed\":false,"
+        + "      \"estimated\":true,"
+        + "      \"cash\":false"
+        + "    },"
+        + "    {"
+        + "      \"place\":5,"
+        + "      \"amount\":372,"
+        + "      \"guaranteed\":false,"
+        + "      \"estimated\":true,"
+        + "      \"cash\":true"
+        + "    }"
+        + "  ]"
+        + "}");
   }
 }

@@ -63,21 +63,6 @@ public class GameHelper {
     return optionalGame.get();
   }
 
-  public Game getCurrent() {
-    int seasonId = getSeasonModule().getCurrentId();
-    List<Integer> gameIds = gameRepository.findUnfinalizedBySeasonId(seasonId);
-    if (gameIds.size() > 0) {
-      return get(gameIds.get(0));
-    }
-
-    gameIds = gameRepository.findMostRecentBySeasonId(seasonId);
-    if (gameIds.size() > 0) {
-      return get(gameIds.get(0));
-    }
-
-    throw new NotFoundException("Current game not found");
-  }
-
   public void checkFinalized(Game game) {
     if (game.isFinalized()) {
       throw new GameIsFinalizedException();
@@ -136,7 +121,8 @@ public class GameHelper {
 
     @Override
     public Void call() throws Exception {
-      webSocketConnector.sendGame(getCurrent());
+      // TODO
+      //webSocketConnector.sendGame(getCurrent());
       return null;
     }
   }

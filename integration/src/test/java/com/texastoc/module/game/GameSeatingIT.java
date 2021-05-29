@@ -12,46 +12,103 @@ import com.texastoc.module.game.model.Seat;
 import com.texastoc.module.game.model.Seating;
 import com.texastoc.module.game.model.SeatsPerTable;
 import com.texastoc.module.game.model.TableRequest;
-import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import com.texastoc.module.season.model.Season;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.web.client.HttpClientErrorException;
 
-public class GameSeatingStepdefs extends BaseIntegrationTest {
+public class GameSeatingIT extends BaseIntegrationTest {
 
   static final Random RANDOM = new Random(System.currentTimeMillis());
 
   Integer gameId;
+  Season seasonCreated;
   Seating seating;
-  List<GamePlayer> gamePlayers = new LinkedList<>();
+  List<GamePlayer> gamePlayers;
   HttpClientErrorException exception;
 
   @Before
   public void before() {
     gameId = null;
+    seasonCreated = null;
     seating = null;
+    gamePlayers = new LinkedList<>();
     exception = null;
-    gamePlayers.clear();
   }
 
-  @Given("^a game has (\\d+) players$")
-  public void aGameHasPlayers(int numPlayers) throws Exception {
+  /**
+   * Seat 0 players at 1 table with no table requests
+   */
+  @Test
+  public void zeroAtOneNoRequests() throws Exception {
+    // Arrange
+    aGameHasGamePlayers(0);
+    seatingIsDoneWithTableAndSeatsAndRequests(1, 10, 0, 0);
+    // Act
+    gamePlayersAreSeatedAtTable(0, 1);
+    // Assert
+    tableHasDeadStacks(1, 10);
+  }
+
+  /**
+   * Seat 9 players at table 1 with no table requests
+   */
+  @Test
+  public void nineAtOneNoRequests() throws Exception {
+    aGameHasGamePlayers(9);
+    seatingIsDoneWithTableAndSeatsAndRequests(1, 9, 0, 0);
+    gamePlayersAreSeatedAtTable(9, 1);
+    tableHasDeadStacks(1, 0);
+  }
+
+  /**
+   * Seat 13 players at 2 tables with no table requests
+   */
+  @Test
+  public void thirteenAtTwoNoRequests() throws Exception {
+    aGameHasGamePlayers(13);
+    seatingIsDoneWithTableAndSeatsAndRequests(2, 8, 0, 0);
+    gamePlayersAreSeatedAtTable(7, 1);
+    gamePlayersAreSeatedAtTable(6, 2);
+    tableHasDeadStacks(1, 1);
+    tableHasDeadStacks(2, 2);
+  }
+
+  /**
+   * Seat 40 players at 4 tables with 2 table requests to move to table 3
+   */
+  @Test
+  public void fortyAtFourTwoRequests() throws Exception {
+    aGameHasGamePlayers(40);
+    seatingIsDoneWithTableAndSeatsAndRequests(4, 10, 2, 3);
+    requestsAreFulfilled();
+  }
+
+  /**
+   * Seat 2 players at 1 tables with 1 table requests to move to table 3
+   */
+  @Test
+  public void twoAtOneOneRequests() throws Exception {
+    aGameHasGamePlayers(2);
+    seatingIsDoneWithTableAndSeatsAndRequests(1, 10, 1, 3);
+    invalidSeating();
+  }
+
+  private void aGameHasGamePlayers(int numPlayers) throws Exception {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
-    createSeason(getSeasonStart().getYear(), token);
+    seasonCreated = createSeason(getSeasonStart().getYear(), token);
 
     Game game = createGame(Game.builder()
         .date(LocalDate.now())
         .hostId(1)
         .transportRequired(false)
-        .build(), token);
+        .build(), seasonCreated.getId(), token);
 
     gameId = game.getId();
 
@@ -69,8 +126,7 @@ public class GameSeatingStepdefs extends BaseIntegrationTest {
     }
   }
 
-  @When("^seating is done with (\\d+) tables each with (\\d+) seats and (\\d+) table requests for table (\\d+)$")
-  public void seatingIsDoneWithTableAndSeats(int tables, int seats, int requests,
+  private void seatingIsDoneWithTableAndSeatsAndRequests(int tables, int seats, int requests,
       int tableRequested) throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
     Seating seatingRequest = new Seating();
@@ -113,8 +169,7 @@ public class GameSeatingStepdefs extends BaseIntegrationTest {
     }
   }
 
-  @Then("^(\\d+) players are seated at table (\\d+)$")
-  public void playersAreSeatedAtTable(int numPlayers, int tableNum) throws Exception {
+  private void gamePlayersAreSeatedAtTable(int numPlayers, int tableNum) throws Exception {
     List<GameTable> gameTables = seating.getGameTables();
     assertNotNull("tables should not be null", gameTables);
 
@@ -128,8 +183,7 @@ public class GameSeatingStepdefs extends BaseIntegrationTest {
     assertEquals(numPlayers + " are seated", numPlayers, numPlayersSeated);
   }
 
-  @And("^table (\\d+) has (\\d+) dead stacks$")
-  public void tableHasDeadStacks(int tableNum, int numDeadStacks) throws Exception {
+  private void tableHasDeadStacks(int tableNum, int numDeadStacks) throws Exception {
     List<GameTable> gameTables = seating.getGameTables();
     GameTable table = gameTables.get(tableNum - 1);
     List<Seat> seats = table.getSeats();
@@ -142,8 +196,7 @@ public class GameSeatingStepdefs extends BaseIntegrationTest {
     assertEquals("should have " + numDeadStacks + " dead stacks", numDeadStacks, numEmptySeats);
   }
 
-  @And("^the player requests are fulfilled$")
-  public void requestsAreFulfilled() throws Exception {
+  private void requestsAreFulfilled() throws Exception {
     List<GameTable> gameTables = seating.getGameTables();
     List<TableRequest> tableRequests = seating.getTableRequests();
 
@@ -167,8 +220,7 @@ public class GameSeatingStepdefs extends BaseIntegrationTest {
     }
   }
 
-  @And("^invalid seating request occurs$")
-  public void invalidSeating() throws Exception {
+  private void invalidSeating() throws Exception {
     assertNotNull("exception should have been thrown", exception);
     assertEquals("status should be 400", 400, exception.getStatusCode().value());
   }

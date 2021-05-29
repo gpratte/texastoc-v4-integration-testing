@@ -5,36 +5,155 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.texastoc.module.game.model.GamePlayer;
-import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import java.util.LinkedList;
 import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
 
-public class GamePlayerStepdefs extends BaseGameStepdefs {
+public class GamePlayerIT extends BaseGameIT {
 
   private Integer gameId;
-  private List<GamePlayer> gamePlayers = new LinkedList<>();
-  private List<GamePlayer> retrievedGamePlayers = new LinkedList<>();
+  private List<GamePlayer> gamePlayers;
+  private List<GamePlayer> retrievedGamePlayers;
 
   @Before
   public void before() {
-    // Before each scenario
+    // Before each test
     super.before();
     gameId = null;
+    gamePlayers = new LinkedList<>();
+    retrievedGamePlayers = null;
   }
 
-  @When("^a game is created$")
-  public void a_game_is_created() throws Exception {
+  /**
+   * Add an existing player as a game player with minimal fields set
+   */
+  @Test
+  public void addEmptyExistingPlayer() throws Exception {
+    // Arrange
+    aGameIsCreated();
+    aPlayerIsAddedWithNothingSet();
+    // Act
+    theGameIsUpdatedWithThePlayers();
+    // Assert
+    theGamePlayersAreRetrieved();
+    theRetrievedGamePlayersHaveNothingSet();
+  }
+
+  /**
+   * Add a first time player as a game player with minimal fields set
+   */
+  @Test
+  public void addEmptyFirstTimePlayer() throws Exception {
+    // Arrange
+    aGameIsCreated();
+    aFirstTimePlayerIsAddedWithNothingSet();
+    // Act
+    theGameIsUpdatedWithThePlayers();
+    // Assert
+    theGamePlayersAreRetrieved();
+    theRetrievedFirstTimeGamePlayersHaveNothingSet();
+  }
+
+  @Test
+  public void addNonEmptyExistingPlayer() throws Exception {
+    // Add an existing player as a game player with all fields set
+    aGameIsCreated();
+    aPlayerIsAddedWithEverythingSet();
+    theGameIsUpdatedWithThePlayers();
+    theGamePlayersAreRetrieved();
+    theRetrievedGamePlayersHaveEverythingSet();
+  }
+
+  /**
+   * Add a first time player as a game player with everything set
+   */
+  @Test
+  public void addNonEmptyFirstTimePlayer() throws Exception {
+    aGameIsCreated();
+    aFirstTimePlayerIsAddedWithEverythingSet();
+    theGameIsUpdatedWithThePlayers();
+    theGamePlayersAreRetrieved();
+    theRetrievedFirstTimeGamePlayersHaveEverythingSet();
+  }
+
+  /**
+   * Add an existing player as a game player with minimal fields set and then update all fields
+   */
+  @Test
+  public void updateGamePlayer() throws Exception {
+    aGameIsCreated();
+    aPlayerIsAddedWithNothingSet();
+    theGameIsUpdatedWithThePlayers();
+    theGamePlayersAreRetrieved();
+    theGamePlayersAreUpdated();
+    theGameIsUpdatedWithTheUpdatedPlayers();
+    theRetrievedGamePlayersHaveEverythingSet();
+  }
+
+  @Test
+  public void knockOutGamePlayer() throws Exception {
+    aGameIsCreated();
+    aPlayerIsAddedWithNothingSet();
+    theGameIsUpdatedWithThePlayers();
+    theGamePlayersAreRetrieved();
+    theGamePlayersWithKnockedOut(true);
+    theGameIsUpdatedWithTheUpdatedPlayers();
+    theRetrievedGamePlayersWithKnockedOut(true);
+  }
+
+  @Test
+  public void undoKnockedOutGamePlayer() throws Exception {
+    aGameIsCreated();
+    aPlayerIsAddedWithEverythingSet();
+    theGameIsUpdatedWithThePlayers();
+    theGamePlayersAreRetrieved();
+    theGamePlayersWithKnockedOut(false);
+    theGameIsUpdatedWithTheUpdatedPlayers();
+    theRetrievedGamePlayersWithKnockedOut(false);
+  }
+
+  @Test
+  public void rebuyGamePlayer() throws Exception {
+    aGameIsCreated();
+    aPlayerIsAddedWithNothingSet();
+    theGameIsUpdatedWithThePlayers();
+    theGamePlayersAreRetrieved();
+    theGamePlayersWithRebuy(true);
+    theGameIsUpdatedWithTheUpdatedPlayers();
+    theRetrievedGamePlayersWithRebuy(true);
+  }
+
+  @Test
+  public void undoGamePlayerRebuy() throws Exception {
+    aGameIsCreated();
+    aPlayerIsAddedWithEverythingSet();
+    theGameIsUpdatedWithThePlayers();
+    theGamePlayersAreRetrieved();
+    theGamePlayersWithRebuy(false);
+    theGameIsUpdatedWithTheUpdatedPlayers();
+    theRetrievedGamePlayersWithRebuy(false);
+  }
+
+  @Test
+  public void deleteGamePlayer() throws Exception {
+    aGameIsCreated();
+    aPlayerIsAddedWithNothingSet();
+    theGameIsUpdatedWithThePlayers();
+    theGamePlayersAreRetrieved();
+    allGamePlayersAreDeleted();
+    theGamePlayersAreRetrieved();
+    thereAreNoGamePlayers();
+  }
+
+  private void aGameIsCreated() throws Exception {
     super.aSeasonExists();
     super.theGameStartsNow();
     super.theGameIsCreated();
     gameId = gameCreated.getId();
   }
 
-  @And("^a player is added with nothing set$")
-  public void aPlayerIsAddedWithNothingSet() throws Exception {
+  private void aPlayerIsAddedWithNothingSet() throws Exception {
     GamePlayer gamePlayer = GamePlayer.builder()
         .playerId(GUEST_USER_PLAYER_ID)
         .gameId(gameId)
@@ -44,8 +163,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     gamePlayers.add(addPlayerToGame(gamePlayer, token));
   }
 
-  @And("^a player is added with everything set$")
-  public void aPlayerIsAddedWithEverythingSet() throws Exception {
+  private void aPlayerIsAddedWithEverythingSet() throws Exception {
     GamePlayer gamePlayer = GamePlayer.builder()
         .playerId(GUEST_USER_PLAYER_ID)
         .gameId(gameId)
@@ -63,8 +181,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     gamePlayers.add(addPlayerToGame(gamePlayer, token));
   }
 
-  @And("^a first time player is added with everything set$")
-  public void aFirstTimePlayerIsAddedWithEverythingSet() throws Exception {
+  private void aFirstTimePlayerIsAddedWithEverythingSet() throws Exception {
     GamePlayer gamePlayer = GamePlayer.builder()
         .playerId(GUEST_USER_PLAYER_ID)
         .firstName("first")
@@ -85,8 +202,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     gamePlayers.add(addPlayerToGame(gamePlayer, token));
   }
 
-  @And("^a first time player is added with nothing set$")
-  public void aFirstTimePlayerIsAddedWithNothingSet() throws Exception {
+  private void aFirstTimePlayerIsAddedWithNothingSet() throws Exception {
     GamePlayer gamePlayer = GamePlayer.builder()
         .firstName("first")
         .lastName("last")
@@ -98,39 +214,34 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     gamePlayers.add(addPlayerToGame(gamePlayer, token));
   }
 
-  @When("^the game is updated with the players$")
-  public void theGameIsUpdatedWithThePlayers() throws Exception {
-    super.getCurrentGame();
+  private void theGameIsUpdatedWithThePlayers() throws Exception {
+    getGame(gameId);
     gameRetrieved.setPlayers(gamePlayers);
     String token = login(USER_EMAIL, USER_PASSWORD);
     updateGame(gameRetrieved.getId(), gameRetrieved, token);
   }
 
-  @When("^the game is updated with the updated players$")
-  public void theGameIsUpdatedWithTheUpdatedPlayers() throws Exception {
-    super.getCurrentGame();
+  private void theGameIsUpdatedWithTheUpdatedPlayers() throws Exception {
+    getGame(gameId);
     gameRetrieved.setPlayers(retrievedGamePlayers);
     String token = login(USER_EMAIL, USER_PASSWORD);
     updateGame(gameRetrieved.getId(), gameRetrieved, token);
   }
 
-  @When("^all players are deleted$")
-  public void allPlayersAreDeleted() throws Exception {
-    super.getCurrentGame();
+  private void allGamePlayersAreDeleted() throws Exception {
+    getGame(gameId);
     String token = login(USER_EMAIL, USER_PASSWORD);
     for (GamePlayer gamePlayer : gameRetrieved.getPlayers()) {
       deletePlayerFromGame(gameRetrieved.getId(), gamePlayer.getId(), token);
     }
   }
 
-  @And("^the current players are retrieved$")
-  public void theCurrentPlayersAreRetrieved() throws Exception {
-    super.getCurrentGame();
+  private void theGamePlayersAreRetrieved() throws Exception {
+    getGame(gameId);
     retrievedGamePlayers = gameRetrieved.getPlayers();
   }
 
-  @Then("^the retrieved game players have nothing set$")
-  public void theRetrievedGamePlayersHaveNothingSet() {
+  private void theRetrievedGamePlayersHaveNothingSet() {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       assertFalse("bought-in should be false", gamePlayer.isBoughtIn());
       assertFalse("rebought should be false", gamePlayer.isRebought());
@@ -142,8 +253,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     }
   }
 
-  @Then("^the retrieved first time game players have nothing set$")
-  public void theRetrievedFirstTimeGamePlayersHaveNothingSet() {
+  private void theRetrievedFirstTimeGamePlayersHaveNothingSet() {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       assertFalse("bought-in should be false", gamePlayer.isBoughtIn());
       assertFalse("rebought should be false", gamePlayer.isRebought());
@@ -160,8 +270,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     }
   }
 
-  @Then("^the retrieved game players have everything set$")
-  public void theRetrievedGamePlayersHaveEverythingSet() {
+  private void theRetrievedGamePlayersHaveEverythingSet() {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       assertTrue("bought-in should be true", gamePlayer.isBoughtIn());
       assertTrue("rebought should be true", gamePlayer.isRebought());
@@ -175,8 +284,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     }
   }
 
-  @Then("^the retrieved first time game players have everything set$")
-  public void theRetrievedFirstTimeGamePlayersHaveEverythingSet() {
+  private void theRetrievedFirstTimeGamePlayersHaveEverythingSet() {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       assertTrue("bought-in should be true", gamePlayer.isBoughtIn());
       assertTrue("rebought should be true", gamePlayer.isRebought());
@@ -194,8 +302,7 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     }
   }
 
-  @And("^the current players are updated$")
-  public void theCurrentPlayersAreUpdated() throws Exception {
+  private void theGamePlayersAreUpdated() throws Exception {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       gamePlayer.setKnockedOut(true);
       gamePlayer.setAnnualTocParticipant(true);
@@ -209,15 +316,13 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     }
   }
 
-  @And("^the current players with knocked out (true|false)")
-  public void theCurrentPlayersWithKnockedOut(boolean knockedOut) throws Exception {
+  private void theGamePlayersWithKnockedOut(boolean knockedOut) throws Exception {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       gamePlayer.setKnockedOut(knockedOut);
     }
   }
 
-  @Then("^the retrieved game players with knocked out (true|false)$")
-  public void theRetrievedGamePlayersWithKnockedOut(boolean knockedOut) {
+  private void theRetrievedGamePlayersWithKnockedOut(boolean knockedOut) {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       if (knockedOut) {
         assertTrue("knocked out should be true", gamePlayer.isKnockedOut());
@@ -227,15 +332,13 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     }
   }
 
-  @And("^the current players with rebuy (true|false)")
-  public void theCurrentPlayersWithRebuy(boolean knockedOut) throws Exception {
+  private void theGamePlayersWithRebuy(boolean knockedOut) throws Exception {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       gamePlayer.setRebought(knockedOut);
     }
   }
 
-  @Then("^the retrieved game players with rebuy (true|false)$")
-  public void theRetrievedGamePlayersWithRebuy(boolean knockedOut) {
+  private void theRetrievedGamePlayersWithRebuy(boolean knockedOut) {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       if (knockedOut) {
         assertTrue("rebought should be true", gamePlayer.isRebought());
@@ -245,9 +348,8 @@ public class GamePlayerStepdefs extends BaseGameStepdefs {
     }
   }
 
-  @Then("^there are no players$")
-  public void thereAreNoPlayers() throws Exception {
-    super.getCurrentGame();
+  private void thereAreNoGamePlayers() throws Exception {
+    getGame(gameId);
     assertEquals("number of players should be zero", 0, gameRetrieved.getPlayers().size());
   }
 }

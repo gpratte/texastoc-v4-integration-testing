@@ -4,7 +4,7 @@ import com.texastoc.BaseIntegrationTest;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.season.model.Season;
 
-public abstract class BaseSeasonStepdefs extends BaseIntegrationTest {
+public abstract class BaseSeasonIT extends BaseIntegrationTest {
 
   protected Integer startYear;
   protected Season seasonCreated;

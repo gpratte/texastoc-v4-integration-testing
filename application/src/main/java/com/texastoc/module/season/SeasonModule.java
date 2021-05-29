@@ -27,24 +27,6 @@ public interface SeasonModule {
   Season get(int id);
 
   /**
-   * Get the current season. Will first look if there is an unfinalized season and then look for the
-   * most recent.
-   *
-   * @return the current season
-   * @throws NotFoundException
-   */
-  Season getCurrent();
-
-  /**
-   * Get the current season id. Will first look if there is an unfinalized * season and then look
-   * for the most recent.
-   *
-   * @return the current season's id
-   * @throws NotFoundException
-   */
-  int getCurrentId();
-
-  /**
    * Finalizes the season for the given season Id. Creates an historical season entry.
    *
    * @param seasonId the season's id

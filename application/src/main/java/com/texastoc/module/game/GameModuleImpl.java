@@ -24,8 +24,8 @@ public class GameModuleImpl implements GameModule {
   }
 
   @Override
-  public Game create(Game game) {
-    return gameService.create(game);
+  public Game create(Game game, Integer seasonId) {
+    return gameService.create(game, seasonId);
   }
 
   @Override
@@ -36,11 +36,6 @@ public class GameModuleImpl implements GameModule {
   @Override
   public Game get(int id) {
     return gameService.get(id);
-  }
-
-  @Override
-  public Game getCurrent() {
-    return gameService.getCurrent();
   }
 
   @Override

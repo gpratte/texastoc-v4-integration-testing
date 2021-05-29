@@ -2,14 +2,16 @@ package com.texastoc.module.game;
 
 import com.texastoc.BaseIntegrationTest;
 import com.texastoc.module.game.model.Game;
+import com.texastoc.module.season.model.Season;
 import java.time.LocalDate;
 import org.springframework.web.client.HttpClientErrorException;
 
-public abstract class BaseGameStepdefs extends BaseIntegrationTest {
+public abstract class BaseGameIT extends BaseIntegrationTest {
 
   protected Game gameToCreate;
   protected Game gameCreated;
   protected Game gameRetrieved;
+  protected Season seasonCreated;
   protected HttpClientErrorException exception;
 
   protected void before() {
@@ -17,12 +19,13 @@ public abstract class BaseGameStepdefs extends BaseIntegrationTest {
     gameToCreate = null;
     gameCreated = null;
     gameRetrieved = null;
+    seasonCreated = null;
     exception = null;
   }
 
   protected void aSeasonExists() throws Exception {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
-    createSeason(token);
+    seasonCreated = createSeason(token);
   }
 
   protected void theGameStartsNow() throws Exception {
@@ -35,12 +38,12 @@ public abstract class BaseGameStepdefs extends BaseIntegrationTest {
 
   protected void theGameIsCreated() throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
-    gameCreated = createGame(gameToCreate, token);
+    gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
   }
 
-  protected void getCurrentGame() throws Exception {
+  protected void getGame(int id) throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
-    gameRetrieved = getCurrentGame(token);
+    gameRetrieved = getGame(id, token);
   }
 
 }

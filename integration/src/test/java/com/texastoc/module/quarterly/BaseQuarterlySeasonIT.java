@@ -7,7 +7,7 @@ import com.texastoc.module.season.model.Season;
 import java.time.LocalDate;
 import java.util.List;
 
-public abstract class BaseQuarterlySeasonStepdefs extends BaseIntegrationTest {
+public abstract class BaseQuarterlySeasonIT extends BaseIntegrationTest {
 
   protected Integer startYear;
   protected Season seasonCreated;

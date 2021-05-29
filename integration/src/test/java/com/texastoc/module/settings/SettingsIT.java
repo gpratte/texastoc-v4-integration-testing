@@ -22,22 +22,15 @@ public class SettingsIT extends BaseIntegrationTest {
 
   @Test
   public void verifySettings() throws Exception {
+    // Arrange and Act
     settings = getSettings();
+    // Assert
     assertNotNull(settings);
     assertNotNull(settings.getVersion());
 
     assertNotNull(settings.getTocConfigs());
-    TocConfig tocConfig = settings.getTocConfigs().get(2020);
+    TocConfig tocConfig = settings.getTocConfigs().get(2021);
     assertEquals(10, tocConfig.getKittyDebit());
-    assertEquals(20, tocConfig.getAnnualTocCost());
-    assertEquals(20, tocConfig.getQuarterlyTocCost());
-    assertEquals(3, tocConfig.getQuarterlyNumPayouts());
-    assertEquals(40, tocConfig.getRegularBuyInCost());
-    assertEquals(40, tocConfig.getRegularRebuyCost());
-    assertEquals(20, tocConfig.getRegularRebuyTocDebit());
-
-    tocConfig = settings.getTocConfigs().get(2021);
-    assertEquals(0, tocConfig.getKittyDebit());
     assertEquals(20, tocConfig.getAnnualTocCost());
     assertEquals(20, tocConfig.getQuarterlyTocCost());
     assertEquals(3, tocConfig.getQuarterlyNumPayouts());

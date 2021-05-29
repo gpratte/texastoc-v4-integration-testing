@@ -14,6 +14,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.texastoc.TestConstants;
+import com.texastoc.config.IntegrationTestingConfig;
 import com.texastoc.exception.NotFoundException;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.model.Game;
@@ -57,7 +58,9 @@ public class SeasonServiceTest implements TestConstants {
   public void before() {
     seasonRepository = mock(SeasonRepository.class);
     seasonHistoryRepository = mock(SeasonHistoryRepository.class);
-    seasonService = new SeasonService(seasonRepository, seasonHistoryRepository);
+    IntegrationTestingConfig integrationTestingConfig = new IntegrationTestingConfig(false);
+    seasonService = new SeasonService(seasonRepository, seasonHistoryRepository,
+        integrationTestingConfig);
     settingsModule = mock(SettingsModule.class);
     ReflectionTestUtils.setField(seasonService, "settingsModule", settingsModule);
     quarterlySeasonModule = mock(QuarterlySeasonModule.class);
@@ -159,61 +162,6 @@ public class SeasonServiceTest implements TestConstants {
       seasonService.get(1);
     }).isInstanceOf(NotFoundException.class)
         .hasMessageContaining("Season with id 1 not found");
-  }
-
-  @Test
-  public void getCurrentUnfinalized() {
-    // Arrange
-    Season unfinalziedSeason = Season.builder().id(1).build();
-    when(seasonRepository.findUnfinalized()).thenReturn(Arrays.asList(unfinalziedSeason));
-
-    // Act
-    Season currentSeason = seasonService.getCurrent();
-    // Assert
-    Mockito.verify(seasonRepository, Mockito.times(1)).findUnfinalized();
-    assertEquals(1, currentSeason.getId());
-
-    // Act
-    int currentSeasonId = seasonService.getCurrentId();
-    assertEquals(1, currentSeasonId);
-
-  }
-
-  @Test
-  public void getCurrentMostRecent() {
-    // Arrange
-    Season mostRecentSeason = Season.builder().id(2).build();
-    when(seasonRepository.findUnfinalized()).thenReturn(Collections.emptyList());
-    when(seasonRepository.findMostRecent()).thenReturn(Arrays.asList(mostRecentSeason));
-
-    // Act
-    Season currentSeason = seasonService.getCurrent();
-    // Assert
-    Mockito.verify(seasonRepository, Mockito.times(1)).findUnfinalized();
-    assertEquals(2, currentSeason.getId());
-
-    // Act
-    int currentSeasonId = seasonService.getCurrentId();
-    assertEquals(2, currentSeasonId);
-  }
-
-  @Test
-  public void getCurrentNotFound() {
-    // Arrange
-    when(seasonRepository.findUnfinalized()).thenReturn(Collections.emptyList());
-    when(seasonRepository.findMostRecent()).thenReturn(Collections.emptyList());
-
-    // Act and Assert
-    assertThatThrownBy(() -> {
-      seasonService.getCurrent();
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("Current season not found");
-
-    // Act and Assert
-    assertThatThrownBy(() -> {
-      seasonService.getCurrentId();
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("Current season not found");
   }
 
   @Test

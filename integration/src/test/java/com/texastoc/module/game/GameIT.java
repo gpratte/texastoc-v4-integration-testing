@@ -8,11 +8,10 @@ import static org.junit.Assert.assertTrue;
 
 import com.texastoc.module.game.model.Game;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import java.time.LocalDate;
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -26,9 +25,12 @@ public class GameIT extends BaseGameIT {
 
   @Test
   public void createSimpleGame() throws Exception {
+    // arrange
     aSeasonExists();
     theGameStartsNow();
+    // act
     theGameIsCreated();
+    // assert
     theGameIsNormal();
     theGameIsNotTransportRequired();
   }
@@ -69,42 +71,34 @@ public class GameIT extends BaseGameIT {
     theGameRetrievedIsFinalized();
   }
 
-  /*
-
-  Scenario: create, finalize and unfinalize a simple game
-    Given a season exists
-    Given the game starts now
-    When the game is created
-    And the current game is retrieved
-    Then the retrieved game is unfinalized
-    When the game is finalized
-    And the current game is retrieved
-    Then the retrieved game is finalized
-    When the game is unfinalized
-    And the current game is retrieved
-    Then the retrieved game is unfinalized
-
-  Scenario: try to create a game when there is a game in progress
-    Given a season exists
-    Given the game starts now
-    When the game is created
-    When another game is created
-    Then the new game is not allowed
-
-   */
-
-  //@Given("^a season exists$")
-  public void aSeasonExists() throws Exception {
-    super.aSeasonExists();
+  @Test
+  public void createFinalizeAndUnfinalizeSimpleGame() throws Exception {
+    aSeasonExists();
+    theGameStartsNow();
+    theGameIsCreated();
+    theGameIsRetrieved();
+    theGameRetrievedIsUnfinalized();
+    theGameIsFinalized();
+    theGameIsRetrieved();
+    theGameRetrievedIsFinalized();
+    theGameIsUnfinalized();
+    theGameIsRetrieved();
+    theGameRetrievedIsUnfinalized();
   }
 
-  //@Given("^the game starts now$")
-  public void theGameStartsNow() throws Exception {
-    super.theGameStartsNow();
+  // TODO need to use feature flag to toggle this
+  @Ignore
+  @Test
+  public void cannotCreateGame() throws Exception {
+    // Try to create a game when there is a game in progress
+    aSeasonExists();
+    theGameStartsNow();
+    theGameIsCreated();
+    anotherGameIsCreated();
+    theNewGameIsNotAllowed();
   }
 
-  //@Given("^the game supplies need to be moved$")
-  public void theGameSuppliesNeedToBeMoved() {
+  private void theGameSuppliesNeedToBeMoved() {
     gameToCreate = Game.builder()
         .date(LocalDate.now())
         .hostId(1)
@@ -112,14 +106,7 @@ public class GameIT extends BaseGameIT {
         .build();
   }
 
-  //@When("^the game is created$")
-  public void theGameIsCreated() throws Exception {
-    super.theGameIsCreated();
-  }
-
-
-  @When("^another game is created$")
-  public void anotherGameIsCreated() throws Exception {
+  private void anotherGameIsCreated() throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
     try {
       createGame(Game.builder()
@@ -132,20 +119,17 @@ public class GameIT extends BaseGameIT {
     }
   }
 
-  //@When("^the game is finalized$")
-  public void theGameIsFinalized() throws Exception {
+  private void theGameIsFinalized() throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
     finalizeGame(gameCreated.getId(), token);
   }
 
-  @When("^the game is unfinalized$")
-  public void the_game_is_unfinalized() throws Exception {
+  private void theGameIsUnfinalized() throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
     unfinalizeGame(gameCreated.getId(), token);
   }
 
-  //@And("^the retrieved game is updated and retrieved$")
-  public void theGameRetrievedIsUpdatedAndRetrieved() throws Exception {
+  private void theGameRetrievedIsUpdatedAndRetrieved() throws Exception {
     Game gameToUpdate = Game.builder()
         .hostId(gameRetrieved.getHostId())
         .date(gameRetrieved.getDate())
@@ -158,73 +142,61 @@ public class GameIT extends BaseGameIT {
     gameRetrieved = getGame(gameCreated.getId(), token);
   }
 
-  //@When("^the game is created and retrieved$")
-  public void theGameIsCreatedAndRetrieved() throws Exception {
+  private void theGameIsCreatedAndRetrieved() throws Exception {
     String token = login(USER_EMAIL, USER_PASSWORD);
     gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
     gameRetrieved = getGame(gameCreated.getId(), token);
   }
 
-  //@When("^the game is retrieved$")
-  public void theGameIsRetrieved() throws Exception {
+  private void theGameIsRetrieved() throws Exception {
     super.getGame(gameCreated.getId());
   }
 
-  @Then("^the current game is found$")
-  public void currentGameExists() throws Exception {
+  private void currentGameExists() throws Exception {
     assertNotNull(gameRetrieved);
   }
 
-  // @Then("^the game is normal$")
-  public void theGameIsNormal() throws Exception {
+  private void theGameIsNormal() throws Exception {
     assertNewGame(gameCreated);
   }
 
-  //@Then("^the game is not transport required$")
-  public void theGameIsNotTransportRequired() throws Exception {
+  private void theGameIsNotTransportRequired() throws Exception {
     Assert.assertFalse("transport required should be false", gameCreated.isTransportRequired());
   }
 
-  //@Then("^the game transport supplies flag is set$")
-  public void theGameTransportSuppliesFlagIsSet() throws Exception {
+  private void theGameTransportSuppliesFlagIsSet() throws Exception {
     assertNotNull("game create should not be null", gameCreated);
 
     // Game setup variables
     assertTrue("transport required should be true", gameCreated.isTransportRequired());
   }
 
-  //@Then("^the retrieved game is normal$")
-  public void theGameRetrievedIsNormal() throws Exception {
+  private void theGameRetrievedIsNormal() throws Exception {
     assertNewGame(gameRetrieved);
   }
 
-  //@Then("^the retrieved game has no players or payouts$")
-  public void theGameRetrievedHasNoPlayersOrPayouts() throws Exception {
+  private void theGameRetrievedHasNoPlayersOrPayouts() throws Exception {
     gameHasNoPlayersOrPayouts(gameRetrieved);
   }
 
-  //@Then("^the retrieved game is finalized$")
-  public void theGameRetrievedIsFinalized() throws Exception {
+  private void theGameRetrievedIsFinalized() throws Exception {
     assertTrue("game should be finalized", gameRetrieved.isFinalized());
   }
 
-  @Then("^the retrieved game is unfinalized$")
-  public void the_retrieved_game_is_unfinalized() throws Exception {
+  private void theGameRetrievedIsUnfinalized() throws Exception {
     assertFalse("game should be unfinalized", gameRetrieved.isFinalized());
   }
 
-  @Then("^the current game has no players or payouts$")
-  public void the_current_game_has_no_players() throws Exception {
+  private void the_current_game_has_no_players() throws Exception {
     gameHasNoPlayersOrPayouts(gameRetrieved);
   }
 
-  @Then("^the new game is not allowed$")
-  public void notAllowed() throws Exception {
+  private void theNewGameIsNotAllowed() throws Exception {
     assertNotNull(exception);
     assertThat(exception.getStatusCode().value()).isEqualTo(HttpStatus.SC_CONFLICT);
   }
 
-  public void gameHasNoPlayersOrPayouts(Game game) throws Exception {
+  private void gameHasNoPlayersOrPayouts(Game game) throws Exception {
     assertNotNull("game players should not be null", game.getPlayers());
     assertEquals("num of game players should be zero", 0, (int) game.getNumPlayers());
     assertEquals("num of game players should be zero", 0, (int) game.getPlayers().size());
@@ -273,5 +245,4 @@ public class GameIT extends BaseGameIT {
     Assert.assertFalse("not finalized", game.isFinalized());
     Assert.assertNull("started should be null", game.getStarted());
   }
-
 }

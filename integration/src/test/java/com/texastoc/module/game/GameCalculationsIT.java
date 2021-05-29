@@ -7,17 +7,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePayout;
 import com.texastoc.module.game.model.GamePlayer;
-import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import java.util.LinkedList;
 import java.util.List;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class GameCalculationsIT extends BaseGameIT {
 
   static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
   private Integer gameId;
+
+  static final List<String> GAME_PLAYERS = new LinkedList<>();
+  static final List<String> GAME_CALCULATIONS = new LinkedList<>();
 
   @Before
   public void before() {
@@ -26,20 +28,95 @@ public class GameCalculationsIT extends BaseGameIT {
     gameId = null;
   }
 
-  @When("^a calculated game is created$")
-  public void a_game_is_created() throws Exception {
+  /**
+   * A game with one (empty) player
+   */
+  @Test
+  public void gameWithOneEmptyPlayer() throws Exception {
+    aGameIsCreated();
+    addGamePlayers(GAME_PLAYERS.get(0));
+    getCalculatedGame();
+    calcualatedGame(GAME_CALCULATIONS.get(0));
+  }
+
+  /**
+   * A game with one player with everything set all. The player is bought-in, rebought, annual toc
+   * participant, quarterly toc participant and is in first place.
+   */
+  @Test
+  public void gameWithOnePlayer() throws Exception {
+    aGameIsCreated();
+    addGamePlayers(GAME_PLAYERS.get(1));
+    getCalculatedGame();
+    calcualatedGame(GAME_CALCULATIONS.get(1));
+  }
+
+  /**
+   * A game with two players and then update a player
+   */
+  @Test
+  public void gameWithTwoPlayers() throws Exception {
+    aGameIsCreated();
+    addGamePlayers(GAME_PLAYERS.get(2));
+    getCalculatedGame();
+    calcualatedGame(GAME_CALCULATIONS.get(2));
+    updatePlayer(GAME_PLAYERS.get(3));
+    getCalculatedGame();
+    calcualatedGame(GAME_CALCULATIONS.get(3));
+  }
+
+  /**
+   * A game with 7 players and then add a player will result in another payout
+   */
+  @Test
+  public void gameWithSevenPlayers() throws Exception {
+    aGameIsCreated();
+    addGamePlayers(GAME_PLAYERS.get(4));
+    getCalculatedGame();
+    calcualatedGame(GAME_CALCULATIONS.get(4));
+    addingPlayer(GAME_PLAYERS.get(5));
+    getCalculatedGame();
+    calcualatedGame(GAME_CALCULATIONS.get(5));
+  }
+
+  /**
+   * A game with 8 players and delete a player will result in one less payout
+   */
+  @Test
+  public void gameWithEightPlayers() throws Exception {
+    aGameIsCreated();
+    addGamePlayers(GAME_PLAYERS.get(6));
+    getCalculatedGame();
+    calcualatedGame(GAME_CALCULATIONS.get(6));
+    deleteGamePlayer();
+    getCalculatedGame();
+    calcualatedGame(GAME_CALCULATIONS.get(7));
+  }
+
+  /**
+   * A game over with ten players with all but one bought-in, 7 have rebought, 6 are annual toc
+   * participants, 3 are quarterly toc participants and top 2 chopped the pot
+   */
+  @Test
+  public void gameWithTenPlayers() throws Exception {
+    aGameIsCreated();
+    addGamePlayers(GAME_PLAYERS.get(7));
+    getCalculatedGame();
+    calcualatedGame(GAME_CALCULATIONS.get(8));
+  }
+
+  private void aGameIsCreated() throws Exception {
     super.aSeasonExists();
     super.theGameStartsNow();
     super.theGameIsCreated();
     gameId = gameCreated.getId();
   }
 
-  @When("^adding players$")
-  public void addPlayers(String json) throws Exception {
+  private void addGamePlayers(String json) throws Exception {
     List<GamePlayer> gamePlayers = OBJECT_MAPPER.readValue(
         json, new TypeReference<List<GamePlayer>>() {
         });
-    // ;;!! super.getCurrentGame();
+    getGame(gameId);
     String token = login(USER_EMAIL, USER_PASSWORD);
     for (GamePlayer gp : gamePlayers) {
       GamePlayer gamePlayer = GamePlayer.builder()
@@ -57,9 +134,8 @@ public class GameCalculationsIT extends BaseGameIT {
     }
   }
 
-  @When("^adding a player$")
-  public void addingPlayer(String json) throws Exception {
-    //;;!! super.getCurrentGame();
+  private void addingPlayer(String json) throws Exception {
+    getGame(gameId);
     String token = login(USER_EMAIL, USER_PASSWORD);
     GamePlayer gamePlayer = OBJECT_MAPPER.readValue(json, GamePlayer.class);
     gamePlayer.setGameId(gameId);
@@ -68,10 +144,9 @@ public class GameCalculationsIT extends BaseGameIT {
     addFirstTimePlayerToGame(gamePlayer, token);
   }
 
-  @When("^updating a player$")
-  public void updatePlayer(String json) throws Exception {
+  private void updatePlayer(String json) throws Exception {
     GamePlayer updateGamePlayerInfo = OBJECT_MAPPER.readValue(json, GamePlayer.class);
-    //;;!! super.getCurrentGame();
+    getGame(gameId);
     String token = login(USER_EMAIL, USER_PASSWORD);
     for (GamePlayer gp : gameRetrieved.getPlayers()) {
       if (gp.getFirstName().equals(updateGamePlayerInfo.getFirstName()) &&
@@ -88,21 +163,18 @@ public class GameCalculationsIT extends BaseGameIT {
     }
   }
 
-  @When("^deleting a player$")
-  public void deletePlayer() throws Exception {
-    //;;!! super.getCurrentGame();
+  private void deleteGamePlayer() throws Exception {
+    getGame(gameId);
     String token = login(USER_EMAIL, USER_PASSWORD);
     GamePlayer gamePlayer = gameRetrieved.getPlayers().get(0);
     super.deletePlayerFromGame(gameRetrieved.getId(), gamePlayer.getId(), token);
   }
 
-  @And("^the current calculated game is retrieved$")
-  public void getCurrentGame() throws Exception {
-    //;;!! super.getCurrentGame();
+  private void getCalculatedGame() throws Exception {
+    getGame(gameId);
   }
 
-  @Then("^the game calculated is$")
-  public void calcualatedGame(String json) throws Exception {
+  private void calcualatedGame(String json) throws Exception {
     Game game = OBJECT_MAPPER.readValue(json, Game.class);
     assertGame(game, gameRetrieved);
   }
@@ -146,5 +218,489 @@ public class GameCalculationsIT extends BaseGameIT {
     }
   }
 
+  static {
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"boughtIn\":false,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":1,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"firstName\":\"Doyle\","
+        + "    \"lastName\":\"Brunson\","
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+    GAME_PLAYERS.add("{"
+        + "  \"firstName\":\"Doyle\","
+        + "  \"lastName\":\"Brunson\","
+        + "  \"boughtIn\":true,"
+        + "  \"annualTocParticipant\":false,"
+        + "  \"quarterlyTocParticipant\":false,"
+        + "  \"rebought\":true,"
+        + "  \"place\":null,"
+        + "  \"chop\":null"
+        + "}");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+    GAME_PLAYERS.add("{"
+        + "  \"boughtIn\":true,"
+        + "  \"annualTocParticipant\":false,"
+        + "  \"quarterlyTocParticipant\":false,"
+        + "  \"rebought\":false,"
+        + "  \"place\":null,"
+        + "  \"chop\":null"
+        + "}");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+    GAME_PLAYERS.add("["
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":false,"
+        + "    \"place\":5,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":true,"
+        + "    \"place\":4,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":true,"
+        + "    \"place\":9,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":7,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":false,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":null,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":true,"
+        + "    \"rebought\":true,"
+        + "    \"place\":6,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":false,"
+        + "    \"place\":1,"
+        + "    \"chop\":55000"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":true,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":true,"
+        + "    \"place\":2,"
+        + "    \"chop\":48750"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":true,"
+        + "    \"place\":8,"
+        + "    \"chop\":null"
+        + "  },"
+        + "  {"
+        + "    \"boughtIn\":true,"
+        + "    \"annualTocParticipant\":false,"
+        + "    \"quarterlyTocParticipant\":false,"
+        + "    \"rebought\":true,"
+        + "    \"place\":3,"
+        + "    \"chop\":null"
+        + "  }"
+        + "]");
+
+    GAME_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":0,"
+        + "  \"rebuyAddOnCollected\":0,"
+        + "  \"annualTocCollected\":0,"
+        + "  \"quarterlyTocCollected\":0,"
+        + "  \"totalCollected\":0,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":0,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":0,"
+        + "  \"totalCombinedTocCalculated\":0,"
+        + "  \"kittyCalculated\":0,"
+        + "  \"prizePotCalculated\":0,"
+        + "  \"numPlayers\":1,"
+        + "  \"numPaidPlayers\":0,"
+        + "  \"chopped\":false,"
+        + "  \"canRebuy\":true,"
+        + "  \"finalized\":false,"
+        + "  \"payouts\":[]"
+        + "}");
+    GAME_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":40,"
+        + "  \"rebuyAddOnCollected\":40,"
+        + "  \"annualTocCollected\":20,"
+        + "  \"quarterlyTocCollected\":20,"
+        + "  \"totalCollected\":120,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":20,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":20,"
+        + "  \"totalCombinedTocCalculated\":60,"
+        + "  \"kittyCalculated\":10,"
+        + "  \"prizePotCalculated\":50,"
+        + "  \"numPlayers\":1,"
+        + "  \"numPaidPlayers\":1,"
+        + "  \"chopped\":false,"
+        + "  \"canRebuy\":true,"
+        + "  \"payouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":50,"
+        + "      \"chopAmount\":null"
+        + "    }"
+        + "  ]"
+        + "}");
+    GAME_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":80,"
+        + "  \"rebuyAddOnCollected\":0,"
+        + "  \"annualTocCollected\":20,"
+        + "  \"quarterlyTocCollected\":20,"
+        + "  \"totalCollected\":120,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":0,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":0,"
+        + "  \"totalCombinedTocCalculated\":40,"
+        + "  \"kittyCalculated\":10,"
+        + "  \"prizePotCalculated\":70,"
+        + "  \"numPlayers\":2,"
+        + "  \"numPaidPlayers\":2,"
+        + "  \"chopped\":false,"
+        + "  \"canRebuy\":true,"
+        + "  \"payouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":70,"
+        + "      \"chopAmount\":null"
+        + "    }"
+        + "  ]"
+        + "}");
+    GAME_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":80,"
+        + "  \"rebuyAddOnCollected\":40,"
+        + "  \"annualTocCollected\":20,"
+        + "  \"quarterlyTocCollected\":20,"
+        + "  \"totalCollected\":160,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":0,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":40,"
+        + "  \"totalCombinedTocCalculated\":40,"
+        + "  \"kittyCalculated\":10,"
+        + "  \"prizePotCalculated\":110,"
+        + "  \"numPlayers\":2,"
+        + "  \"numPaidPlayers\":2,"
+        + "  \"chopped\":false,"
+        + "  \"canRebuy\":true,"
+        + "  \"payouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":110,"
+        + "      \"chopAmount\":null"
+        + "    }"
+        + "  ]"
+        + "}");
+    GAME_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":280,"
+        + "  \"rebuyAddOnCollected\":0,"
+        + "  \"annualTocCollected\":0,"
+        + "  \"quarterlyTocCollected\":0,"
+        + "  \"totalCollected\":280,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":0,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":0,"
+        + "  \"totalCombinedTocCalculated\":0,"
+        + "  \"kittyCalculated\":10,"
+        + "  \"prizePotCalculated\":270,"
+        + "  \"numPlayers\":7,"
+        + "  \"numPaidPlayers\":7,"
+        + "  \"chopped\":false,"
+        + "  \"canRebuy\":true,"
+        + "  \"payouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":270,"
+        + "      \"chopAmount\":null"
+        + "    }"
+        + "  ]"
+        + "}");
+    GAME_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":320,"
+        + "  \"rebuyAddOnCollected\":0,"
+        + "  \"annualTocCollected\":0,"
+        + "  \"quarterlyTocCollected\":0,"
+        + "  \"totalCollected\":320,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":0,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":0,"
+        + "  \"totalCombinedTocCalculated\":0,"
+        + "  \"kittyCalculated\":10,"
+        + "  \"prizePotCalculated\":310,"
+        + "  \"numPlayers\":8,"
+        + "  \"numPaidPlayers\":8,"
+        + "  \"chopped\":false,"
+        + "  \"canRebuy\":true,"
+        + "  \"payouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":201,"
+        + "      \"chopAmount\":null"
+        + "    },"
+        + "    {"
+        + "      \"place\":2,"
+        + "      \"amount\":109,"
+        + "      \"chopAmount\":null"
+        + "    }"
+        + "  ]"
+        + "}");
+    GAME_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":320,"
+        + "  \"rebuyAddOnCollected\":0,"
+        + "  \"annualTocCollected\":0,"
+        + "  \"quarterlyTocCollected\":0,"
+        + "  \"totalCollected\":320,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":0,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":0,"
+        + "  \"totalCombinedTocCalculated\":0,"
+        + "  \"kittyCalculated\":10,"
+        + "  \"prizePotCalculated\":310,"
+        + "  \"numPlayers\":8,"
+        + "  \"numPaidPlayers\":8,"
+        + "  \"chopped\":false,"
+        + "  \"canRebuy\":true,"
+        + "  \"payouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":201,"
+        + "      \"chopAmount\":null"
+        + "    },"
+        + "    {"
+        + "      \"place\":2,"
+        + "      \"amount\":109,"
+        + "      \"chopAmount\":null"
+        + "    }"
+        + "  ]"
+        + "}");
+    GAME_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":280,"
+        + "  \"rebuyAddOnCollected\":0,"
+        + "  \"annualTocCollected\":0,"
+        + "  \"quarterlyTocCollected\":0,"
+        + "  \"totalCollected\":280,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":0,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":0,"
+        + "  \"totalCombinedTocCalculated\":0,"
+        + "  \"kittyCalculated\":10,"
+        + "  \"prizePotCalculated\":270,"
+        + "  \"numPlayers\":7,"
+        + "  \"numPaidPlayers\":7,"
+        + "  \"chopped\":false,"
+        + "  \"canRebuy\":true,"
+        + "  \"payouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":270,"
+        + "      \"chopAmount\":null"
+        + "    }"
+        + "  ]"
+        + "}");
+    GAME_CALCULATIONS.add("{"
+        + "  \"buyInCollected\":360,"
+        + "  \"rebuyAddOnCollected\":280,"
+        + "  \"annualTocCollected\":120,"
+        + "  \"quarterlyTocCollected\":60,"
+        + "  \"totalCollected\":820,"
+        + "  \"annualTocFromRebuyAddOnCalculated\":80,"
+        + "  \"rebuyAddOnLessAnnualTocCalculated\":200,"
+        + "  \"totalCombinedTocCalculated\":260,"
+        + "  \"kittyCalculated\":10,"
+        + "  \"prizePotCalculated\":550,"
+        + "  \"numPlayers\":10,"
+        + "  \"numPaidPlayers\":9,"
+        + "  \"chopped\":true,"
+        + "  \"canRebuy\":true,"
+        + "  \"payouts\":["
+        + "    {"
+        + "      \"place\":1,"
+        + "      \"amount\":357,"
+        + "      \"chopAmount\":280"
+        + "    },"
+        + "    {"
+        + "      \"place\":2,"
+        + "      \"amount\":193,"
+        + "      \"chopAmount\":270"
+        + "    }"
+        + "  ]"
+        + "}");
+  }
 
 }

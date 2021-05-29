@@ -192,15 +192,8 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 01-move-player-integration-tests-to-juni
-Refactored the settings and player integration tests to be JUnit tests.
+## Current Branch: 02-remove-current-season-and-game
+Removed the endpoints to get the current season and get the current game.
+Now have to get them by Id.
 
-Turned out nicely because a test in JUnit was a scenrio in the cucumber feature file. For example a test now looks like
-
-<pre>  @Test
-  public void createMultipleAndGet() throws Exception {
-    newPlayer();
-    anotherNewPlayer();
-    getPlayers();
-    thePlayersMatch();
-  }</pre>
+Refactored all the remaining cucumber tests to JUnit.

@@ -235,7 +235,7 @@ public class SeasonServiceTest implements TestConstants {
     Season season = seasonArg.getValue();
     assertTrue(season.isFinalized());
 
-    verify(seasonHistoryRepository, Mockito.times(1)).deleteById(1);
+    verify(seasonHistoryRepository, Mockito.times(1)).deleteById("2020");
 
     ArgumentCaptor<HistoricalSeason> historicalSeasonArg = ArgumentCaptor
         .forClass(HistoricalSeason.class);
@@ -290,6 +290,7 @@ public class SeasonServiceTest implements TestConstants {
     // Arrange
     when(seasonRepository.findById(1)).thenReturn(Optional.of(Season.builder()
         .id(1)
+        .start(LocalDate.now())
         .finalized(true)
         .build()));
 
@@ -302,7 +303,7 @@ public class SeasonServiceTest implements TestConstants {
     Season season = seasonArg.getValue();
     assertFalse(season.isFinalized());
 
-    verify(seasonHistoryRepository, Mockito.times(1)).deleteById(1);
+    verify(seasonHistoryRepository, Mockito.times(1)).deleteById(Integer.toString(LocalDate.now().getYear()));
   }
 
   @Test

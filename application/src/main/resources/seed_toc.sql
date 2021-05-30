@@ -35,3 +35,15 @@ INSERT INTO settings
 VALUES (1, 1);
 INSERT INTO toc_config
 VALUES (1, 10, 20, 20, 3, 40, 40, 20, 2021, 1);
+
+INSERT INTO historical_season VALUES ('2020', '2021');
+INSERT INTO historical_season_player
+VALUES (3, 'Bob Roberts', 12345, 48, '2020', '2020');
+INSERT INTO historical_season_player
+VALUES (4, 'Abe Abeson', 11000, 50, '2020', '2020');
+
+INSERT INTO historical_season VALUES ('2019', '2020');
+INSERT INTO historical_season_player
+VALUES (1, 'Abe Abeson', 99500, 51, '2019', '2019');
+INSERT INTO historical_season_player
+VALUES (2, 'Bob Roberts', 88000, 45, '2019', '2019');

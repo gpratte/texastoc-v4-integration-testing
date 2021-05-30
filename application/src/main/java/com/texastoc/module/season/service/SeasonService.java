@@ -146,11 +146,10 @@ public class SeasonService {
     seasonRepository.save(season);
 
     // Clear out the historical season
-    seasonHistoryRepository.deleteById(seasonId);
+    seasonHistoryRepository.deleteById(Integer.toString(season.getStart().getYear()));
     // Set the historical season
     List<HistoricalSeasonPlayer> hsPlayers = new LinkedList<>();
     HistoricalSeason historicalSeason = HistoricalSeason.builder()
-        .seasonId(seasonId)
         .startYear(Integer.toString(season.getStart().getYear()))
         .endYear(Integer.toString(season.getEnd().getYear()))
         .players(hsPlayers)
@@ -179,7 +178,7 @@ public class SeasonService {
     seasonRepository.save(season);
 
     // Clear out the historical season
-    seasonHistoryRepository.deleteById(seasonId);
+    seasonHistoryRepository.deleteById(Integer.toString(season.getStart().getYear()));
 
     return season;
   }

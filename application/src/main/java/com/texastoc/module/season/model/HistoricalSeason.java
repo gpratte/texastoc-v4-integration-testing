@@ -17,8 +17,6 @@ import org.springframework.data.relational.core.mapping.MappedCollection;
 public class HistoricalSeason {
 
   @Id
-  private int id;
-  private int seasonId;
   private String startYear;
   private String endYear;
   @MappedCollection

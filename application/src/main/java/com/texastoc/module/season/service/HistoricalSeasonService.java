@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.module.season.model.HistoricalSeason;
 import com.texastoc.module.season.repository.SeasonHistoryRepository;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +20,7 @@ public class HistoricalSeasonService {
   }
 
   public List<HistoricalSeason> getPastSeasons() {
-    return StreamSupport
-        .stream(seasonHistoryRepository.findAll().spliterator(), false)
-        .collect(Collectors.toList());
+    return seasonHistoryRepository.findByOrderByStartYearDesc();
   }
 
 }

@@ -1,18 +1,24 @@
 
-Refactor cucumber tests into JUnit tests.
-Remove update password in UI (have to use the forgot password flow)
-Move past season history out of json file
+2021 season:
 Get rid of the season estimated payouts
-
-Use case: want to change the season settings mid-season
-Create a game save off the season settings with the game.
-When reoopen a game optionally use the new season settings.
-
+Remove update password in UI (have to use the forgot password flow)
+UI settings for one touch rebuy
 Gradle?
 Remove spring fox?
 CI/CD again
+HATEOS?
+
+2022 season:
+Add seasonId to the game url path
+Composite primary key.
+UUID for keys (no longer auto increment)
+
+====== PENDING =======
+Move past season history out of json file
+
 
 ====== DONE =======
+Refactor cucumber tests into JUnit tests.
 Travis CICD
   Heroku deploy - rest calls instead of messaging?
 

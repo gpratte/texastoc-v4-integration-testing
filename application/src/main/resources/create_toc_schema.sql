@@ -365,11 +365,9 @@ alter table toc_config
 
 CREATE TABLE historical_season
 (
-    id         int NOT NULL AUTO_INCREMENT,
-    season_id  int NOT NULL,
-    start_year int DEFAULT NULL,
-    end_year   int DEFAULT NULL,
-    PRIMARY KEY (id)
+    start_year varchar(8) NOT NULL,
+    end_year   varchar(8) NOT NULL,
+    PRIMARY KEY (start_year)
 );
 
 CREATE TABLE historical_season_player
@@ -378,8 +376,8 @@ CREATE TABLE historical_season_player
     name                  varchar(64),
     points                int,
     entries               int,
-    historical_season     int NOT NULL,
-    historical_season_key int NOT NULL,
+    historical_season     varchar(8) NOT NULL,
+    historical_season_key varchar(8) NOT NULL,
     PRIMARY KEY (id)
 );
 

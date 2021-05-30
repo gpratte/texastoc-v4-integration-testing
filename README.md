@@ -192,8 +192,5 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 02-remove-current-season-and-game
-Removed the endpoints to get the current season and get the current game.
-Now have to get them by Id.
-
-Refactored all the remaining cucumber tests to JUnit.
+## Current Branch: 03-move-season-history-to-db
+Instead of having the season history in a json file (and in github) moved the data into the database.

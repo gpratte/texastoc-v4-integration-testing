@@ -3,7 +3,6 @@ DROP TABLE IF EXISTS player;
 DROP TABLE IF EXISTS season;
 DROP TABLE IF EXISTS season_player;
 DROP TABLE IF EXISTS season_payout;
-DROP TABLE IF EXISTS season_estimated_payout;
 DROP TABLE IF EXISTS quarterly_season;
 DROP TABLE IF EXISTS quarterly_season_player;
 DROP TABLE IF EXISTS quarterly_season_payout;
@@ -15,7 +14,6 @@ DROP TABLE IF EXISTS game_player;
 DROP TABLE IF EXISTS game_payout;
 DROP TABLE IF EXISTS seating;
 DROP TABLE IF EXISTS game;
-DROP TABLE IF EXISTS season_estimated_payout;
 DROP TABLE IF EXISTS season_payout_settings;
 DROP TABLE IF EXISTS toc_config;
 DROP TABLE IF EXISTS settings;
@@ -307,21 +305,6 @@ CREATE TABLE season_payout
     UNIQUE KEY Season_Payout_Unique (season_id, place, estimated)
 );
 
-CREATE TABLE season_estimated_payout
-(
-    id         int NOT NULL AUTO_INCREMENT,
-    season_id  int NOT NULL,
-    place      int NOT NULL,
-    amount     int     DEFAULT NULL,
-    guaranteed boolean DEFAULT false,
-    estimated  boolean DEFAULT false,
-    cash       boolean DEFAULT false,
-    season     int NOT NULL,
-    season_key int NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE KEY Season_Estimated_Payout_Unique (season_id, place, estimated)
-);
-
 CREATE TABLE season_payout_settings
 (
     id         int           NOT NULL AUTO_INCREMENT,
@@ -365,9 +348,10 @@ alter table toc_config
 
 CREATE TABLE historical_season
 (
+    id                    int NOT NULL AUTO_INCREMENT,
     start_year varchar(8) NOT NULL,
     end_year   varchar(8) NOT NULL,
-    PRIMARY KEY (start_year)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE historical_season_player
@@ -376,8 +360,12 @@ CREATE TABLE historical_season_player
     name                  varchar(64),
     points                int,
     entries               int,
-    historical_season     varchar(8) NOT NULL,
-    historical_season_key varchar(8) NOT NULL,
+    start_year            varchar(8) NOT NULL,
+    historical_season     int NOT NULL,
+    historical_season_key int NOT NULL,
     PRIMARY KEY (id)
 );
+alter table historical_season_player
+    add constraint fk_historical_season_player_historical_season foreign key (historical_season) references historical_season (id);
+
 

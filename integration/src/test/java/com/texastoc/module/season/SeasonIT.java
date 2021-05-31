@@ -53,6 +53,8 @@ public class SeasonIT extends BaseSeasonIT {
     verifyRetrievedIsNotEnded();
   }
 
+  // TODO add test with season players and make sure they become historical season players
+
   // A season starts encompassing today
   private void seasonStarts() throws Exception {
     startYear = getSeasonStart().getYear();

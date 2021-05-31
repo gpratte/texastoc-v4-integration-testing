@@ -127,7 +127,6 @@ public class SeasonServiceTest implements TestConstants {
 
     assertTrue(season.getPlayers() == null || season.getPlayers().size() == 0);
     assertTrue(season.getPayouts() == null || season.getPayouts().size() == 0);
-    assertTrue(season.getEstimatedPayouts() == null || season.getEstimatedPayouts().size() == 0);
 
     ArgumentCaptor<Integer> seasonIdArg = ArgumentCaptor.forClass(Integer.class);
     ArgumentCaptor<Integer> startArg = ArgumentCaptor.forClass(Integer.class);

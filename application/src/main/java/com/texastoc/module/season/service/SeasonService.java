@@ -156,6 +156,7 @@ public class SeasonService {
         .build();
     season.getPlayers()
         .forEach(seasonPlayer -> hsPlayers.add(HistoricalSeasonPlayer.builder()
+            .startYear(Integer.toString(season.getStart().getYear()))
             .name(seasonPlayer.getName())
             .points(seasonPlayer.getPoints())
             .entries(seasonPlayer.getEntries())

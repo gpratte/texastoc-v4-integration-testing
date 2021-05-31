@@ -71,6 +71,4 @@ public class Season {
   private List<SeasonPlayer> players;
   @MappedCollection
   private List<SeasonPayout> payouts;
-  @MappedCollection
-  private List<SeasonEstimatedPayout> estimatedPayouts;
 }

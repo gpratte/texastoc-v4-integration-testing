@@ -193,23 +193,6 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
       assertEquals(expectedSeason.getPayouts().get(i).isCash(),
           seasonRetrieved.getPayouts().get(i).isCash());
     }
-
-    assertEquals(expectedSeason.getEstimatedPayouts().size(),
-        seasonRetrieved.getEstimatedPayouts().size());
-    for (int i = 0; i < expectedSeason.getEstimatedPayouts().size(); i++) {
-      assertEquals(seasonRetrieved.getId(),
-          seasonRetrieved.getEstimatedPayouts().get(i).getSeasonId());
-      assertEquals(expectedSeason.getEstimatedPayouts().get(i).getPlace(),
-          seasonRetrieved.getEstimatedPayouts().get(i).getPlace());
-      assertEquals(expectedSeason.getEstimatedPayouts().get(i).getAmount(),
-          seasonRetrieved.getEstimatedPayouts().get(i).getAmount());
-      assertEquals(expectedSeason.getEstimatedPayouts().get(i).isGuaranteed(),
-          seasonRetrieved.getEstimatedPayouts().get(i).isGuaranteed());
-      assertEquals(expectedSeason.getEstimatedPayouts().get(i).isEstimated(),
-          seasonRetrieved.getEstimatedPayouts().get(i).isEstimated());
-      assertEquals(expectedSeason.getEstimatedPayouts().get(i).isCash(),
-          seasonRetrieved.getEstimatedPayouts().get(i).isCash());
-    }
   }
 
   static {
@@ -311,8 +294,7 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
         "\"entries\":1" +
         "}" +
         "]," +
-        "\"payouts\":[]," +
-        "\"estimatedPayouts\":[]" +
+        "\"payouts\":[]" +
         "}");
     SEASON_CALCULATIONS.add("{"
         + "  \"buyInCollected\":240,"
@@ -348,9 +330,6 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
         + "    }"
         + "  ],"
         + "  \"payouts\":["
-        + "    "
-        + "  ],"
-        + "  \"estimatedPayouts\":["
         + "    {"
         + "      \"place\":1,"
         + "      \"amount\":1649,"

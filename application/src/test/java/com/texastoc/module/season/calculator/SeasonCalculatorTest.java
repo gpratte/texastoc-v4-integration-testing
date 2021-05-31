@@ -87,7 +87,6 @@ public class SeasonCalculatorTest implements TestConstants {
 
     assertEquals(0, season.getPlayers().size());
     assertEquals(0, season.getPayouts().size());
-    assertEquals(0, season.getEstimatedPayouts().size());
   }
 
   @Test
@@ -192,11 +191,8 @@ public class SeasonCalculatorTest implements TestConstants {
     assertNull(seasonPlayer.getPlace());
     assertEquals(0, seasonPlayer.getPoints());
 
-    // TODO beef up testing payouts
-    assertEquals(0, season.getPayouts().size());
-
     // TODO beef up testing estimated payouts
-    assertEquals(5, season.getEstimatedPayouts().size());
+    assertEquals(5, season.getPayouts().size());
   }
 
   @Test
@@ -373,11 +369,8 @@ public class SeasonCalculatorTest implements TestConstants {
     assertNull(seasonPlayer.getPlace());
     assertEquals(0, seasonPlayer.getPoints());
 
-    // TODO beef up testing payouts
-    assertEquals(0, season.getPayouts().size());
-
     // TODO beef up testing estimated payouts
-    assertEquals(5, season.getEstimatedPayouts().size());
+    assertEquals(5, season.getPayouts().size());
   }
 
 }

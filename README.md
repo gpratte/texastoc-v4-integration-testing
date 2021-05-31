@@ -192,5 +192,6 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 03-move-season-history-to-db
-Instead of having the season history in a json file (and in github) moved the data into the database.
+## Current Branch: 04-remove-estimated-payouts
+Remove estimated payouts. Also more work that should have been done in the previouse
+branch moving season history to database.

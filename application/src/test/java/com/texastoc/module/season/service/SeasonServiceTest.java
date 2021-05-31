@@ -127,7 +127,6 @@ public class SeasonServiceTest implements TestConstants {
 
     assertTrue(season.getPlayers() == null || season.getPlayers().size() == 0);
     assertTrue(season.getPayouts() == null || season.getPayouts().size() == 0);
-    assertTrue(season.getEstimatedPayouts() == null || season.getEstimatedPayouts().size() == 0);
 
     ArgumentCaptor<Integer> seasonIdArg = ArgumentCaptor.forClass(Integer.class);
     ArgumentCaptor<Integer> startArg = ArgumentCaptor.forClass(Integer.class);
@@ -246,11 +245,13 @@ public class SeasonServiceTest implements TestConstants {
     assertEquals(2, historicalSeason.getPlayers().size());
 
     HistoricalSeasonPlayer hsp1 = HistoricalSeasonPlayer.builder()
+        .startYear("2020")
         .name(player1.getName())
         .points(player1.getPoints())
         .entries(player1.getEntries())
         .build();
     HistoricalSeasonPlayer hsp2 = HistoricalSeasonPlayer.builder()
+        .startYear("2020")
         .name(player2.getName())
         .points(player2.getPoints())
         .entries(player2.getEntries())

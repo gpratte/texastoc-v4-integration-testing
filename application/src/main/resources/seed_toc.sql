@@ -30,7 +30,7 @@ VALUES (2, 2021,
                           {"place" : 4,"amount" : 1100,"percent" : 14},
                           {"place" : 5,"amount" : 0,"percent" : 30}]}]');
 INSERT INTO version
-VALUES (1, '3.11');
+VALUES (1, '4.00');
 INSERT INTO settings
 VALUES (1, 1);
 INSERT INTO toc_config

@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -62,8 +61,8 @@ public class GameRestController {
     return gameModule.get(id);
   }
 
-  @GetMapping("/games")
-  public List<Game> getGamesBySeasonId(@RequestParam(required = false) Integer seasonId) {
+  @GetMapping("/seasons/{seasonId}/games")
+  public List<Game> getGamesBySeasonId(@PathVariable("seasonId") int seasonId) {
     return gameModule.getBySeasonId(seasonId);
   }
 

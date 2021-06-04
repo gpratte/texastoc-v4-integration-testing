@@ -168,8 +168,7 @@ public abstract class BaseIntegrationTest implements TestConstants {
         Void.class);
   }
 
-  protected void deletePlayerFromGame(int gameId, int gamePlayerId, String token)
-      throws JsonProcessingException {
+  protected void deletePlayerFromGame(int gameId, int gamePlayerId, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", "Bearer " + token);
     HttpEntity<String> entity = new HttpEntity<>("", headers);
@@ -181,7 +180,7 @@ public abstract class BaseIntegrationTest implements TestConstants {
         Void.class);
   }
 
-  protected void finalizeGame(int gameId, String token) throws JsonProcessingException {
+  protected void finalizeGame(int gameId, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", "Bearer " + token);
     headers.set("Content-Type", "application/vnd.texastoc.finalize+json");
@@ -190,7 +189,7 @@ public abstract class BaseIntegrationTest implements TestConstants {
     restTemplate.put(endpoint() + "/games/" + gameId, entity);
   }
 
-  protected void unfinalizeGame(int gameId, String token) throws JsonProcessingException {
+  protected void unfinalizeGame(int gameId, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", "Bearer " + token);
     headers.set("Content-Type", "application/vnd.texastoc.unfinalize+json");
@@ -318,7 +317,7 @@ public abstract class BaseIntegrationTest implements TestConstants {
     return response.getBody();
   }
 
-  protected Game getGame(int id, String token) throws JsonProcessingException {
+  protected Game getGame(int id, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", "Bearer " + token);
     HttpEntity<String> entity = new HttpEntity<>("", headers);
@@ -331,7 +330,21 @@ public abstract class BaseIntegrationTest implements TestConstants {
     return response.getBody();
   }
 
-  protected Season getSeason(int id, String token) throws JsonProcessingException {
+  protected Game getGameBySeasonId(int seasonId, String token) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.set("Authorization", "Bearer " + token);
+    HttpEntity<String> entity = new HttpEntity<>("", headers);
+
+    ResponseEntity<List<Game>> response = restTemplate.exchange(
+        endpoint() + "/seasons/" + seasonId + "/games",
+        HttpMethod.GET,
+        entity,
+        new ParameterizedTypeReference<List<Game>>() {
+        });
+    return response.getBody().get(0);
+  }
+
+  protected Season getSeason(int id, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", "Bearer " + token);
     HttpEntity<String> entity = new HttpEntity<>("", headers);
@@ -344,7 +357,7 @@ public abstract class BaseIntegrationTest implements TestConstants {
     return response.getBody();
   }
 
-  protected void endSeason(int seasonId, String token) throws JsonProcessingException {
+  protected void endSeason(int seasonId, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", "Bearer " + token);
     headers.set("Content-Type", "application/vnd.texastoc.finalize+json");
@@ -353,7 +366,7 @@ public abstract class BaseIntegrationTest implements TestConstants {
     restTemplate.put(endpoint() + "/seasons/" + seasonId, entity);
   }
 
-  protected void openSeason(int seasonId, String token) throws JsonProcessingException {
+  protected void openSeason(int seasonId, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", "Bearer " + token);
     headers.set("Content-Type", "application/vnd.texastoc.unfinalize+json");

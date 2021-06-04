@@ -53,6 +53,14 @@ public class GameIT extends BaseGameIT {
   }
 
   @Test
+  public void createRetrieveSimpleGameBySeason() throws Exception {
+    aSeasonExists();
+    theGameStartsNow();
+    theGameIsCreated();
+    theGameIsRetrievedBySeasonId();
+    theGameRetrievedHasNoPlayersOrPayouts();
+  }
+  @Test
   public void createAndUpdateSimpleGame() throws Exception {
     aSeasonExists();
     theGameStartsNow();
@@ -146,6 +154,11 @@ public class GameIT extends BaseGameIT {
     String token = login(USER_EMAIL, USER_PASSWORD);
     gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
     gameRetrieved = getGame(gameCreated.getId(), token);
+  }
+
+  private void theGameIsRetrievedBySeasonId() throws Exception {
+    String token = login(USER_EMAIL, USER_PASSWORD);
+    gameRetrieved = getGameBySeasonId(gameCreated.getSeasonId(), token);
   }
 
   private void theGameIsRetrieved() throws Exception {

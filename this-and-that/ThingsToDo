@@ -1,6 +1,5 @@
 
 2021 season:
-Disable socket configuration
 Remove update password in UI (have to use the forgot password flow)
 UI settings for one touch rebuy
 Gradle?

@@ -192,6 +192,5 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 04-remove-estimated-payouts
-Remove estimated payouts. Also more work that should have been done in the previouse
-branch moving season history to database.
+## Current Branch: 05-server-changes-for-frontend
+Biggest change was requiring the season id on the url path to get games.

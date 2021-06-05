@@ -66,19 +66,12 @@ public class ClockService {
     updateListeners(gameId);
   }
 
+  /**
+   * Move back one minute
+   * @param gameId
+   */
   public void back(int gameId) {
     Clock clock = getClock(gameId);
-    if (clock.getMillisRemaining() == 0) {
-      // Move to previous round
-      Round thisRound = findPreviousRound(clock.getThisRound());
-      clock.setThisRound(thisRound);
-      clock.setNextRound(findNextRound(thisRound));
-      clock.setMillisRemaining(thisRound.getDuration() * 60 * 1000);
-      notifyRoundChange(gameId);
-      updateListeners(gameId);
-      return;
-    }
-
     long millisRemaining = clock.getMillisRemaining() - 60000;
     if (millisRemaining < 0) {
       millisRemaining = 0;
@@ -87,17 +80,29 @@ public class ClockService {
     updateListeners(gameId);
   }
 
+  /**
+   * Move to previous round
+   * @param gameId
+   */
+  public void stepBack(int gameId) {
+    Clock clock = getClock(gameId);
+    // Move to previous round
+    Round thisRound = findPreviousRound(clock.getThisRound());
+    clock.setThisRound(thisRound);
+    clock.setNextRound(findNextRound(thisRound));
+    clock.setMillisRemaining(thisRound.getDuration() * 60 * 1000);
+    notifyRoundChange(gameId);
+    updateListeners(gameId);
+  }
+
+    /**
+   * Move ahead one minute
+   * @param gameId
+   */
   public void forward(int gameId) {
     Clock clock = getClock(gameId);
-    // If already at max time go to next round
+    // If already at max time then nothing to do
     if (clock.getMillisRemaining() == (clock.getThisRound().getDuration() * 60 * 1000)) {
-      // Move to next round
-      Round thisRound = clock.getNextRound();
-      clock.setThisRound(thisRound);
-      clock.setNextRound(findNextRound(clock.getThisRound()));
-      clock.setMillisRemaining(thisRound.getDuration() * 60 * 1000);
-      notifyRoundChange(gameId);
-      updateListeners(gameId);
       return;
     }
 
@@ -110,6 +115,22 @@ public class ClockService {
     }
     clock.setMillisRemaining(millisRemaining);
     updateListeners(gameId);
+  }
+
+  /**
+   * Move to the next round
+   * @param gameId
+   */
+  public void stepForward(int gameId) {
+    Clock clock = getClock(gameId);
+    // Move to next round
+    Round thisRound = clock.getNextRound();
+    clock.setThisRound(thisRound);
+    clock.setNextRound(findNextRound(clock.getThisRound()));
+    clock.setMillisRemaining(thisRound.getDuration() * 60 * 1000);
+    notifyRoundChange(gameId);
+    updateListeners(gameId);
+    return;
   }
 
   public void endClock(int gameId) {

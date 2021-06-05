@@ -192,6 +192,6 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 06-clock-step-forward-and-back
-Added endpoints to the clock controller to step the clock forward one round and to
-step the clock back one round.
+## Current Branch: 07-text-when-application-started
+Added a Component that listens when the application is started. It then sends a
+text to the administrator.

@@ -192,5 +192,6 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 05-server-changes-for-frontend
-Biggest change was requiring the season id on the url path to get games.
+## Current Branch: 06-clock-step-forward-and-back
+Added endpoints to the clock controller to step the clock forward one round and to
+step the clock back one round.

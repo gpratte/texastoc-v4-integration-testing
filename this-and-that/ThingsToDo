@@ -1,11 +1,9 @@
 
 2021 season:
-Change clock layout to expand to size of browser.
 Player PII
   Admin can see all player info and does a put to update
   Non-admin can only see his info and others are masked and does a put to update his own
 After changing email get an error although the email has changed
-Gradle?
 Remove spring fox?
 CI/CD again
 HATEOS?

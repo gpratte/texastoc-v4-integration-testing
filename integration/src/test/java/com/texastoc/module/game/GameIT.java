@@ -7,16 +7,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.texastoc.module.game.model.Game;
-import io.cucumber.java.Before;
 import java.time.LocalDate;
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.web.client.HttpClientErrorException;
 
 public class GameIT extends BaseGameIT {
-
+  
   @Before
   public void before() {
     // Before each scenario
@@ -60,6 +60,7 @@ public class GameIT extends BaseGameIT {
     theGameIsRetrievedBySeasonId();
     theGameRetrievedHasNoPlayersOrPayouts();
   }
+
   @Test
   public void createAndUpdateSimpleGame() throws Exception {
     aSeasonExists();

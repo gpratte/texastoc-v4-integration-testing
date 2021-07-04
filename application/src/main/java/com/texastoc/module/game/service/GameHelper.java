@@ -84,13 +84,14 @@ public class GameHelper {
     executorService.submit(new GameSender());
   }
 
-  public void sendGameSummary(int id) {
+  // Sleep is the number of seconds to sleep
+  public void sendGameSummary(int id, long sleep) {
     Game game = get(id);
     Season season = getSeasonModule().get(game.getSeasonId());
     List<Player> players = getPlayerModule().getAll();
     List<QuarterlySeason> quarterlySeasons = getQuarterlySeasonModule()
         .getBySeasonId(season.getId());
-    GameSummary gameSummary = new GameSummary(game, season, quarterlySeasons, players);
+    GameSummary gameSummary = new GameSummary(game, season, quarterlySeasons, players, sleep);
     // TODO use Spring Integration
     new Thread(gameSummary).start();
   }

@@ -10,6 +10,7 @@ import com.texastoc.module.season.model.Season;
 import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -17,25 +18,37 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+@Slf4j
 public class GameSummary implements Runnable {
 
-  private Game game;
-  private Season season;
-  private List<QuarterlySeason> quarterlySeasons;
-  private List<Player> players;
+  private final Game game;
+  private final Season season;
+  private final List<QuarterlySeason> quarterlySeasons;
+  private final List<Player> players;
+  private final long sleep;
 
   private NotificationModule notificationModule;
 
   public GameSummary(Game game, Season season, List<QuarterlySeason> quarterlySeasons,
-      List<Player> players) {
+      List<Player> players, long sleep) {
     this.game = game;
     this.season = season;
     this.quarterlySeasons = quarterlySeasons;
     this.players = players;
+    this.sleep = sleep;
   }
 
   @Override
   public void run() {
+    // TODO should not sleep for integration tests
+    if (sleep > 0) {
+      try {
+        Thread.sleep(sleep * 1000);
+      } catch (InterruptedException e) {
+        log.warn("interrupted from sleeping before sending game summary email");
+      }
+    }
+
     String body = getGameSummaryFromTemplate(game, season);
     String subject = "Summary " + game.getDate();
 

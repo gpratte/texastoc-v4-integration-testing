@@ -10,13 +10,13 @@ import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.season.model.Season;
 import com.texastoc.module.season.model.SeasonPlayer;
-import io.cucumber.java.Before;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.assertj.core.api.Assertions;
 import org.awaitility.Awaitility;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SeasonCalculationsIT extends BaseSeasonIT {

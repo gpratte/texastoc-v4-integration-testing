@@ -39,4 +39,15 @@
   <bean id="quarterlySeasonListener"
     class="com.texastoc.module.quarterly.event.GameFinalizedHandler"/>
 
+  <!-- Subscriber -->
+  <int:service-activator
+    id="gameListener3"
+    input-channel="gameFinalized"
+    ref="clockSeasonListener"
+    method="handleGameFinalized"/>
+
+  <bean id="clockSeasonListener"
+    class="com.texastoc.module.clock.event.GameFinalizedHandler"/>
+
+
 </beans>

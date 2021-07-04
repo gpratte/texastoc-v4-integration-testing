@@ -5,10 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import com.texastoc.module.quarterly.model.QuarterlySeason;
-import io.cucumber.java.Before;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 
 public class QuarterlySeasonIT extends BaseQuarterlySeasonIT {

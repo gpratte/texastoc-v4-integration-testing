@@ -185,8 +185,7 @@ public class GameService {
     }
     gameEventProducer.notifyGameFinalized(id, game.getSeasonId(), game.getQSeasonId(), true);
     gameHelper.sendUpdatedGame();
-    // TODO message clock to end
-    gameHelper.sendGameSummary(id);
+    gameHelper.sendGameSummary(id, 300);
     return game;
   }
 

@@ -5,8 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.texastoc.module.season.model.Season;
-import io.cucumber.java.Before;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SeasonIT extends BaseSeasonIT {

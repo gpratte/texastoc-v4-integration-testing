@@ -68,6 +68,7 @@ public class ClockService {
 
   /**
    * Move back one minute
+   *
    * @param gameId
    */
   public void back(int gameId) {
@@ -82,6 +83,7 @@ public class ClockService {
 
   /**
    * Move to previous round
+   *
    * @param gameId
    */
   public void stepBack(int gameId) {
@@ -95,8 +97,9 @@ public class ClockService {
     updateListeners(gameId);
   }
 
-    /**
+  /**
    * Move ahead one minute
+   *
    * @param gameId
    */
   public void forward(int gameId) {
@@ -119,6 +122,7 @@ public class ClockService {
 
   /**
    * Move to the next round
+   *
    * @param gameId
    */
   public void stepForward(int gameId) {

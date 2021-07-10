@@ -175,8 +175,6 @@ public class GameService {
       return game;
     }
 
-    gameHelper.recalculate(game.getId());
-    game = get(id);
     game.setFinalized(true);
     game.setSeating(null);
     gameRepository.save(game);
@@ -185,7 +183,7 @@ public class GameService {
     }
     gameEventProducer.notifyGameFinalized(id, game.getSeasonId(), game.getQSeasonId(), true);
     gameHelper.sendUpdatedGame();
-    gameHelper.sendGameSummary(id, 300);
+    gameHelper.sendGameSummary(id, game.getSeasonGameNum());
     return game;
   }
 

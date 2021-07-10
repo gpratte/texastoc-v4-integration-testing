@@ -234,10 +234,6 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 08-fix-clock-not-terminating
-
-Clock service now listens to the game finalized event and ends the clock.
-
-Added a delay before sending out the game summary to allow the asynchronous calculations to finshing
-when a game is finalized.
-
+## Current Branch: 09-update-season-before-game-summary
+When the game is finalized an event is sent that the season service listens to and then recalculates.
+Wait for the season to recalculate before sending the game summary.

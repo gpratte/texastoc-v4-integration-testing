@@ -84,16 +84,8 @@ public class GameHelper {
     executorService.submit(new GameSender());
   }
 
-  // Sleep is the number of seconds to sleep
-  public void sendGameSummary(int id, long sleep) {
-    Game game = get(id);
-    Season season = getSeasonModule().get(game.getSeasonId());
-    List<Player> players = getPlayerModule().getAll();
-    List<QuarterlySeason> quarterlySeasons = getQuarterlySeasonModule()
-        .getBySeasonId(season.getId());
-    GameSummary gameSummary = new GameSummary(game, season, quarterlySeasons, players, sleep);
-    // TODO use Spring Integration
-    new Thread(gameSummary).start();
+  public void sendGameSummary(int id, int seasonGameNum) {
+    executorService.submit(new GameOver(id, seasonGameNum));
   }
 
   private PlayerModule getPlayerModule() {
@@ -127,4 +119,43 @@ public class GameHelper {
       return null;
     }
   }
+
+  private class GameOver implements Callable<Void> {
+
+    private final int gameId;
+    private final int seasonGameNum;
+
+    public GameOver(int gameId, int seasonGameNum) {
+      this.gameId = gameId;
+      this.seasonGameNum = seasonGameNum;
+    }
+
+    @Override
+    public Void call() throws Exception {
+      Game game = get(gameId);
+      int seasonNumGamesPlayed = 0;
+      Season season = null;
+      // Wait for the season calculator to finish
+      // TODO change to check the season's lastCalculated and the quarterlySeason's
+      //  lastCalculated is after game's lastCalculated
+      do {
+        try {
+          Thread.sleep(1000l);
+        } catch (InterruptedException e) {
+          // do nothing
+        }
+        season = getSeasonModule().get(game.getSeasonId());
+        seasonNumGamesPlayed = season.getNumGamesPlayed();
+      } while (seasonNumGamesPlayed != seasonGameNum);
+
+      List<Player> players = getPlayerModule().getAll();
+      List<QuarterlySeason> quarterlySeasons = getQuarterlySeasonModule()
+          .getBySeasonId(season.getId());
+      GameSummary gameSummary = new GameSummary(game, season, quarterlySeasons, players);
+      // TODO use Spring Integration
+      new Thread(gameSummary).start();
+      return null;
+    }
+  }
+
 }

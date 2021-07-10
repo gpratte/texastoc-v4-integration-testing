@@ -379,7 +379,7 @@ public class GameSummaryTest {
     NotificationModule notificationModule = mock(NotificationModule.class);
 
     // Act
-    GameSummary gameSummary = new GameSummary(game, season, quarterlySeasons, players, 0);
+    GameSummary gameSummary = new GameSummary(game, season, quarterlySeasons, players);
     ReflectionTestUtils.setField(gameSummary, "notificationModule", notificationModule);
     gameSummary.run();
 

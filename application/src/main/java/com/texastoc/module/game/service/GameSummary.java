@@ -25,30 +25,19 @@ public class GameSummary implements Runnable {
   private final Season season;
   private final List<QuarterlySeason> quarterlySeasons;
   private final List<Player> players;
-  private final long sleep;
 
   private NotificationModule notificationModule;
 
   public GameSummary(Game game, Season season, List<QuarterlySeason> quarterlySeasons,
-      List<Player> players, long sleep) {
+      List<Player> players) {
     this.game = game;
     this.season = season;
     this.quarterlySeasons = quarterlySeasons;
     this.players = players;
-    this.sleep = sleep;
   }
 
   @Override
   public void run() {
-    // TODO should not sleep for integration tests
-    if (sleep > 0) {
-      try {
-        Thread.sleep(sleep * 1000);
-      } catch (InterruptedException e) {
-        log.warn("interrupted from sleeping before sending game summary email");
-      }
-    }
-
     String body = getGameSummaryFromTemplate(game, season);
     String subject = "Summary " + game.getDate();
 

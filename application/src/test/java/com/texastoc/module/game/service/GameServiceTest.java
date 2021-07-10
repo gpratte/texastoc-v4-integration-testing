@@ -283,8 +283,7 @@ public class GameServiceTest implements TestConstants {
     gameService.finalize(1);
 
     // Assert
-    verify(gameHelper, Mockito.times(2)).get(1);
-    verify(gameHelper, Mockito.times(1)).recalculate(1);
+    verify(gameHelper, Mockito.times(1)).get(1);
 
     ArgumentCaptor<Game> gameArg = ArgumentCaptor.forClass(Game.class);
     verify(gameRepository).save(gameArg.capture());

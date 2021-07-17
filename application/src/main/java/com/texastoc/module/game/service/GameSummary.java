@@ -8,6 +8,7 @@ import com.texastoc.module.player.model.Role;
 import com.texastoc.module.quarterly.model.QuarterlySeason;
 import com.texastoc.module.season.model.Season;
 import java.io.StringWriter;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +72,7 @@ public class GameSummary implements Runnable {
     Template t = VELOCITY_ENGINE.getTemplate("game-summary.vm");
     VelocityContext context = new VelocityContext();
 
+    Collections.sort(game.getPlayers());
     context.put("game", game);
 
     context.put("season", season);

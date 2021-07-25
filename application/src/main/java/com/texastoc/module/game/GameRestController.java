@@ -6,7 +6,6 @@ import com.texastoc.module.game.exception.SeatingException;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.model.Seating;
-import com.texastoc.module.game.service.GameService;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -37,11 +36,9 @@ public class GameRestController {
   public static final String CONTENT_TYPE_NOTIFY_SEATING = "application/vnd.texastoc.notify-seating+json";
 
   private final GameModule gameModule;
-  private final GameService gameService;
 
-  public GameRestController(GameModuleImpl gameModuleImpl, GameService gameService) {
+  public GameRestController(GameModuleImpl gameModuleImpl) {
     gameModule = gameModuleImpl;
-    this.gameService = gameService;
   }
 
   // TODO need season path for all these endpoints

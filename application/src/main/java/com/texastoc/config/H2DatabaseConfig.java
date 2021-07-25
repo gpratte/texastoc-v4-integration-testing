@@ -26,7 +26,7 @@ public class H2DatabaseConfig {
   public DataSource dataSource() {
     DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
     dataSourceBuilder.driverClassName("org.h2.Driver");
-    dataSourceBuilder.url("jdbc:h2:file:~/testdb;AUTO_SERVER=TRUE");
+    dataSourceBuilder.url("jdbc:h2:mem:testdb");
     dataSourceBuilder.username("sa");
     dataSourceBuilder.password("");
     return dataSourceBuilder.build();

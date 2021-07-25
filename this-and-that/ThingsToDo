@@ -2,6 +2,7 @@
 2021 season:
 Dockerize
   Remove REST calls (that can replace events)
+    mvn -P h2-embedded-tomcatz -pl application clean package
   Container with frontend/backend/database
   Frontend calls backend within docker
 Test deployment

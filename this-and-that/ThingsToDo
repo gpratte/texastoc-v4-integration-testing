@@ -1,5 +1,12 @@
 
 2021 season:
+Dockerize
+  Remove REST calls (that can replace events)
+  Container with frontend/backend/database
+  Frontend calls backend within docker
+Test deployment
+  VM
+  Proxy for certificate
 Player PII
   Admin can see all player info and does a put to update
   Non-admin can only see his info and others are masked and does a put to update his own
@@ -14,6 +21,10 @@ Composite primary key for game
 UUID for keys (no longer auto increment)
 
 ====== DONE =======
+Dockerize
+  Dockerfile and docker-compose.yml so that server can run locally with H2
+    mvn -P h2-embedded-tomcat-spring-integration -pl application clean package
+    docker build -t texastoc-v4-server-image .
 Clock controls more intuitive
 UI settings for one touch rebuy
 Move past season history out of json file

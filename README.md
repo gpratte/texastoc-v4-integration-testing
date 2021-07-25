@@ -234,6 +234,5 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 09-update-season-before-game-summary
-When the game is finalized an event is sent that the season service listens to and then recalculates.
-Wait for the season to recalculate before sending the game summary.
+## Current Branch: 11-dockerize
+Dockerfile and docker-compose.yml so that server can run locally with H2.

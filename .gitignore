@@ -17,5 +17,6 @@ test.results
 *.iml
 *.ipr
 
-# mac
+# other
 .DS_Store
+.java-version

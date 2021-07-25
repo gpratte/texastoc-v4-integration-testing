@@ -234,5 +234,8 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 11-dockerize
-Dockerfile and docker-compose.yml so that server can run locally with H2.
+## Current Branch: 12-spring-integration-only
+Remove the workaround (hack) that allowed REST calls instead of using spring integration for messaging.
+
+The has was put in place because of a problem running on the webrunner tomcat needed by Heroku.
+Runner the server in a docker container means there is no longer a need for the hack.

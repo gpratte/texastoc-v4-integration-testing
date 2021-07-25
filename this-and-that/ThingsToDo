@@ -1,8 +1,6 @@
 
 2021 season:
 Dockerize
-  Remove REST calls (that can replace events)
-    mvn -P h2-embedded-tomcatz -pl application clean package
   Container with frontend/backend/database
   Frontend calls backend within docker
 Test deployment
@@ -26,6 +24,8 @@ Dockerize
   Dockerfile and docker-compose.yml so that server can run locally with H2
     mvn -P h2-embedded-tomcat-spring-integration -pl application clean package
     docker build -t texastoc-v4-server-image .
+  Remove REST calls (that can replace events)
+    mvn -P h2-embedded-tomcat -pl application clean package
 Clock controls more intuitive
 UI settings for one touch rebuy
 Move past season history out of json file

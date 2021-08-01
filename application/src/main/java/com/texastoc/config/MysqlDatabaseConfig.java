@@ -23,7 +23,7 @@ public class MysqlDatabaseConfig {
 
   @Bean
   public DataSource dataSource() {
-    DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+    DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
     dataSourceBuilder.url(url);
     dataSourceBuilder.username(username);
     dataSourceBuilder.password(password);

@@ -24,7 +24,7 @@ public class H2DatabaseConfig {
 
   @Bean
   public DataSource dataSource() {
-    DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+    DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
     dataSourceBuilder.driverClassName("org.h2.Driver");
     dataSourceBuilder.url("jdbc:h2:mem:testdb");
     dataSourceBuilder.username("sa");
@@ -35,8 +35,7 @@ public class H2DatabaseConfig {
   @Bean
   CommandLineRunner init(JdbcTemplate jdbcTemplate) {
     return args -> {
-      InputStream resource = new ClassPathResource(
-          "create_toc_schema.sql").getInputStream();
+      InputStream resource = new ClassPathResource("create_toc_schema.sql").getInputStream();
       try (BufferedReader reader = new BufferedReader(
           new InputStreamReader(resource))) {
         String line;
@@ -49,7 +48,7 @@ public class H2DatabaseConfig {
             continue;
           }
 
-          sb.append(" " + line);
+          sb.append(" ").append(line);
 
           if (line.endsWith(";")) {
             jdbcTemplate.execute(sb.toString());
@@ -58,8 +57,7 @@ public class H2DatabaseConfig {
         }
       }
 
-      resource = new ClassPathResource(
-          "seed_toc.sql").getInputStream();
+      resource = new ClassPathResource("seed_toc.sql").getInputStream();
       try (BufferedReader reader = new BufferedReader(
           new InputStreamReader(resource))) {
         String line;
@@ -72,7 +70,7 @@ public class H2DatabaseConfig {
             continue;
           }
 
-          sb.append(" " + line);
+          sb.append(" ").append(line);
 
           if (line.endsWith(";")) {
             jdbcTemplate.execute(sb.toString());

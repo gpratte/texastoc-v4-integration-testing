@@ -4,7 +4,7 @@ server:
     include-binding-errors: always
 
 use:
-  h2: false
+  h2: true
   mysql: false
 
 populate: false

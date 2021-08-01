@@ -3,7 +3,6 @@ package com.texastoc.module.clock.service;
 import com.texastoc.module.clock.config.RoundsConfig;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.GameModuleFactory;
-import com.texastoc.module.game.connector.WebSocketConnector;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.model.clock.Clock;
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClockService {
 
-  private final WebSocketConnector webSocketConnector;
+  //private final WebSocketConnector webSocketConnector;
   private final RoundsConfig roundsConfig;
 
   private GameModule gameModule;
@@ -30,8 +29,8 @@ public class ClockService {
   private final Map<Integer, Clock> clocks = new HashMap<>();
   private final Map<Integer, RunClock> threads = new HashMap<>();
 
-  public ClockService(WebSocketConnector webSocketConnector, RoundsConfig roundsConfig) {
-    this.webSocketConnector = webSocketConnector;
+  public ClockService(RoundsConfig roundsConfig) {
+    //this.webSocketConnector = webSocketConnector;
     this.roundsConfig = roundsConfig;
   }
 
@@ -228,7 +227,7 @@ public class ClockService {
   }
 
   private void updateListeners(int gameId) {
-    webSocketConnector.sendClock(get(gameId));
+    //webSocketConnector.sendClock(get(gameId));
   }
 
   private GameModule getGameModule() {

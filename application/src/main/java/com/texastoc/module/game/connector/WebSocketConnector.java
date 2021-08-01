@@ -3,9 +3,8 @@ package com.texastoc.module.game.connector;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.clock.Clock;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class WebSocketConnector {
 
   private final SimpMessagingTemplate template;

@@ -1,5 +1,6 @@
 package com.texastoc.config;
 
+import com.texastoc.config.job.Populator;
 import com.texastoc.module.notification.NotificationModule;
 import com.texastoc.module.notification.NotificationModuleFactory;
 import com.texastoc.module.player.PlayerModule;
@@ -17,32 +18,44 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 
+  private final Populator populator;
   private PlayerModule playerModule;
   private NotificationModule notificationModule;
 
+  public ApplicationStartup(Populator populator) {
+    this.populator = populator;
+  }
+
   /**
-   * This event is executed as late as conceivably possible to indicate that
-   * the application is ready to service requests.
+   * This event is executed as late as conceivably possible to indicate that the application is
+   * ready to service requests.
    */
   @Override
   public void onApplicationEvent(final ApplicationReadyEvent event) {
 
-    // Get the admin that cares if the system started
-    List<Player> players = getPlayerModule().getAll();
-    for (Player player : players) {
-      boolean isAdmin = false;
-      for (Role role : player.getRoles()) {
-        if (Role.Type.ADMIN == role.getType()) {
-          isAdmin = true;
+    populator.initializeData();
+
+    try {
+      // Get the admin that cares if the system started
+      List<Player> players = getPlayerModule().getAll();
+      for (Player player : players) {
+        boolean isAdmin = false;
+        for (Role role : player.getRoles()) {
+          if (Role.Type.ADMIN == role.getType()) {
+            isAdmin = true;
+            break;
+          }
+        }
+
+        if (isAdmin && !StringUtils.isBlank(player.getPhone()) && player.getFirstName()
+            .startsWith("Gil")) {
+          log.info("sending application started text to " + player.getName());
+          getNotificationModule().sendText(player.getPhone(), "texastoc started");
           break;
         }
       }
-
-      if (isAdmin && !StringUtils.isBlank(player.getPhone()) && player.getFirstName().startsWith("Gil")) {
-        log.info("sending application started text to " + player.getName());
-        getNotificationModule().sendText(player.getPhone(), "texastoc started");
-        break;
-      }
+    } catch (Exception e) {
+      log.error("Could not send startup SMS");
     }
   }
 

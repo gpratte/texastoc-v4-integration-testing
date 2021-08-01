@@ -10,7 +10,7 @@ public class IntegrationTestingConfig {
 
   private final boolean allowMultipleSeasons;
 
-  public IntegrationTestingConfig(@Value("${allowMultipleSeasons:false}")
+  public IntegrationTestingConfig(@Value("${test.allowMultipleSeasons:false}")
       boolean allowMultipleSeasons) {
     this.allowMultipleSeasons = allowMultipleSeasons;
   }

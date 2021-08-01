@@ -20,3 +20,4 @@ test.results
 # other
 .DS_Store
 .java-version
+/data/

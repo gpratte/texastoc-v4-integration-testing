@@ -3,12 +3,15 @@ server:
     include-message: always
     include-binding-errors: always
 
-use:
+db:
   h2: true
   mysql: false
+  schema: false
+  seed: false
+  populate: false
 
-populate: false
-allowMultipleSeasons: false
+test:
+  allowMultipleSeasons: false
 
 spring:
   h2:

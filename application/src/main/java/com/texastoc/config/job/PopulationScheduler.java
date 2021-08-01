@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "populate", name = "season")
+@ConditionalOnProperty(name = "populate", havingValue = "true")
 public class PopulationScheduler {
 
   private final SeasonService seasonService;

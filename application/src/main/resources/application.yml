@@ -3,9 +3,17 @@ server:
     include-message: always
     include-binding-errors: always
 
-#logging:
-#  level:
-#    org.springframework.jdbc.core: TRACE
+use:
+  h2: false
+  mysql: false
+
+populate: false
+allowMultipleSeasons: false
+
+spring:
+  h2:
+    console:
+      enabled: true
 
 payouts:
   fileName: payouts-percentages.json

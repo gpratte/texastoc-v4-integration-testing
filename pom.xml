@@ -54,15 +54,8 @@
 
   <profiles>
     <profile>
-      <id>h2-embedded-tomcat</id>
-      <properties>
-        <spring-boot.run.profiles>h2</spring-boot.run.profiles>
-      </properties>
+      <id>h2</id>
       <dependencies>
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-tomcat</artifactId>
-        </dependency>
         <dependency>
           <groupId>com.h2database</groupId>
           <artifactId>h2</artifactId>
@@ -72,34 +65,8 @@
     </profile>
 
     <profile>
-      <id>mysql-embedded-tomcat</id>
-      <properties>
-        <spring-boot.run.profiles>mysql</spring-boot.run.profiles>
-      </properties>
+      <id>mysql</id>
       <dependencies>
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-tomcat</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>mysql</groupId>
-          <artifactId>mysql-connector-java</artifactId>
-          <scope>runtime</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>mysql-provided-tomcat</id>
-      <properties>
-        <spring-boot.run.profiles>mysql</spring-boot.run.profiles>
-      </properties>
-      <dependencies>
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-tomcat</artifactId>
-          <scope>provided</scope>
-        </dependency>
         <dependency>
           <groupId>mysql</groupId>
           <artifactId>mysql-connector-java</artifactId>

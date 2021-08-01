@@ -1,0 +1,29 @@
+When docker starts it look to see if there is ANYTHING in the local volume
+(~/toc/data). Only if empty will it set the root password.
+
+docker-compose.yml
+version: '3'
+services:
+  db:
+    container_name: db
+    image: 'mysql:8.0.25'
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    ports:
+      - 3306:3306
+    volumes:
+      - '~/toc/data:/var/lib/mysql'
+
+docker-compose up -d
+docker ps
+docker logs mysql
+docker exec -it db bash
+  mysql -u root -p
+  ALTER USER 'root'@'localhost' IDENTIFIED BY 'supersecretpassword';
+  CREATE USER 'tocuser'@'%' IDENTIFIED BY 'tocpass';
+  GRANT ALL PRIVILEGES ON * . * TO 'tocuser'@'%';
+  FLUSH PRIVILEGES;
+  quit;
+  mysql -u tocuser -p
+  create database toc;
+  quit;

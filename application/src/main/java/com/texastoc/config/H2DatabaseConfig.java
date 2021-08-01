@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * Only run when the mysql spring profile is not present
  */
 @Configuration
-@ConditionalOnProperty(prefix = "use", name = "h2")
+@ConditionalOnProperty(prefix = "use", name = "h2", havingValue = "true")
 public class H2DatabaseConfig {
 
   public static boolean initialized = false;

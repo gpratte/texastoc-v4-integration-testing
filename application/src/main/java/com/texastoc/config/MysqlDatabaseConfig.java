@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * Only run when the mysql spring profile is present
  */
 @Configuration
-@ConditionalOnProperty(prefix = "use", name = "mysql")
+@ConditionalOnProperty(prefix = "use", name = "mysql", havingValue = "true")
 public class MysqlDatabaseConfig {
 
   @Value("${mysql.url:jdbc:mysql://localhost/toc?useTimezone=true&serverTimezone=America/Chicago}")

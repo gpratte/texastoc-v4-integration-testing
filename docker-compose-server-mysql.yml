@@ -15,12 +15,10 @@ services:
     environment:
       SPRING_APPLICATION_JSON: >
         {
-          "use": {
+          "db": {
             "h2": false,
             "mysql": true
-          },
-          "populate": true,
-          "allowMultipleSeasons": false
+          }
         }
     ports:
       - 8080:8080

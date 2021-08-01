@@ -6,9 +6,10 @@ server:
 db:
   h2: true
   mysql: false
-  schema: false
-  seed: false
-  populate: false
+  # There are other fields but they should be set as environment variables.
+  # schema: false
+  # seed: false
+  # populate: false
 
 test:
   allowMultipleSeasons: false

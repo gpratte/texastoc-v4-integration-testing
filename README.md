@@ -67,17 +67,19 @@ DB_SCHEMA=true;DB_SEED=true;DB_POPULATE=true
 ```
 Running in IntelliJ is obviously the easiest way to step through code in the debugger.
 
-#### maven command line
+#### mvn command
 To run with `mvn` define the maven profile on the command line with `-P`.
 
+###### pass variable on the command line
 Environment variables can be passed on the command line or set as variables in the terminal window.
 
 Here's an example of using the `h2` profile and some command line paramters
 ```
-mvn -Dspring-boot.run.arguments="--db.h2=true --db.mysql=false --db.schema=true --db.seed=true --db.populate=true"
--P h2 -pl application spring-boot:run
+mvn -Dspring-boot.run.arguments="--db.h2=true --db.mysql=false --db.schema=true --db.seed=true --db.populate=true" -P h2 -pl application spring-boot:run
 ```
-The variable can be set in the terminal (Mac) which runs the server. Set an environment variable like so
+
+###### set variables in the terminal session
+As an alternative to passing the variables on the command line they can be set in the terminal (Mac) which runs the server. Set an environment variable like so
 ```
 export DB_H2=true
 export DB_MYSQL=false
@@ -86,9 +88,6 @@ export DB_SEED=true
 export DB_POPULATE=true
 ```
 and then run the server like so
-which Spring
-profiles are to be active with "-Dspring-boot.run.profiles" all followed by "-pl application
-spring-boot:run".
 ```
 mvn -P h2 -pl application spring-boot:run
 ```
@@ -96,6 +95,8 @@ Note that an environment variable can be removed by `unset`. For example
 ```
 unset DB_H2
 ```
+
+######run the JVM in debug mode
 The `mvn` command can be augmented with the following to allow a debugger to connect on port 8787
 ```
 -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8787"
@@ -115,7 +116,7 @@ Here is an example of passing parameters
 ```
 java -jar application/target/texastoc-v4-application-1.0.0.jar --db.h2=true --db.mysql=false --db.schema=true --db.seed=true --db.populate=true
 ```
-As was true for running with `mvn` the same is true when running a jar for exposing port 8787 for debugging
+As was true for running the JVM in debug mode mentioned in the [run the JVM in debug mode](######run the JVM in debug mode) section above is also true when running the jar
 ```
 java -jar application/target/texastoc-v4-application-1.0.0.jar --db.h2=true --db.mysql=false --db.schema=true --db.seed=true --db.populate=true -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8787
 ```
@@ -159,16 +160,17 @@ Bring up the standalone container `docker compose -f docker-compose-server-h2.ym
 First configure MySQL standalone. Bring up MySQL `docker compose -f docker-compose-mysql.yml up -d` (this will create a `./data` directory fyi).
 
 Now bash into the server, set the root password, create another user and create a database.
-* docker exec -it db bash
-* mysql -u root -p
-* ALTER USER 'root'@'localhost' IDENTIFIED BY 'shipit';
-* CREATE USER 'tocuser'@'%' IDENTIFIED BY 'shipit';
-* GRANT ALL PRIVILEGES ON * . * TO 'tocuser'@'%';
-* FLUSH PRIVILEGES;
-* quit;
-* mysql -u tocuser -p
-* create database toc;
-* quit;
+* `docker exec -it db bash`
+* `mysql -u root -p`
+* `ALTER USER 'root'@'localhost' IDENTIFIED BY 'rootpass';`
+* `CREATE USER 'tocuser'@'%' IDENTIFIED BY 'tocpass';`
+* `GRANT ALL PRIVILEGES ON * . * TO 'tocuser'@'%';`
+* `FLUSH PRIVILEGES;`
+* `quit;`
+* `mysql -u tocuser -p`
+* `create database toc;`
+* `quit;`
+
 and then stop the container `docker compose -f docker-compose-mysql.yml down`
 
 Build the jar
@@ -215,10 +217,11 @@ To run all the tests from the command line type
 
 ### Integration tests
 
-To run the one or more integration tests the application first has to be started. For example (with
-debugging)
+To run the one or more integration tests the application first has to be started
 
-* mvn -Dspring-boot.run.arguments="--db.h2=true --db.mysql=false --db.schema=true --db.seed=true --db.populate=false"
+```
+mvn -Dspring-boot.run.arguments="--db.h2=true --db.schema=true --db.seed=true --test.allowMultipleSeasons=true" -P h2 -pl application spring-boot:run
+```
 
 To run in IntelliJ right click on the java folder and choose _Run 'All Tests'_
 

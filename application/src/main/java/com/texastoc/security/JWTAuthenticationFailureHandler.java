@@ -14,7 +14,7 @@ public class JWTAuthenticationFailureHandler implements AuthenticationFailureHan
       + "\"status\": 401, "
       + "\"error\": \"Unauthorized\", "
       + "\"message\": \"Authentication failed: bad credentials\", "
-      + "\"path\": \"/login\"}";
+      + "\"path\": \"/api/v4/login\"}";
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,

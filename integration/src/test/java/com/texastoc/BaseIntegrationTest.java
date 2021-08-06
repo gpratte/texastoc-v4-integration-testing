@@ -402,7 +402,7 @@ public abstract class BaseIntegrationTest implements TestConstants {
     String loginParametersAsJson = mapper.writeValueAsString(loginParameters);
     HttpEntity<String> entity = new HttpEntity<>(loginParametersAsJson, headers);
 
-    String url = endpointRoot() + "/login";
+    String url = endpointRoot() + "/api/v4/login";
     return restTemplate.postForObject(url, entity, Token.class).getToken();
   }
 

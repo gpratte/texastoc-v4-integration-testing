@@ -273,7 +273,6 @@ public class ClockService {
               // Do nothing
             }
             long clockRan = System.currentTimeMillis() - start;
-            System.out.print(". ");
             clock.setMillisRemaining(clock.getMillisRemaining() - clockRan);
           } else {
             // Move to next round

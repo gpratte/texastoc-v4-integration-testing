@@ -1,8 +1,6 @@
 package com.texastoc.config.job;
 
 import com.google.common.collect.ImmutableList;
-import com.texastoc.config.H2DatabaseConfig;
-import com.texastoc.module.game.GameModuleFactory;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.model.Seating;
@@ -11,16 +9,17 @@ import com.texastoc.module.game.model.TableRequest;
 import com.texastoc.module.game.service.GamePlayerService;
 import com.texastoc.module.game.service.GameService;
 import com.texastoc.module.game.service.SeatingService;
-import com.texastoc.module.notification.NotificationModuleFactory;
 import com.texastoc.module.player.PlayerModule;
 import com.texastoc.module.player.PlayerModuleFactory;
 import com.texastoc.module.player.model.Player;
-import com.texastoc.module.quarterly.QuarterlySeasonModuleFactory;
-import com.texastoc.module.season.SeasonModuleFactory;
 import com.texastoc.module.season.model.Season;
 import com.texastoc.module.season.service.SeasonService;
 import com.texastoc.module.settings.SettingsModule;
 import com.texastoc.module.settings.SettingsModuleFactory;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,8 +27,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,52 +38,50 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "populate", name = "season")
-public class PopulationScheduler {
+public class Populator {
 
   private final SeasonService seasonService;
   private final GameService gameService;
   private final GamePlayerService gamePlayerService;
   private final SeatingService seatingService;
   private final Random random = new Random(System.currentTimeMillis());
+  private final JdbcTemplate jdbcTemplate;
   private PlayerModule playerModule;
   private SettingsModule settingsModule;
 
-  public PopulationScheduler(SeasonService seasonService, GameService gameService,
-      GamePlayerService gamePlayerService, SeatingService seatingService) {
+  @Value("${db.schema:false}")
+  private boolean schema;
+  @Value("${db.seed:false}")
+  private boolean seed;
+  @Value("${db.populate:false}")
+  private boolean populate;
+
+  public Populator(SeasonService seasonService, GameService gameService,
+      GamePlayerService gamePlayerService, SeatingService seatingService,
+      JdbcTemplate jdbcTemplate) {
     this.seasonService = seasonService;
     this.gameService = gameService;
     this.gamePlayerService = gamePlayerService;
     this.seatingService = seatingService;
+    this.jdbcTemplate = jdbcTemplate;
   }
 
-  @Scheduled(fixedDelay = 3600000)
-  public void populate() {
-    while (true) {
-      // Wait for the modules to be ready
-      if (H2DatabaseConfig.initialized) {
-        try {
-          GameModuleFactory.getGameModule();
-          SeasonModuleFactory.getSeasonModule();
-          PlayerModuleFactory.getPlayerModule();
-          SettingsModuleFactory.getSettingsModule();
-          NotificationModuleFactory.getNotificationModule();
-          QuarterlySeasonModuleFactory.getQuarterlySeasonModule();
-          break;
-        } catch (Exception e) {
-          // do nothing
-          log.info("#");
-        }
+  public void initializeData() {
+    try {
+      if (schema) {
+        InputStream resource = new ClassPathResource("create_toc_schema.sql").getInputStream();
+        applySql(resource);
       }
-
-      try {
-        Thread.sleep(1000l);
-      } catch (Exception e) {
-        // do nothing
+      if (seed) {
+        InputStream resource = new ClassPathResource("seed_toc.sql").getInputStream();
+        applySql(resource);
       }
-
+      if (populate) {
+        createSeason();
+      }
+    } catch (IOException e) {
+      log.error("Problem initializing data", e);
     }
-    createSeason();
   }
 
   private void createSeason() {
@@ -308,6 +307,30 @@ public class PopulationScheduler {
     }
     return settingsModule;
   }
+
+  private void applySql(InputStream resource) throws IOException {
+    try (BufferedReader reader = new BufferedReader(
+        new InputStreamReader(resource))) {
+      String line;
+      StringBuilder sb = new StringBuilder();
+      while ((line = reader.readLine()) != null) {
+        if (StringUtils.isBlank(line)) {
+          continue;
+        }
+        if (line.startsWith("#")) {
+          continue;
+        }
+
+        sb.append(" ").append(line);
+
+        if (line.endsWith(";")) {
+          jdbcTemplate.execute(sb.toString());
+          sb = new StringBuilder();
+        }
+      }
+    }
+  }
+
 
   static final String[] firstNames = {"James", "John", "Robert", "Michael", "Mary", "William",
       "David", "Joseph", "Richard", "Charles", "Thomas", "Christopher", "Daniel", "Elizabeth",

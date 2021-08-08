@@ -14,14 +14,14 @@
   <parent>
     <groupId>com.texastoc</groupId>
     <artifactId>texastoc-v4</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
   </parent>
 
   <dependencies>
     <dependency>
       <groupId>com.texastoc</groupId>
       <artifactId>texastoc-v4-application</artifactId>
-      <version>${project.version}</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>

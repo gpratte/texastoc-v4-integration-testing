@@ -4,7 +4,6 @@ import com.texastoc.exception.NotFoundException;
 import com.texastoc.module.game.calculator.GameCalculator;
 import com.texastoc.module.game.calculator.PayoutCalculator;
 import com.texastoc.module.game.calculator.PointsCalculator;
-import com.texastoc.module.game.connector.WebSocketConnector;
 import com.texastoc.module.game.exception.GameIsFinalizedException;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.repository.GameRepository;
@@ -36,20 +35,18 @@ public class GameHelper {
   private final PointsCalculator pointsCalculator;
   private final ExecutorService executorService;
 
-  private final WebSocketConnector webSocketConnector;
+  //private final WebSocketConnector webSocketConnector;
 
   private PlayerModule playerModule;
   private SeasonModule seasonModule;
   private QuarterlySeasonModule quarterlySeasonModule;
 
   public GameHelper(GameRepository gameRepository, GameCalculator gameCalculator,
-      PayoutCalculator payoutCalculator, PointsCalculator pointsCalculator,
-      WebSocketConnector webSocketConnector) {
+      PayoutCalculator payoutCalculator, PointsCalculator pointsCalculator) {
     this.gameRepository = gameRepository;
     this.gameCalculator = gameCalculator;
     this.payoutCalculator = payoutCalculator;
     this.pointsCalculator = pointsCalculator;
-    this.webSocketConnector = webSocketConnector;
 
     executorService = Executors.newCachedThreadPool();
   }

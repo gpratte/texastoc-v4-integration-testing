@@ -1,0 +1,26 @@
+version: '3'
+services:
+  db:
+    container_name: db
+    image: 'mysql:8.0.25'
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    ports:
+      - 3306:3306
+    volumes:
+      - './data:/var/lib/mysql'
+  server:
+    container_name: server
+    image: texastoc-v4-mysql-image:latest
+    environment:
+      SPRING_APPLICATION_JSON: >
+        {
+          "db": {
+            "h2": false,
+            "mysql": true
+          }
+        }
+    ports:
+      - 8080:8080
+    depends_on:
+      - db

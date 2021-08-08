@@ -11,7 +11,6 @@ import com.texastoc.exception.NotFoundException;
 import com.texastoc.module.game.calculator.GameCalculator;
 import com.texastoc.module.game.calculator.PayoutCalculator;
 import com.texastoc.module.game.calculator.PointsCalculator;
-import com.texastoc.module.game.connector.WebSocketConnector;
 import com.texastoc.module.game.exception.GameIsFinalizedException;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.repository.GameRepository;
@@ -32,7 +31,7 @@ public class GameHelperTest {
   private GameHelper gameHelper;
   private GameRepository gameRepository;
   private SeasonModule seasonModule;
-  private WebSocketConnector webSocketConnector;
+  //  private WebSocketConnector webSocketConnector;
   private final GameCalculator gameCalculator = mock(GameCalculator.class);
   private final PayoutCalculator payoutCalculator = mock(PayoutCalculator.class);
   private final PointsCalculator pointsCalculator = mock(PointsCalculator.class);
@@ -42,9 +41,8 @@ public class GameHelperTest {
     gameRepository = mock(GameRepository.class);
     PlayerModule playerModule = mock(PlayerModule.class);
     seasonModule = mock(SeasonModule.class);
-    webSocketConnector = mock(WebSocketConnector.class);
-    gameHelper = new GameHelper(gameRepository, gameCalculator, payoutCalculator, pointsCalculator,
-        webSocketConnector);
+//    webSocketConnector = mock(WebSocketConnector.class);
+    gameHelper = new GameHelper(gameRepository, gameCalculator, payoutCalculator, pointsCalculator);
     ReflectionTestUtils.setField(gameHelper, "playerModule", playerModule);
     ReflectionTestUtils.setField(gameHelper, "seasonModule", seasonModule);
   }
@@ -151,7 +149,7 @@ public class GameHelperTest {
 
     // Assert
     // Since this is a thread call, sleep for a half a second first
-    Thread.sleep(500l);
-    verify(webSocketConnector, Mockito.times(1)).sendGame(any(Game.class));
+//    Thread.sleep(500l);
+//    verify(webSocketConnector, Mockito.times(1)).sendGame(any(Game.class));
   }
 }

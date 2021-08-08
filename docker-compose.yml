@@ -1,7 +1,0 @@
-version: '3'
-services:
-  texastoc-v4-server:
-    container_name: texastoc-v4-server
-    image: texastoc-v4-server-image:latest
-    ports:
-      - 8080:8080

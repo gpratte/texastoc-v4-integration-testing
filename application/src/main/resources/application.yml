@@ -3,9 +3,21 @@ server:
     include-message: always
     include-binding-errors: always
 
-#logging:
-#  level:
-#    org.springframework.jdbc.core: TRACE
+db:
+  h2: true
+  mysql: false
+  # There are other fields but they should be set as environment variables.
+  # schema: false
+  # seed: false
+  # populate: false
+
+test:
+  allowMultipleSeasons: false
+
+spring:
+  h2:
+    console:
+      enabled: true
 
 payouts:
   fileName: payouts-percentages.json

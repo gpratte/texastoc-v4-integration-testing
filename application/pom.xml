@@ -5,8 +5,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>texastoc-v4-application</artifactId>
-  <version>1.0</version>
-  <packaging>war</packaging>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
 
   <name>texastoc v4 application</name>
   <description>Texas Tournament Of Champions</description>
@@ -14,13 +14,17 @@
   <parent>
     <groupId>com.texastoc</groupId>
     <artifactId>texastoc-v4</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
   </parent>
 
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

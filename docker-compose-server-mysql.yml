@@ -18,6 +18,10 @@ services:
           "db": {
             "h2": false,
             "mysql": true
+          },
+          "mysql": {
+            "url": "jdbc:mysql://db:3306/toc?allowPublicKeyRetrieval=true&useSSL=false",
+            "password": "tocpass"
           }
         }
     ports:

@@ -157,7 +157,7 @@ java -jar application/target/texastoc-v4-application-1.0.0.jar --db.h2=true --db
 The server can be run in a standalone container when using the in-memory H2 database or alongside a
 MySQL container.
 
-###### For running with H2
+###### Running with H2
 
 First build the jar
 
@@ -197,22 +197,21 @@ environment:
 
 Bring up the standalone container `docker compose -f docker-compose-server-h2.yml up`
 
-###### For running with MYSQL
+###### Running with MYSQL
 
-First configure MySQL standalone. Bring up
-MySQL `docker compose -f docker-compose-mysql.yml up -d` (this will create a `./data` directory fyi)
-.
+First configure MySQL standalone. Bring up the MySQL docker container
+`docker compose -f docker-compose-mysql.yml up -d`
+(this will create a `./data` directory fyi).
 
-Now bash into the server, set the root password, create another user and create a database.
+Use the mysql client to set the root password, create another user and create a database.
 
-* `docker exec -it db bash`
-* `mysql -u root -p`
+* `mysql -h 127.0.0.1 -P 3306 -u root -p`
 * `ALTER USER 'root'@'localhost' IDENTIFIED BY 'rootpass';`
 * `CREATE USER 'tocuser'@'%' IDENTIFIED BY 'tocpass';`
 * `GRANT ALL PRIVILEGES ON * . * TO 'tocuser'@'%';`
 * `FLUSH PRIVILEGES;`
 * `quit;`
-* `mysql -u tocuser -p`
+* `mysql -h 127.0.0.1 -P 3306 -u tocuser -p`
 * `create database toc;`
 * `quit;`
 

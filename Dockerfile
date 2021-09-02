@@ -3,5 +3,11 @@
 # docker build -t texastoc-v4-$DB-image .
 FROM adoptopenjdk/openjdk11:latest
 EXPOSE 8080
-ADD application/target/texastoc-v4-application-1.0.0.jar texastoc-v4-application-1.0.0.jar
-ENTRYPOINT ["java","-jar","texastoc-v4-application-1.0.0.jar"]
+COPY application/target/texastoc-v4-application-1.0.0.jar /application/
+ADD third-party/newrelic-java /application/
+ENTRYPOINT ["java"]
+CMD [ \
+    "-javaagent:/application/newrelic/newrelic.jar", \
+    "-jar", \
+    "/application/texastoc-v4-application-1.0.0.jar" \
+]

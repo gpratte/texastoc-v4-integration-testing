@@ -1,11 +1,5 @@
 
 2021 season:
-Dockerize
-  Container with frontend/backend/database
-  Frontend calls backend within docker
-Test deployment
-  VM
-  Proxy for certificate
 Player PII
   Admin can see all player info and does a put to update
   Non-admin can only see his info and others are masked and does a put to update his own
@@ -20,6 +14,15 @@ Composite primary key for game
 UUID for keys (no longer auto increment)
 
 ====== DONE =======
+NGINX
+  frontend file server
+  reverse proxy backend
+  SSL termination
+  cache headers index.html
+Dockerize
+  Backend/database
+Test deployment
+  VM
 Dockerize
   Dockerfile and docker-compose.yml so that server can run locally with H2
     mvn -P h2-embedded-tomcat-spring-integration -pl application clean package

@@ -259,22 +259,22 @@ public class GameCalculatorTest implements TestConstants {
 
     assertEquals("number of game players should be 8", 8, gameCalculated.getNumPlayers());
 
-    assertEquals("buy-in collected should be 48", 48, gameCalculated.getBuyInCollected());
-    assertEquals("rebuy add on collected should be 20", 20,
+    assertEquals("buy-in collected should be 320", 320, gameCalculated.getBuyInCollected());
+    assertEquals("rebuy add on collected should be 160", 160,
         gameCalculated.getRebuyAddOnCollected());
-    assertEquals("annual toc collected should be 32", 32, gameCalculated.getAnnualTocCollected());
-    assertEquals("quarterly toc collected should be 28", 28,
+    assertEquals("annual toc collected should be 80", 80, gameCalculated.getAnnualTocCollected());
+    assertEquals("quarterly toc collected should be 80", 80,
         gameCalculated.getQuarterlyTocCollected());
-    assertEquals("total collected should be 128", 128, gameCalculated.getTotalCollected());
+    assertEquals("total collected should be 640", 640, gameCalculated.getTotalCollected());
 
-    assertEquals("kitty calculated should be 9", 9, gameCalculated.getKittyCalculated());
-    assertEquals("annual Toc from rebuy add on calculated should be 8", 8,
+    assertEquals(TestConstants.KITTY_PER_GAME, gameCalculated.getKittyCalculated());
+    assertEquals("annual Toc from rebuy add on calculated should be 40", 40,
         gameCalculated.getAnnualTocFromRebuyAddOnCalculated());
-    assertEquals("rebuy add on less annual Toc calculated should be 12", 12,
+    assertEquals("rebuy add on less annual Toc calculated should be 120", 120,
         gameCalculated.getRebuyAddOnLessAnnualTocCalculated());
-    assertEquals("total combined toc calculated should be 68", 68,
+    assertEquals("total combined toc calculated should be 200", 200,
         gameCalculated.getTotalCombinedTocCalculated());
-    assertEquals("prize pot calculated should be 51", 51, gameCalculated.getPrizePotCalculated());
+    assertEquals("prize pot calculated should be 430", 430, gameCalculated.getPrizePotCalculated());
   }
 
   private void assertGameNoPlayers(Game gameCalculated) {

@@ -14,18 +14,29 @@ import java.util.Map;
 
 public interface TestConstants {
 
-  int KITTY_PER_GAME = 9;
-  int TOC_PER_GAME = 8;
-  int QUARTERLY_TOC_PER_GAME = 7;
+  int KITTY_PER_GAME = 10;
+  int TOC_PER_GAME = 20;
+  int QUARTERLY_TOC_PER_GAME = 20;
   int QUARTERLY_NUM_PAYOUTS = 3;
 
-  int GAME_BUY_IN = 6;
-  int GAME_REBUY = 5;
-  int GAME_REBUY_TOC_DEBIT = 4;
+  int GAME_BUY_IN = 40;
+  int GAME_REBUY = 40;
+  int GAME_REBUY_TOC_DEBIT = 20;
 
+  int CHOP_NUM_PLAYERS = 2;
   double CHOP_TENTH_PLACE_INCR = 0.5;
   int CHOP_TENTH_PLACE_POINTS = 3;
   double CHOP_MULTIPLIER = 1.291;
+
+  int GIL_PRATTE_PLAYER_ID = 1;
+  String GIL_PRATTE_NAME = "Gil Pratte";
+  int GUEST_USER_PLAYER_ID = 2;
+  String GUEST_USER_NAME = "Guest User";
+
+  String ADMIN_EMAIL = "gilpratte@texastoc.com";
+  String ADMIN_PASSWORD = "password";
+  String USER_EMAIL = "guest@texastoc.com";
+  String USER_PASSWORD = "password";
 
   static TocConfig getTocConfig() {
     return TocConfig.builder()
@@ -306,15 +317,15 @@ public interface TestConstants {
 
     SeasonPayoutRange seasonPayoutRange = new SeasonPayoutRange();
     ranges.add(seasonPayoutRange);
-    seasonPayoutRange.setLowRange(3000);
-    seasonPayoutRange.setHighRange(5000);
+    seasonPayoutRange.setLowRange(5000);
+    seasonPayoutRange.setHighRange(7000);
 
     List<SeasonPayoutPlace> guaranteed = new LinkedList<>();
     seasonPayoutRange.setGuaranteed(guaranteed);
     SeasonPayoutPlace seasonPayoutPlace = new SeasonPayoutPlace();
     guaranteed.add(seasonPayoutPlace);
     seasonPayoutPlace.setPlace(1);
-    seasonPayoutPlace.setAmount(700);
+    seasonPayoutPlace.setAmount(1400);
     seasonPayoutPlace.setPercent(20);
 
     List<SeasonPayoutPlace> finalTable = new LinkedList<>();
@@ -323,19 +334,19 @@ public interface TestConstants {
     seasonPayoutPlace = new SeasonPayoutPlace();
     finalTable.add(seasonPayoutPlace);
     seasonPayoutPlace.setPlace(2);
-    seasonPayoutPlace.setAmount(600);
+    seasonPayoutPlace.setAmount(1350);
     seasonPayoutPlace.setPercent(20);
 
     seasonPayoutPlace = new SeasonPayoutPlace();
     finalTable.add(seasonPayoutPlace);
     seasonPayoutPlace.setPlace(3);
-    seasonPayoutPlace.setAmount(450);
+    seasonPayoutPlace.setAmount(1150);
     seasonPayoutPlace.setPercent(16);
 
     seasonPayoutPlace = new SeasonPayoutPlace();
     finalTable.add(seasonPayoutPlace);
     seasonPayoutPlace.setPlace(4);
-    seasonPayoutPlace.setAmount(350);
+    seasonPayoutPlace.setAmount(1100);
     seasonPayoutPlace.setPercent(14);
 
     seasonPayoutPlace = new SeasonPayoutPlace();

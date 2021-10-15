@@ -310,7 +310,5 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 13-more-docker
-
-Flesh out the Dockerfile, docker-compose yaml files and vastly overhaul the README
-(e.g. no longer build a war and deploy it to a standalone Tomcat).
+## Current Branch: 14-constants-for-tests
+Use the same production runtime constants for the unit tests.

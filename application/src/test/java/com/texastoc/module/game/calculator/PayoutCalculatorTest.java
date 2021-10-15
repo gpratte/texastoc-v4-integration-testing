@@ -165,8 +165,8 @@ public class PayoutCalculatorTest implements TestConstants {
 
     // From https://www.primedope.com/icm-deal-calculator/
     List<Integer> amountsWithChop = new ArrayList<>(2);
-    int firstPlaceWithChop = 35;
-    int secondPlaceWithChop = 25;
+    int firstPlaceWithChop = 236;
+    int secondPlaceWithChop = 164;
     amountsWithChop.add(firstPlaceWithChop);
     amountsWithChop.add(secondPlaceWithChop);
 
@@ -228,9 +228,9 @@ public class PayoutCalculatorTest implements TestConstants {
 
     // From https://www.primedope.com/icm-deal-calculator/
     List<Integer> amountsWithChop = new ArrayList<>(3);
-    int firstPlaceWithChop = 29;
-    int secondPlaceWithChop = 20;
-    int thirdPlaceWithChop = 11;
+    int firstPlaceWithChop = 194;
+    int secondPlaceWithChop = 134;
+    int thirdPlaceWithChop = 72;
     amountsWithChop.add(firstPlaceWithChop);
     amountsWithChop.add(secondPlaceWithChop);
     amountsWithChop.add(thirdPlaceWithChop);
@@ -305,9 +305,9 @@ public class PayoutCalculatorTest implements TestConstants {
     // From https://www.primedope.com/icm-deal-calculator/
     // assuming 1st=91, 2nd=58, 3rd=41
     List<Integer> amountsWithChop = new ArrayList<>(3);
-    amountsWithChop.add(78);
-    amountsWithChop.add(68);
-    amountsWithChop.add(44);
+    amountsWithChop.add(523);
+    amountsWithChop.add(456);
+    amountsWithChop.add(290);
 
     int totalPaidOutWithoutChop = 0;
     int totalPaidOutWithChop = 0;

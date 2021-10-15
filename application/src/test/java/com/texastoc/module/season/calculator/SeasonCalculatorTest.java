@@ -103,14 +103,14 @@ public class SeasonCalculatorTest implements TestConstants {
 
     // 10 players bought in
     int boughtIn = 10 * GAME_BUY_IN;
-    // 6 annual toc
-    int toc = 6 * TOC_PER_GAME;
-    // 5 rebought
-    int rebought = 5 * GAME_REBUY;
+    // 4 annual toc
+    int toc = 4 * TOC_PER_GAME;
+    // 4 rebought
+    int rebought = 4 * GAME_REBUY;
     // total collected
     int totalCollected = boughtIn + toc + rebought;
-    // 3 of the rebuys are annual toc
-    int tocFromRebuys = 3 * GAME_REBUY_TOC_DEBIT;
+    // 2 of the rebuys are annual toc
+    int tocFromRebuys = 2 * GAME_REBUY_TOC_DEBIT;
     // total toc
     int totalToc = toc + tocFromRebuys;
     // kitty
@@ -136,8 +136,8 @@ public class SeasonCalculatorTest implements TestConstants {
           .id(i)
           .playerId(i)
           .gameId(1)
-          .tocPoints(i < 6 ? i : 0)
-          .annualTocParticipant(i < 6)
+          .tocPoints(i < 4 ? i : 0)
+          .annualTocParticipant(i < 4)
           .build();
       gameSeasonPlayers.add(gamePlayer);
     }
@@ -170,24 +170,18 @@ public class SeasonCalculatorTest implements TestConstants {
     Assert.assertTrue("last calculated should be within the last few seconds",
         season.getLastCalculated().isAfter(LocalDateTime.now().minusSeconds(3)));
 
-    assertEquals(6, season.getPlayers().size());
+    assertEquals(4, season.getPlayers().size());
     // Season players are sorted by points
     SeasonPlayer seasonPlayer = season.getPlayers().get(0);
     assertEquals(1, seasonPlayer.getPlace().intValue());
-    assertEquals(5, seasonPlayer.getPoints());
+    assertEquals(3, seasonPlayer.getPoints());
     seasonPlayer = season.getPlayers().get(1);
     assertEquals(2, seasonPlayer.getPlace().intValue());
-    assertEquals(4, seasonPlayer.getPoints());
+    assertEquals(2, seasonPlayer.getPoints());
     seasonPlayer = season.getPlayers().get(2);
     assertEquals(3, seasonPlayer.getPlace().intValue());
-    assertEquals(3, seasonPlayer.getPoints());
-    seasonPlayer = season.getPlayers().get(3);
-    assertEquals(4, seasonPlayer.getPlace().intValue());
-    assertEquals(2, seasonPlayer.getPoints());
-    seasonPlayer = season.getPlayers().get(4);
-    assertEquals(5, seasonPlayer.getPlace().intValue());
     assertEquals(1, seasonPlayer.getPoints());
-    seasonPlayer = season.getPlayers().get(5);
+    seasonPlayer = season.getPlayers().get(3);
     assertNull(seasonPlayer.getPlace());
     assertEquals(0, seasonPlayer.getPoints());
 
@@ -210,14 +204,14 @@ public class SeasonCalculatorTest implements TestConstants {
     // Game 1
     // 10 players bought in
     int boughtIn1 = 10 * GAME_BUY_IN;
-    // 6 annual toc
-    int toc1 = 6 * TOC_PER_GAME;
+    // 4 annual toc
+    int toc1 = 4 * TOC_PER_GAME;
     // 5 rebought
     int rebought1 = 5 * GAME_REBUY;
     // total collected
     int totalCollected1 = boughtIn1 + toc1 + rebought1;
-    // 3 of the rebuys are annual toc
-    int tocFromRebuys1 = 3 * GAME_REBUY_TOC_DEBIT;
+    // 2 of the rebuys are annual toc
+    int tocFromRebuys1 = 2 * GAME_REBUY_TOC_DEBIT;
     // total toc
     int totalToc1 = toc1 + tocFromRebuys1;
     // kitty
@@ -244,7 +238,7 @@ public class SeasonCalculatorTest implements TestConstants {
           .playerId(i)
           .gameId(1)
           .tocPoints(i)
-          .annualTocParticipant(i < 6)
+          .annualTocParticipant(i < 4)
           .build();
       gameSeasonPlayers.add(gamePlayer);
     }
@@ -253,14 +247,14 @@ public class SeasonCalculatorTest implements TestConstants {
     // Game 2
     // 16 players bought in
     int boughtIn2 = 16 * GAME_BUY_IN;
-    // 10 annual toc
-    int toc2 = 10 * TOC_PER_GAME;
+    // 5 annual toc
+    int toc2 = 5 * TOC_PER_GAME;
     // 5 rebought
     int rebought2 = 5 * GAME_REBUY;
     // total collected
     int totalCollected2 = boughtIn2 + toc2 + rebought2;
-    // 3 of the rebuys are annual toc
-    int tocFromRebuys2 = 3 * GAME_REBUY_TOC_DEBIT;
+    // 1 of the rebuys is annual toc
+    int tocFromRebuys2 = 1 * GAME_REBUY_TOC_DEBIT;
     // total toc
     int totalToc2 = toc2 + tocFromRebuys2;
     // kitty
@@ -287,7 +281,7 @@ public class SeasonCalculatorTest implements TestConstants {
           .playerId(i)
           .gameId(1)
           .tocPoints(i)
-          .annualTocParticipant(i < 10)
+          .annualTocParticipant(i < 5)
           .build();
       gameSeasonPlayers.add(gamePlayer);
     }
@@ -322,52 +316,30 @@ public class SeasonCalculatorTest implements TestConstants {
     Assert.assertTrue("last calculated should be within the last few seconds",
         season.getLastCalculated().isAfter(LocalDateTime.now().minusSeconds(3)));
 
-    assertEquals(10, season.getPlayers().size());
+    assertEquals(5, season.getPlayers().size());
     // Season players are sorted by points
     SeasonPlayer seasonPlayer = season.getPlayers().get(0);
     assertEquals(1, seasonPlayer.getPlace().intValue());
-    assertEquals(10, seasonPlayer.getPoints());
+    assertEquals(6, seasonPlayer.getPoints());
     assertEquals(2, seasonPlayer.getEntries());
 
     seasonPlayer = season.getPlayers().get(1);
     assertEquals(2, seasonPlayer.getPlace().intValue());
-    assertEquals(9, seasonPlayer.getPoints());
-    assertEquals(1, seasonPlayer.getEntries());
-
-    seasonPlayer = season.getPlayers().get(2);
-    assertEquals(3, seasonPlayer.getPlace().intValue());
-    assertEquals(8, seasonPlayer.getPoints());
-
-    seasonPlayer = season.getPlayers().get(3);
-    assertEquals(3, seasonPlayer.getPlace().intValue());
-    assertEquals(8, seasonPlayer.getPoints());
-
-    seasonPlayer = season.getPlayers().get(4);
-    assertEquals(5, seasonPlayer.getPlace().intValue());
-    assertEquals(7, seasonPlayer.getPoints());
-    assertEquals(1, seasonPlayer.getEntries());
-
-    seasonPlayer = season.getPlayers().get(5);
-    assertEquals(6, seasonPlayer.getPlace().intValue());
-    assertEquals(6, seasonPlayer.getPoints());
-
-    seasonPlayer = season.getPlayers().get(6);
-    assertEquals(6, seasonPlayer.getPlace().intValue());
-    assertEquals(6, seasonPlayer.getPoints());
-
-    seasonPlayer = season.getPlayers().get(7);
-    assertEquals(8, seasonPlayer.getPlace().intValue());
     assertEquals(4, seasonPlayer.getPoints());
     assertEquals(2, seasonPlayer.getEntries());
 
-    seasonPlayer = season.getPlayers().get(8);
-    assertEquals(9, seasonPlayer.getPlace().intValue());
-    assertEquals(2, seasonPlayer.getPoints());
-    assertEquals(2, seasonPlayer.getEntries());
+    seasonPlayer = season.getPlayers().get(2);
+    assertEquals(2, seasonPlayer.getPlace().intValue());
+    assertEquals(4, seasonPlayer.getPoints());
 
-    seasonPlayer = season.getPlayers().get(9);
+    seasonPlayer = season.getPlayers().get(3);
+    assertEquals(4, seasonPlayer.getPlace().intValue());
+    assertEquals(2, seasonPlayer.getPoints());
+
+    seasonPlayer = season.getPlayers().get(4);
     assertNull(seasonPlayer.getPlace());
     assertEquals(0, seasonPlayer.getPoints());
+    assertEquals(2, seasonPlayer.getEntries());
 
     // TODO beef up testing estimated payouts
     assertEquals(5, season.getPayouts().size());

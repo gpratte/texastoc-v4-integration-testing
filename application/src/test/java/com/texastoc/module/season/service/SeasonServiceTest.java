@@ -58,7 +58,7 @@ public class SeasonServiceTest implements TestConstants {
   public void before() {
     seasonRepository = mock(SeasonRepository.class);
     seasonHistoryRepository = mock(SeasonHistoryRepository.class);
-    IntegrationTestingConfig integrationTestingConfig = new IntegrationTestingConfig(false);
+    IntegrationTestingConfig integrationTestingConfig = new IntegrationTestingConfig(false, false);
     seasonService = new SeasonService(seasonRepository, seasonHistoryRepository,
         integrationTestingConfig);
     settingsModule = mock(SettingsModule.class);
@@ -304,7 +304,8 @@ public class SeasonServiceTest implements TestConstants {
     Season season = seasonArg.getValue();
     assertFalse(season.isFinalized());
 
-    verify(seasonHistoryRepository, Mockito.times(1)).deleteById(Integer.toString(LocalDate.now().getYear()));
+    verify(seasonHistoryRepository, Mockito.times(1)).deleteById(
+        Integer.toString(LocalDate.now().getYear()));
   }
 
   @Test

@@ -13,6 +13,7 @@ db:
 
 test:
   allowMultipleSeasons: false
+  allowChaos: false
 
 spring:
   h2:

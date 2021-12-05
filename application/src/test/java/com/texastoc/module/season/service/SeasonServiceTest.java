@@ -58,7 +58,8 @@ public class SeasonServiceTest implements TestConstants {
   public void before() {
     seasonRepository = mock(SeasonRepository.class);
     seasonHistoryRepository = mock(SeasonHistoryRepository.class);
-    IntegrationTestingConfig integrationTestingConfig = new IntegrationTestingConfig(false, false);
+    IntegrationTestingConfig integrationTestingConfig = new IntegrationTestingConfig(false, false,
+        1);
     seasonService = new SeasonService(seasonRepository, seasonHistoryRepository,
         integrationTestingConfig);
     settingsModule = mock(SettingsModule.class);

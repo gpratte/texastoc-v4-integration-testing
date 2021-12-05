@@ -27,13 +27,11 @@ public class ChaosAspect {
     if (!integrationTestingConfig.isAllowChaos()) {
       return;
     }
-    if (RANDOM.nextInt(200) == 50) {
-      // Once every 200 request
+    if (RANDOM.nextInt(integrationTestingConfig.getChaosFrequency()) == 0) {
       log.info("controller throwing RuntimeException");
       throw new RuntimeException("chaos");
     }
-    if (RANDOM.nextInt(200) == 50) {
-      // Once every 200 request
+    if (RANDOM.nextInt(integrationTestingConfig.getChaosFrequency()) == 0) {
       log.info("controller throwing PermissionDeniedException");
       throw new PermissionDeniedException("chaos");
     }

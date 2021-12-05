@@ -1,5 +1,9 @@
 
 2021 season:
+Log request/response
+  correlation Id
+  log calls into controller and module to module calls
+  redact fields that are marked
 Player PII
   Admin can see all player info and does a put to update
   Non-admin can only see his info and others are masked and does a put to update his own

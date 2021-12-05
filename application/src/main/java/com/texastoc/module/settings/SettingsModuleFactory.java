@@ -1,6 +1,5 @@
 package com.texastoc.module.settings;
 
-import com.texastoc.module.settings.service.SettingsService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -8,8 +7,8 @@ public class SettingsModuleFactory {
 
   private static SettingsModule SETTINGS_MODULE;
 
-  public SettingsModuleFactory(SettingsService settingsService) {
-    SETTINGS_MODULE = settingsService;
+  public SettingsModuleFactory(SettingsModuleImpl settingsModule) {
+    SETTINGS_MODULE = settingsModule;
   }
 
   /**

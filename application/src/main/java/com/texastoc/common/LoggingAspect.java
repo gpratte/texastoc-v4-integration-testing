@@ -46,25 +46,16 @@ public class LoggingAspect {
     log.info(OBJECT_MAPPER.writeValueAsString(request));
 
     Object result = null;
-    try {
-      result = pjp.proceed(args);
+    result = pjp.proceed(args);
 
-      ObjectNode response = OBJECT_MAPPER.createObjectNode();
-      MethodSignature signature = (MethodSignature) pjp.getSignature();
-      Method method = signature.getMethod();
-      ResponseStatus responseStatus = method.getAnnotation(ResponseStatus.class);
-      data.put("status", responseStatus.value().value());
-      response.set("response", data);
-      log.info(OBJECT_MAPPER.writeValueAsString(response));
-    } catch (Throwable t) {
-      ObjectNode response = OBJECT_MAPPER.createObjectNode();
-      data.put("error", t.getMessage());
-      response.set("response", data);
-      log.info(OBJECT_MAPPER.writeValueAsString(response));
-      throw t;
-    } finally {
-      MDC.clear();
-    }
+    ObjectNode response = OBJECT_MAPPER.createObjectNode();
+    MethodSignature signature = (MethodSignature) pjp.getSignature();
+    Method method = signature.getMethod();
+    ResponseStatus responseStatus = method.getAnnotation(ResponseStatus.class);
+    data.put("status", responseStatus.value().value());
+    response.set("response", data);
+    log.info(OBJECT_MAPPER.writeValueAsString(response));
+    MDC.clear();
     return result;
   }
 }

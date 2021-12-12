@@ -1,10 +1,12 @@
 package com.texastoc.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Date;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +23,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestControllerAdvise extends ResponseEntityExceptionHandler {
 
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
       HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -30,47 +34,78 @@ public class RestControllerAdvise extends ResponseEntityExceptionHandler {
     return new ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST);
   }
 
+  // TODO just have one Exception type
+
   @ExceptionHandler(value = {EmptyResultDataAccessException.class})
-  protected void handleEmptyResultDataAccessException(EmptyResultDataAccessException ex,
-      HttpServletResponse response) throws IOException {
-    response.sendError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+  protected ResponseEntity<Object> handleEmptyResultDataAccessException(
+      EmptyResultDataAccessException ex, HttpServletRequest request) {
+    return handleException(null, null, HttpStatus.NOT_FOUND, request);
   }
 
   @ExceptionHandler(value = {AccessDeniedException.class})
-  protected void handleAccessDenied(AccessDeniedException ex, HttpServletResponse response)
-      throws IOException {
-    response.sendError(HttpStatus.UNAUTHORIZED.value());
+  protected ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex,
+      HttpServletRequest request) {
+    return handleException(null, null, HttpStatus.UNAUTHORIZED, request);
   }
 
   @ExceptionHandler(value = {PermissionDeniedException.class})
-  protected void handleAccessDenied(PermissionDeniedException ex, HttpServletResponse response)
-      throws IOException {
-    response.sendError(HttpStatus.FORBIDDEN.value());
+  protected ResponseEntity<Object> handleAccessDenied(PermissionDeniedException ex,
+      HttpServletRequest request) {
+    return handleException(null, null, HttpStatus.FORBIDDEN, request);
   }
 
   @ExceptionHandler(value = {IncorrectResultSizeDataAccessException.class})
-  protected void handleIncorrectSize(IncorrectResultSizeDataAccessException ex,
-      HttpServletResponse response) throws IOException {
-    response.sendError(HttpStatus.NOT_FOUND.value());
+  protected ResponseEntity<Object> handleIncorrectSize(IncorrectResultSizeDataAccessException ex,
+      HttpServletRequest request) {
+    return handleException(null, null, HttpStatus.NOT_FOUND, request);
   }
 
   @ExceptionHandler(value = {NotFoundException.class})
-  protected void handleNotFoundException(NotFoundException ex, HttpServletResponse response)
-      throws IOException {
-    response.sendError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+  protected ResponseEntity<Object> handleNotFoundException(NotFoundException ex,
+      HttpServletRequest request) {
+    return handleException(null, null, HttpStatus.NOT_FOUND, request);
   }
 
   @ExceptionHandler(value = {JsonProcessingException.class})
-  protected void handleJsonProcessingException(JsonProcessingException ex,
-      HttpServletResponse response) throws IOException {
-    response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+  protected ResponseEntity<Object> handleJsonProcessingException(JsonProcessingException ex,
+      HttpServletRequest request) {
+    return handleException(ex, null, HttpStatus.INTERNAL_SERVER_ERROR, request);
   }
 
   @ExceptionHandler(value = {RuntimeException.class})
-  protected void handleRuntimeException(RuntimeException ex, HttpServletResponse response)
-      throws IOException {
-    log.error(ex.getMessage(), ex);
-    response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value());
+  protected ResponseEntity<Object> handleRuntimeException(RuntimeException ex,
+      HttpServletRequest request) {
+    log.info("request " + request);
+    return handleException(ex, null, HttpStatus.INTERNAL_SERVER_ERROR, request);
   }
+
+  private ResponseEntity<Object> handleException(Exception e, Object body, HttpStatus status,
+      HttpServletRequest request) {
+    if (e != null) {
+      if ("chaos".equals(e.getMessage())) {
+        log.error("chaos");
+      } else {
+        log.error(e.getMessage(), e);
+      }
+    }
+    try {
+      ObjectNode response = OBJECT_MAPPER.createObjectNode();
+      ObjectNode data = OBJECT_MAPPER.createObjectNode();
+      response.set("response", data);
+      data.put("correlationId", MDC.get("correlationId"));
+      data.put("uri", request.getRequestURI());
+      data.put("status", status.value());
+      if (body != null) {
+        data.put("body", body.toString());
+      }
+      log.info(OBJECT_MAPPER.writeValueAsString(response));
+    } catch (Exception ex) {
+      log.error("Could not log the response", ex);
+    } finally {
+      MDC.clear();
+    }
+    return new ResponseEntity<Object>(body, status);
+  }
+
 
 }

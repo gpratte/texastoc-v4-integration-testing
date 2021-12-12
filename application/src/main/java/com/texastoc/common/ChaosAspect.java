@@ -22,6 +22,7 @@ public class ChaosAspect {
 
   public ChaosAspect(IntegrationTestingConfig integrationTestingConfig) {
     this.integrationTestingConfig = integrationTestingConfig;
+    log.info("integrationTestingConfig={}", integrationTestingConfig);
   }
 
   @Before("bean(*Controller)")
@@ -30,11 +31,11 @@ public class ChaosAspect {
       return;
     }
     if (RANDOM.nextInt(integrationTestingConfig.getChaosFrequency()) == 0) {
-      log.info("controller throwing RuntimeException");
+      log.info("chaos throwing RuntimeException");
       throw new RuntimeException("chaos");
     }
     if (RANDOM.nextInt(integrationTestingConfig.getChaosFrequency()) == 0) {
-      log.info("controller throwing PermissionDeniedException");
+      log.info("chaos throwing PermissionDeniedException");
       throw new PermissionDeniedException("chaos");
     }
   }

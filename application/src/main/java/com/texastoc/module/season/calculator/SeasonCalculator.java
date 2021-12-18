@@ -1,6 +1,8 @@
 package com.texastoc.module.season.calculator;
 
-import com.texastoc.exception.NotFoundException;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.GameModuleFactory;
 import com.texastoc.module.game.model.Game;
@@ -97,8 +99,10 @@ public class SeasonCalculator {
     List<SeasonPayoutSettings> seasonPayoutSettingss = seasonPayoutSettingsRepository
         .findByStartYear(season.getStart().getYear());
     if (seasonPayoutSettingss.size() < 1) {
-      throw new NotFoundException(
-          "Could not find the SeasonPayoutSettings for season " + season.getId());
+      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+          .target("seasonPayoutSettings")
+          .message("for season" + season.getId() + " not found")
+          .build());
     }
     SeasonPayoutSettings seasonPayoutSettings = seasonPayoutSettingss.get(0);
     int total = season.getTotalCombinedAnnualTocCalculated();

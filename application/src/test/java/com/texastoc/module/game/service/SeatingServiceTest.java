@@ -9,7 +9,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import com.texastoc.TestConstants;
-import com.texastoc.module.game.exception.SeatingException;
+import com.texastoc.TestUtils;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.model.GameTable;
@@ -304,8 +307,14 @@ public class SeatingServiceTest implements TestConstants {
     // Act and Assert
     assertThatThrownBy(() -> {
       seatingService.seatGamePlayers(seating);
-    }).isInstanceOf(SeatingException.class)
-        .hasMessageContaining("Requested invalid table number 7");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.CONSTRAINT, ErrorDetails.builder()
+              .target("seating.tableRequests.tableNum")
+              .message("7 is not valid")
+              .build());
+        });
   }
 
   @Test

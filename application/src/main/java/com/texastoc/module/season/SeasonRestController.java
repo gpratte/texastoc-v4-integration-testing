@@ -1,83 +1,67 @@
 package com.texastoc.module.season;
 
-import com.texastoc.module.season.exception.GameInProgressException;
-import com.texastoc.module.season.exception.SeasonInProgressException;
 import com.texastoc.module.season.model.HistoricalSeason;
 import com.texastoc.module.season.model.Season;
-import com.texastoc.module.season.service.HistoricalSeasonService;
-import com.texastoc.module.season.service.SeasonService;
-import java.io.IOException;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v4")
 public class SeasonRestController {
 
-  private final SeasonService seasonService;
-  private final HistoricalSeasonService historicalSeasonService;
+  private final SeasonModuleImpl seasonModule;
 
-  public SeasonRestController(SeasonService seasonService,
-      HistoricalSeasonService historicalSeasonService) {
-    this.seasonService = seasonService;
-    this.historicalSeasonService = historicalSeasonService;
+  public SeasonRestController(SeasonModuleImpl seasonModule) {
+    this.seasonModule = seasonModule;
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @PostMapping("/seasons")
-  public Season createSeason(@RequestBody SeasonStart seasonStart) {
-    return seasonService.create(seasonStart.getStartYear());
+  @ResponseStatus(HttpStatus.CREATED)
+  public Season createSeason(@RequestBody SeasonStart seasonStart, HttpServletRequest request) {
+    return seasonModule.create(seasonStart.getStartYear());
   }
 
   @GetMapping("/seasons/{id}")
-  public Season getSeason(@PathVariable("id") int id) {
-    return seasonService.get(id);
+  @ResponseStatus(HttpStatus.OK)
+  public Season getSeason(@PathVariable("id") int id, HttpServletRequest request) {
+    return seasonModule.get(id);
   }
 
   @GetMapping("/seasons")
-  public List<Season> getSeasons() {
-    return seasonService.getAll();
+  @ResponseStatus(HttpStatus.OK)
+  public List<Season> getSeasons(HttpServletRequest request) {
+    return seasonModule.getAll();
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping(value = "/seasons/{id}", consumes = "application/vnd.texastoc.finalize+json")
-  public Season finalizeSeason(@PathVariable("id") int id) {
-    return seasonService.end(id);
+  @ResponseStatus(HttpStatus.OK)
+  public Season finalizeSeason(@PathVariable("id") int id, HttpServletRequest request) {
+    return seasonModule.end(id);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping(value = "/seasons/{id}", consumes = "application/vnd.texastoc.unfinalize+json")
-  public Season unfinalizeSeason(@PathVariable("id") int id) {
-    return seasonService.open(id);
+  @ResponseStatus(HttpStatus.OK)
+  public Season unfinalizeSeason(@PathVariable("id") int id, HttpServletRequest request) {
+    return seasonModule.open(id);
   }
 
   @GetMapping("/seasons/history")
-  public List<HistoricalSeason> getPastSeasons() {
-    return historicalSeasonService.getPastSeasons();
-  }
-
-  @ExceptionHandler(value = {GameInProgressException.class})
-  protected void handleGameInProgressException(GameInProgressException ex,
-      HttpServletResponse response) throws IOException {
-    response.sendError(HttpStatus.CONFLICT.value(), ex.getMessage());
-  }
-
-  @ExceptionHandler(value = {SeasonInProgressException.class})
-  protected void handleSeasonInProgressException(SeasonInProgressException ex,
-      HttpServletResponse response) throws IOException {
-    String message = ex.getMessage();
-    System.out.println(message);
-    response.sendError(HttpStatus.CONFLICT.value(), ex.getMessage());
+  @ResponseStatus(HttpStatus.OK)
+  public List<HistoricalSeason> getPastSeasons(HttpServletRequest request) {
+    return seasonModule.getPastSeasons();
   }
 
   private static class SeasonStart {

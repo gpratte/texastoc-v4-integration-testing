@@ -2,16 +2,15 @@ package com.texastoc.module.player.service;
 
 import com.google.common.collect.ImmutableSet;
 import com.texastoc.common.AuthorizationHelper;
-import com.texastoc.exception.NotFoundException;
-import com.texastoc.exception.PermissionDeniedException;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.GameModuleFactory;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.notification.NotificationModule;
 import com.texastoc.module.notification.NotificationModuleFactory;
 import com.texastoc.module.player.PlayerModule;
-import com.texastoc.module.player.exception.CannotDeletePlayerException;
-import com.texastoc.module.player.exception.CannotRemoveRoleException;
 import com.texastoc.module.player.model.Player;
 import com.texastoc.module.player.model.Role;
 import com.texastoc.module.player.repository.PlayerRepository;
@@ -84,6 +83,7 @@ public class PlayerService implements PlayerModule {
   @Override
   @Transactional(readOnly = true)
   public List<Player> getAll() {
+    // TODO set passwords to null and other PII
     List<Player> players = StreamSupport.stream(playerRepository.findAll().spliterator(), false)
         .collect(Collectors.toList());
     Collections.sort(players);
@@ -92,13 +92,17 @@ public class PlayerService implements PlayerModule {
 
   @Override
   @Transactional(readOnly = true)
-  public Player get(int id) throws NotFoundException {
+  public Player get(int id) {
     Optional<Player> optionalPlayer = playerRepository.findById(id);
     if (!optionalPlayer.isPresent()) {
-      throw new NotFoundException("Player with id " + id + " not found");
+      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+          .target("player")
+          .message(id + " not found")
+          .build());
     }
     Player player = optionalPlayer.get();
     player.setPassword(null);
+    // TODO set other PII to null
     return player;
   }
 
@@ -106,7 +110,10 @@ public class PlayerService implements PlayerModule {
   public Player getByEmail(String email) {
     List<Player> players = playerRepository.findByEmail(email);
     if (players.size() != 1) {
-      throw new NotFoundException("Could not find player with email " + email);
+      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+          .target("player")
+          .message("for email " + email + " not found")
+          .build());
     }
     Player player = players.get(0);
     player.setPassword(null);
@@ -120,7 +127,10 @@ public class PlayerService implements PlayerModule {
 
     List<Game> games = getGameModule().getByPlayerId(id);
     if (games.size() > 0) {
-      throw new CannotDeletePlayerException(id);
+      throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+          .target("player")
+          .message(id + " cannot be deleted")
+          .build());
     }
     playerRepository.deleteById(id);
   }
@@ -146,7 +156,10 @@ public class PlayerService implements PlayerModule {
     }
 
     if (email == null) {
-      throw new NotFoundException("No code found");
+      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+          .target("code")
+          .message("not found")
+          .build());
     }
 
     forgotPasswordCodes.remove(email);
@@ -189,12 +202,18 @@ public class PlayerService implements PlayerModule {
     }
 
     if (!found) {
-      throw new NotFoundException("Role with id " + roleId + " not found");
+      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+          .target("role")
+          .message(roleId + " not found")
+          .build());
     }
 
     // found the role, now make sure it is not the only role
     if (existingRoles.size() < 2) {
-      throw new CannotRemoveRoleException("Cannot remove the last role for a user");
+      throw new BLException(BLType.CONSTRAINT, ErrorDetails.builder()
+          .target("player.roles")
+          .message("cannot remove the last role")
+          .build());
     }
 
     Set<Role> newRoles = new HashSet<>();
@@ -213,7 +232,7 @@ public class PlayerService implements PlayerModule {
   // verify the user is an admin
   private void verifyLoggedInUserIsAdmin() {
     if (!authorizationHelper.isLoggedInUserHaveRole(Role.Type.ADMIN)) {
-      throw new PermissionDeniedException();
+      throw new BLException(BLType.DENIED);
     }
   }
 
@@ -223,11 +242,14 @@ public class PlayerService implements PlayerModule {
       String email = authorizationHelper.getLoggedInUserEmail();
       List<Player> players = playerRepository.findByEmail(email);
       if (players.size() != 1) {
-        throw new NotFoundException("Could not find player with email " + email);
+        throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+            .target("player")
+            .message("for email " + email + " not found")
+            .build());
       }
       Player loggedInPlayer = players.get(0);
       if (loggedInPlayer.getId() != player.getId()) {
-        throw new PermissionDeniedException();
+        throw new BLException(BLType.DENIED);
       }
     }
   }

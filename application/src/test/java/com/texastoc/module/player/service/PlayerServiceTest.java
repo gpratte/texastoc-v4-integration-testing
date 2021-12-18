@@ -14,14 +14,14 @@ import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.texastoc.TestUtils;
 import com.texastoc.common.AuthorizationHelper;
-import com.texastoc.exception.NotFoundException;
-import com.texastoc.exception.PermissionDeniedException;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.notification.NotificationModule;
-import com.texastoc.module.player.exception.CannotDeletePlayerException;
-import com.texastoc.module.player.exception.CannotRemoveRoleException;
 import com.texastoc.module.player.model.Player;
 import com.texastoc.module.player.model.Role;
 import com.texastoc.module.player.repository.PlayerRepository;
@@ -180,28 +180,34 @@ public class PlayerServiceTest {
         .thenReturn(java.util.Optional.ofNullable(existingPlayer));
 
     // different user
-    Player playersNewValues = Player.builder()
+    Player differentPlayer = Player.builder()
         .id(2)
-        .firstName("updatedFirstName")
-        .lastName("updatedLastName")
-        .email("updated@xyz.com")
-        .phone("updatedPhone")
-        .password("updatedPassword") // will be ignored
+        .firstName("differentFirstName")
+        .lastName("differentLastName")
+        .email("different@xyz.com")
+        .phone("differentPhone")
+        .password("differentPassword")
         .roles(ImmutableSet.of(Role.builder() // will be ignored
             .type(Role.Type.ADMIN)
             .build()))
         .build();
+    when(playerRepository.findById(ArgumentMatchers.eq(2)))
+        .thenReturn(java.util.Optional.ofNullable(differentPlayer));
 
     // mock out authorization check
     when(authorizationHelper.getLoggedInUserEmail()).thenReturn("existing@xyz.com");
     when(playerRepository.findByEmail("existing@xyz.com"))
         .thenReturn(ImmutableList.of(existingPlayer));
 
-    // Act
+    // Act & Assert ;;
     assertThatThrownBy(() -> {
-      playerService.update(playersNewValues);
-    }).isInstanceOf(PermissionDeniedException.class)
-        .hasMessageContaining("Admin permission required for this action");
+      playerService.update(differentPlayer);
+      ;
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.DENIED);
+        });
   }
 
   @Test
@@ -237,8 +243,14 @@ public class PlayerServiceTest {
     // Act and Assert
     assertThatThrownBy(() -> {
       playerService.get(123);
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("Player with id 123 not found");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("player")
+              .message("123 not found")
+              .build());
+        });
   }
 
   @Test
@@ -248,8 +260,14 @@ public class PlayerServiceTest {
         .id(1)
         .firstName("firstName1")
         .lastName("lastName1")
+        .email("player@email.com")
         .build();
     when(playerRepository.findById(1)).thenReturn(Optional.of(player));
+
+    // mock out authorization check
+    when(authorizationHelper.getLoggedInUserEmail()).thenReturn("player@email.com");
+    when(playerRepository.findByEmail("player@email.com"))
+        .thenReturn(ImmutableList.of(player));
 
     // Act
     Player playerRetrieved = playerService.get(1);
@@ -265,9 +283,27 @@ public class PlayerServiceTest {
 
     // Act and Assert
     assertThatThrownBy(() -> {
+      playerService.get(123);
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("player")
+              .message("123 not found")
+              .build());
+        });
+
+    // Act and Assert
+    assertThatThrownBy(() -> {
       playerService.getByEmail("abc");
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageStartingWith("Could not find player with email");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("player")
+              .message("for email abc not found")
+              .build());
+        });
   }
 
   @Test
@@ -313,11 +349,27 @@ public class PlayerServiceTest {
     // mock out one game for the player
     when(gameModule.getByPlayerId(1)).thenReturn(Collections.singletonList(Game.builder().build()));
 
-    // Act
+    // Act & Assert
+    assertThatThrownBy(() -> {
+      playerService.get(123);
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("player")
+              .message("123 not found")
+              .build());
+        });
     assertThatThrownBy(() -> {
       playerService.delete(1);
-    }).isInstanceOf(CannotDeletePlayerException.class)
-        .hasMessageContaining("Player with ID 1 cannot be deleted");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+              .target("player")
+              .message("1 cannot be deleted")
+              .build());
+        });
   }
 
   @Test
@@ -328,9 +380,22 @@ public class PlayerServiceTest {
 
     // Act
     assertThatThrownBy(() -> {
+      playerService.get(123);
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("player")
+              .message("123 not found")
+              .build());
+        });
+    assertThatThrownBy(() -> {
       playerService.delete(1);
-    }).isInstanceOf(PermissionDeniedException.class)
-        .hasMessageContaining("Admin permission required for this action");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.DENIED);
+        });
   }
 
   @Test
@@ -409,9 +474,25 @@ public class PlayerServiceTest {
 
     // Cannot use the same code twice
     assertThatThrownBy(() -> {
+      playerService.get(123);
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("player")
+              .message("123 not found")
+              .build());
+        });
+    assertThatThrownBy(() -> {
       playerService.resetPassword(code, password);
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("No code found");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("code")
+              .message("not found")
+              .build());
+        });
   }
 
   @Test
@@ -574,9 +655,25 @@ public class PlayerServiceTest {
 
     // Act, remove the admin role
     assertThatThrownBy(() -> {
+      playerService.get(123);
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("player")
+              .message("123 not found")
+              .build());
+        });
+    assertThatThrownBy(() -> {
       playerService.removeRole(1, 2);
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("Role with id 2 not found");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("role")
+              .message("2 not found")
+              .build());
+        });
   }
 
   @Test
@@ -606,8 +703,24 @@ public class PlayerServiceTest {
 
     // Act, remove the admin role
     assertThatThrownBy(() -> {
+      playerService.get(123);
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("player")
+              .message("123 not found")
+              .build());
+        });
+    assertThatThrownBy(() -> {
       playerService.removeRole(1, 1);
-    }).isInstanceOf(CannotRemoveRoleException.class)
-        .hasMessageContaining("Cannot remove the last role for a user");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.CONSTRAINT, ErrorDetails.builder()
+              .target("player.roles")
+              .message("cannot remove the last role")
+              .build());
+        });
   }
 }

@@ -2,15 +2,14 @@ package com.texastoc.module.season.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.config.IntegrationTestingConfig;
-import com.texastoc.exception.NotFoundException;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.GameModuleFactory;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.quarterly.QuarterlySeasonModule;
 import com.texastoc.module.quarterly.QuarterlySeasonModuleFactory;
-import com.texastoc.module.season.exception.DuplicateSeasonException;
-import com.texastoc.module.season.exception.GameInProgressException;
-import com.texastoc.module.season.exception.SeasonInProgressException;
 import com.texastoc.module.season.model.HistoricalSeason;
 import com.texastoc.module.season.model.HistoricalSeason.HistoricalSeasonPlayer;
 import com.texastoc.module.season.model.Season;
@@ -68,12 +67,18 @@ public class SeasonService {
       List<Season> seasons = getAll();
       seasons.forEach(season -> {
         if (!season.isFinalized()) {
-          throw new SeasonInProgressException(startYear);
+          throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+              .target("season")
+              .message(season.getId() + " is not finalized")
+              .build());
         }
       });
       seasons.forEach(season -> {
         if (season.getStart().getYear() == startYear) {
-          throw new DuplicateSeasonException(startYear);
+          throw new BLException(BLType.CONSTRAINT, ErrorDetails.builder()
+              .target("season.start")
+              .message("a season with start year " + startYear + " already exists")
+              .build());
         }
       });
     }
@@ -118,7 +123,10 @@ public class SeasonService {
   public Season get(int id) {
     Optional<Season> optionalSeason = seasonRepository.findById(id);
     if (!optionalSeason.isPresent()) {
-      throw new NotFoundException("Season with id " + id + " not found");
+      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+          .target("season")
+          .message(id + " not found")
+          .build());
     }
     return optionalSeason.get();
 
@@ -138,7 +146,10 @@ public class SeasonService {
     List<Game> games = getGameModule().getBySeasonId(seasonId);
     for (Game game : games) {
       if (!game.isFinalized()) {
-        throw new GameInProgressException("There is a game in progress");
+        throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+            .target("game")
+            .message(game.getId() + " is not finalized")
+            .build());
       }
     }
 

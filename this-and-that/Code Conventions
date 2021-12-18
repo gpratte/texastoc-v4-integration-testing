@@ -1,0 +1,5 @@
+
+REST (controller) endpoints must have
+* HttpServletRequest request parameter
+* @ResponseStatus annotation
+

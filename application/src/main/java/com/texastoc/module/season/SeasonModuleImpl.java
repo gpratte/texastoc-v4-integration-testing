@@ -34,13 +34,18 @@ public class SeasonModuleImpl implements SeasonModule {
   }
 
   @Override
-  public void end(int seasonId) {
-    seasonService.end(seasonId);
+  public List<Season> getAll() {
+    return seasonService.getAll();
   }
 
   @Override
-  public void open(int seasonId) {
-    seasonService.open(seasonId);
+  public Season end(int seasonId) {
+    return seasonService.end(seasonId);
+  }
+
+  @Override
+  public Season open(int seasonId) {
+    return seasonService.open(seasonId);
   }
 
   @Override

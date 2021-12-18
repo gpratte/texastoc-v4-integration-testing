@@ -1,6 +1,5 @@
 package com.texastoc.module.game;
 
-import com.texastoc.exception.NotFoundException;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.model.Seating;
@@ -34,7 +33,6 @@ public interface GameModule {
    * If transportRequired is not provided the default value is false.
    *
    * @param game a game with the hostId, date and transportRequired fields set
-   * @throws NotFoundException
    */
   Game update(Game game);
 
@@ -43,7 +41,6 @@ public interface GameModule {
    *
    * @param id the game Id
    * @return the game
-   * @throws NotFoundException
    */
   Game get(int id);
 
@@ -75,7 +72,6 @@ public interface GameModule {
    * Finalize (end) the game.
    *
    * @param id the game Id
-   * @throws NotFoundException
    */
   Game finalize(int id);
 
@@ -83,7 +79,6 @@ public interface GameModule {
    * Unfinalize (reopen) a game. Restricted to admins only.
    *
    * @param id the game Id
-   * @throws NotFoundException
    */
   Game unfinalize(int id);
 
@@ -98,7 +93,6 @@ public interface GameModule {
    *
    * @param gamePlayer a game player with at least playerId
    * @return the newly created game player
-   * @throws NotFoundException
    */
   GamePlayer createGamePlayer(GamePlayer gamePlayer);
 
@@ -115,7 +109,6 @@ public interface GameModule {
    *
    * @param gamePlayer a game player with at least either firstName or lastName set
    * @return the newly created first time game player
-   * @throws NotFoundException
    */
   GamePlayer createFirstTimeGamePlayer(GamePlayer gamePlayer);
 
@@ -133,7 +126,6 @@ public interface GameModule {
    * </ul>
    *
    * @param gamePlayer the game player some or none of the pertinent fields
-   * @throws NotFoundException
    */
   GamePlayer updateGamePlayer(GamePlayer gamePlayer);
 
@@ -142,7 +134,6 @@ public interface GameModule {
    *
    * @param gameId       the game Id
    * @param gamePlayerId the game player Id
-   * @throws NotFoundException
    */
   GamePlayer toggleGamePlayerKnockedOut(int gameId, int gamePlayerId);
 
@@ -151,7 +142,6 @@ public interface GameModule {
    *
    * @param gameId       the game Id
    * @param gamePlayerId the game player Id
-   * @throws NotFoundException
    */
   GamePlayer toggleGamePlayerRebuy(int gameId, int gamePlayerId);
 
@@ -160,7 +150,6 @@ public interface GameModule {
    *
    * @param gameId       the game Id
    * @param gamePlayerId the game player Id
-   * @throws NotFoundException
    */
   void deleteGamePlayer(int gameId, int gamePlayerId);
 
@@ -173,7 +162,6 @@ public interface GameModule {
    *
    * @param seating the seating with the perinent fields
    * @return the seating with the tables
-   * @throws NotFoundException
    */
   Seating seatGamePlayers(Seating seating);
 
@@ -181,7 +169,6 @@ public interface GameModule {
    * Notify the game players as to where to find their seat
    *
    * @param gameId the game Id
-   * @throws NotFoundException
    */
   void notifySeating(int gameId);
 

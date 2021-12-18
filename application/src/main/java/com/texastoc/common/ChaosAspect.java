@@ -1,7 +1,8 @@
 package com.texastoc.common;
 
 import com.texastoc.config.IntegrationTestingConfig;
-import com.texastoc.exception.PermissionDeniedException;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
 import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -35,8 +36,8 @@ public class ChaosAspect {
       throw new RuntimeException("chaos");
     }
     if (RANDOM.nextInt(integrationTestingConfig.getChaosFrequency()) == 0) {
-      log.info("chaos throwing PermissionDeniedException");
-      throw new PermissionDeniedException("chaos");
+      log.info("chaos throwing DENIED");
+      throw new BLException(BLType.DENIED);
     }
   }
 }

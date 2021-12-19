@@ -21,7 +21,7 @@ public class SettingsIT extends BaseIntegrationTest {
   }
 
   @Test
-  public void verifySettings() throws Exception {
+  public void verifySettings() {
     // Arrange and Act
     settings = getSettings();
     // Assert

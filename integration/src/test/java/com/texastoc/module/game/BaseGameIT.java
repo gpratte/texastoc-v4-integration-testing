@@ -23,12 +23,12 @@ public abstract class BaseGameIT extends BaseIntegrationTest {
     exception = null;
   }
 
-  protected void aSeasonExists() throws Exception {
+  protected void aSeasonExists() {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     seasonCreated = createSeason(token);
   }
 
-  protected void theGameStartsNow() throws Exception {
+  protected void theGameStartsNow() {
     gameToCreate = Game.builder()
         .date(LocalDate.now())
         .hostId(1)
@@ -36,12 +36,12 @@ public abstract class BaseGameIT extends BaseIntegrationTest {
         .build();
   }
 
-  protected void theGameIsCreated() throws Exception {
+  protected void theGameIsCreated() {
     String token = login(USER_EMAIL, USER_PASSWORD);
     gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
   }
 
-  protected void getGame(int id) throws Exception {
+  protected void getGame(int id) {
     String token = login(USER_EMAIL, USER_PASSWORD);
     gameRetrieved = getGame(id, token);
   }

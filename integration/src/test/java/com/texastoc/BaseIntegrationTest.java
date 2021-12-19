@@ -64,11 +64,11 @@ public abstract class BaseIntegrationTest implements TestConstants {
     return start;
   }
 
-  protected Season createSeason(String token) throws Exception {
+  protected Season createSeason(String token) {
     return createSeason(getSeasonStart().getYear(), token);
   }
 
-  protected Season createSeason(int startYear, String token) throws Exception {
+  protected Season createSeason(int startYear, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", "Bearer " + token);
@@ -78,14 +78,18 @@ public abstract class BaseIntegrationTest implements TestConstants {
 
     SeasonStart seasonStart = new SeasonStart();
     seasonStart.setStartYear(startYear);
-    String seasonAsJson = mapper.writeValueAsString(seasonStart);
+    String seasonAsJson = null;
+    try {
+      seasonAsJson = mapper.writeValueAsString(seasonStart);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(seasonAsJson, headers);
 
     return restTemplate.postForObject(endpoint() + "/seasons", entity, Season.class);
   }
 
-  protected Game createGame(Game gameToCreate, int seasonid, String token)
-      throws JsonProcessingException {
+  protected Game createGame(Game gameToCreate, int seasonid, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", "Bearer " + token);
@@ -93,22 +97,31 @@ public abstract class BaseIntegrationTest implements TestConstants {
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
 
-    String gameToCreateAsJson = mapper.writeValueAsString(gameToCreate);
+    String gameToCreateAsJson = null;
+    try {
+      gameToCreateAsJson = mapper.writeValueAsString(gameToCreate);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(gameToCreateAsJson, headers);
 
     return restTemplate
         .postForObject(endpoint() + "/seasons/" + seasonid + "/games", entity, Game.class);
   }
 
-  protected void updateGame(int gameId, Game gameToUpdate, String token)
-      throws JsonProcessingException {
+  protected void updateGame(int gameId, Game gameToUpdate, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", "Bearer " + token);
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
-    String updateGameRequestAsJson = mapper.writeValueAsString(gameToUpdate);
+    String updateGameRequestAsJson = null;
+    try {
+      updateGameRequestAsJson = mapper.writeValueAsString(gameToUpdate);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(updateGameRequestAsJson, headers);
 
     ResponseEntity<Void> response = restTemplate.exchange(
@@ -118,15 +131,19 @@ public abstract class BaseIntegrationTest implements TestConstants {
         Void.class);
   }
 
-  protected GamePlayer addPlayerToGame(GamePlayer gamePlayer, String token)
-      throws JsonProcessingException {
+  protected GamePlayer addPlayerToGame(GamePlayer gamePlayer, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", "Bearer " + token);
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
-    String createGamePlayerRequestAsJson = mapper.writeValueAsString(gamePlayer);
+    String createGamePlayerRequestAsJson = null;
+    try {
+      createGamePlayerRequestAsJson = mapper.writeValueAsString(gamePlayer);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(createGamePlayerRequestAsJson, headers);
 
     return restTemplate
@@ -134,15 +151,19 @@ public abstract class BaseIntegrationTest implements TestConstants {
             GamePlayer.class);
   }
 
-  protected GamePlayer addFirstTimePlayerToGame(GamePlayer gamePlayer, String token)
-      throws JsonProcessingException {
+  protected GamePlayer addFirstTimePlayerToGame(GamePlayer gamePlayer, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Content-Type", "application/vnd.texastoc.first-time+json");
     headers.set("Authorization", "Bearer " + token);
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
-    String firstTimeGamePlayerRequestAsJson = mapper.writeValueAsString(gamePlayer);
+    String firstTimeGamePlayerRequestAsJson = null;
+    try {
+      firstTimeGamePlayerRequestAsJson = mapper.writeValueAsString(gamePlayer);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(firstTimeGamePlayerRequestAsJson, headers);
 
     return restTemplate
@@ -150,15 +171,19 @@ public abstract class BaseIntegrationTest implements TestConstants {
             GamePlayer.class);
   }
 
-  protected void updatePlayerInGame(GamePlayer gamePlayer, String token)
-      throws JsonProcessingException {
+  protected void updatePlayerInGame(GamePlayer gamePlayer, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", "Bearer " + token);
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
-    String gamePlayerAsJson = mapper.writeValueAsString(gamePlayer);
+    String gamePlayerAsJson = null;
+    try {
+      gamePlayerAsJson = mapper.writeValueAsString(gamePlayer);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(gamePlayerAsJson, headers);
 
     ResponseEntity<Void> response = restTemplate.exchange(
@@ -198,7 +223,7 @@ public abstract class BaseIntegrationTest implements TestConstants {
     restTemplate.put(endpoint() + "/games/" + gameId, entity);
   }
 
-  protected Seating seatPlayers(int gameId, Seating seating, String token) throws Exception {
+  protected Seating seatPlayers(int gameId, Seating seating, String token) {
 
     HttpHeaders headers = new HttpHeaders();
     headers.set("Content-Type", "application/vnd.texastoc.assign-seats+json");
@@ -206,34 +231,49 @@ public abstract class BaseIntegrationTest implements TestConstants {
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
-    String seatingRequestAsJson = mapper.writeValueAsString(seating);
+    String seatingRequestAsJson = null;
+    try {
+      seatingRequestAsJson = mapper.writeValueAsString(seating);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(seatingRequestAsJson, headers);
 
     return restTemplate
         .postForObject(endpoint() + "/games/" + gameId + "/seats", entity, Seating.class);
   }
 
-  protected Player createPlayer(Player player, String token) throws JsonProcessingException {
+  protected Player createPlayer(Player player, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", "Bearer " + token);
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
-    String playerRequestAsJson = mapper.writeValueAsString(player);
+    String playerRequestAsJson = null;
+    try {
+      playerRequestAsJson = mapper.writeValueAsString(player);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(playerRequestAsJson, headers);
 
     return restTemplate.postForObject(endpoint() + "/players", entity, Player.class);
   }
 
-  protected void updatePlayer(Player player, String token) throws JsonProcessingException {
+  protected void updatePlayer(Player player, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", "Bearer " + token);
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
-    String playerRequestAsJson = mapper.writeValueAsString(player);
+    String playerRequestAsJson = null;
+    try {
+      playerRequestAsJson = mapper.writeValueAsString(player);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(playerRequestAsJson, headers);
 
     restTemplate.put(endpoint() + "/players/" + player.getId(), entity);
@@ -250,14 +290,19 @@ public abstract class BaseIntegrationTest implements TestConstants {
         Void.class);
   }
 
-  protected void addRole(int playerId, Role role, String token) throws JsonProcessingException {
+  protected void addRole(int playerId, Role role, String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", "Bearer " + token);
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
-    String addRoleRequestAsJson = mapper.writeValueAsString(role);
+    String addRoleRequestAsJson = null;
+    try {
+      addRoleRequestAsJson = mapper.writeValueAsString(role);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(addRoleRequestAsJson, headers);
 
     restTemplate.exchange(endpoint() + "/players/" + playerId + "/roles",
@@ -389,7 +434,7 @@ public abstract class BaseIntegrationTest implements TestConstants {
     return response.getBody();
   }
 
-  protected String login(String email, String password) throws JsonProcessingException {
+  protected String login(String email, String password) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -399,7 +444,12 @@ public abstract class BaseIntegrationTest implements TestConstants {
     LoginParameters loginParameters = new LoginParameters();
     loginParameters.email = email;
     loginParameters.password = password;
-    String loginParametersAsJson = mapper.writeValueAsString(loginParameters);
+    String loginParametersAsJson = null;
+    try {
+      loginParametersAsJson = mapper.writeValueAsString(loginParameters);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     HttpEntity<String> entity = new HttpEntity<>(loginParametersAsJson, headers);
 
     String url = endpointRoot() + "/api/v4/login";

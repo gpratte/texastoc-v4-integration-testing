@@ -29,7 +29,7 @@ public class GamePlayerIT extends BaseGameIT {
    * Add an existing player as a game player with minimal fields set
    */
   @Test
-  public void addEmptyExistingPlayer() throws Exception {
+  public void addEmptyExistingPlayer() {
     // Arrange
     aGameIsCreated();
     aPlayerIsAddedWithNothingSet();
@@ -44,7 +44,7 @@ public class GamePlayerIT extends BaseGameIT {
    * Add a first time player as a game player with minimal fields set
    */
   @Test
-  public void addEmptyFirstTimePlayer() throws Exception {
+  public void addEmptyFirstTimePlayer() {
     // Arrange
     aGameIsCreated();
     aFirstTimePlayerIsAddedWithNothingSet();
@@ -56,7 +56,7 @@ public class GamePlayerIT extends BaseGameIT {
   }
 
   @Test
-  public void addNonEmptyExistingPlayer() throws Exception {
+  public void addNonEmptyExistingPlayer() {
     // Add an existing player as a game player with all fields set
     aGameIsCreated();
     aPlayerIsAddedWithEverythingSet();
@@ -69,7 +69,7 @@ public class GamePlayerIT extends BaseGameIT {
    * Add a first time player as a game player with everything set
    */
   @Test
-  public void addNonEmptyFirstTimePlayer() throws Exception {
+  public void addNonEmptyFirstTimePlayer() {
     aGameIsCreated();
     aFirstTimePlayerIsAddedWithEverythingSet();
     theGameIsUpdatedWithThePlayers();
@@ -81,7 +81,7 @@ public class GamePlayerIT extends BaseGameIT {
    * Add an existing player as a game player with minimal fields set and then update all fields
    */
   @Test
-  public void updateGamePlayer() throws Exception {
+  public void updateGamePlayer() {
     aGameIsCreated();
     aPlayerIsAddedWithNothingSet();
     theGameIsUpdatedWithThePlayers();
@@ -92,7 +92,7 @@ public class GamePlayerIT extends BaseGameIT {
   }
 
   @Test
-  public void knockOutGamePlayer() throws Exception {
+  public void knockOutGamePlayer() {
     aGameIsCreated();
     aPlayerIsAddedWithNothingSet();
     theGameIsUpdatedWithThePlayers();
@@ -103,7 +103,7 @@ public class GamePlayerIT extends BaseGameIT {
   }
 
   @Test
-  public void undoKnockedOutGamePlayer() throws Exception {
+  public void undoKnockedOutGamePlayer() {
     aGameIsCreated();
     aPlayerIsAddedWithEverythingSet();
     theGameIsUpdatedWithThePlayers();
@@ -114,7 +114,7 @@ public class GamePlayerIT extends BaseGameIT {
   }
 
   @Test
-  public void rebuyGamePlayer() throws Exception {
+  public void rebuyGamePlayer() {
     aGameIsCreated();
     aPlayerIsAddedWithNothingSet();
     theGameIsUpdatedWithThePlayers();
@@ -125,7 +125,7 @@ public class GamePlayerIT extends BaseGameIT {
   }
 
   @Test
-  public void undoGamePlayerRebuy() throws Exception {
+  public void undoGamePlayerRebuy() {
     aGameIsCreated();
     aPlayerIsAddedWithEverythingSet();
     theGameIsUpdatedWithThePlayers();
@@ -136,7 +136,7 @@ public class GamePlayerIT extends BaseGameIT {
   }
 
   @Test
-  public void deleteGamePlayer() throws Exception {
+  public void deleteGamePlayer() {
     aGameIsCreated();
     aPlayerIsAddedWithNothingSet();
     theGameIsUpdatedWithThePlayers();
@@ -146,14 +146,14 @@ public class GamePlayerIT extends BaseGameIT {
     thereAreNoGamePlayers();
   }
 
-  private void aGameIsCreated() throws Exception {
+  private void aGameIsCreated() {
     super.aSeasonExists();
     super.theGameStartsNow();
     super.theGameIsCreated();
     gameId = gameCreated.getId();
   }
 
-  private void aPlayerIsAddedWithNothingSet() throws Exception {
+  private void aPlayerIsAddedWithNothingSet() {
     GamePlayer gamePlayer = GamePlayer.builder()
         .playerId(GUEST_USER_PLAYER_ID)
         .gameId(gameId)
@@ -163,7 +163,7 @@ public class GamePlayerIT extends BaseGameIT {
     gamePlayers.add(addPlayerToGame(gamePlayer, token));
   }
 
-  private void aPlayerIsAddedWithEverythingSet() throws Exception {
+  private void aPlayerIsAddedWithEverythingSet() {
     GamePlayer gamePlayer = GamePlayer.builder()
         .playerId(GUEST_USER_PLAYER_ID)
         .gameId(gameId)
@@ -181,7 +181,7 @@ public class GamePlayerIT extends BaseGameIT {
     gamePlayers.add(addPlayerToGame(gamePlayer, token));
   }
 
-  private void aFirstTimePlayerIsAddedWithEverythingSet() throws Exception {
+  private void aFirstTimePlayerIsAddedWithEverythingSet() {
     GamePlayer gamePlayer = GamePlayer.builder()
         .playerId(GUEST_USER_PLAYER_ID)
         .firstName("first")
@@ -202,7 +202,7 @@ public class GamePlayerIT extends BaseGameIT {
     gamePlayers.add(addPlayerToGame(gamePlayer, token));
   }
 
-  private void aFirstTimePlayerIsAddedWithNothingSet() throws Exception {
+  private void aFirstTimePlayerIsAddedWithNothingSet() {
     GamePlayer gamePlayer = GamePlayer.builder()
         .firstName("first")
         .lastName("last")
@@ -214,21 +214,21 @@ public class GamePlayerIT extends BaseGameIT {
     gamePlayers.add(addPlayerToGame(gamePlayer, token));
   }
 
-  private void theGameIsUpdatedWithThePlayers() throws Exception {
+  private void theGameIsUpdatedWithThePlayers() {
     getGame(gameId);
     gameRetrieved.setPlayers(gamePlayers);
     String token = login(USER_EMAIL, USER_PASSWORD);
     updateGame(gameRetrieved.getId(), gameRetrieved, token);
   }
 
-  private void theGameIsUpdatedWithTheUpdatedPlayers() throws Exception {
+  private void theGameIsUpdatedWithTheUpdatedPlayers() {
     getGame(gameId);
     gameRetrieved.setPlayers(retrievedGamePlayers);
     String token = login(USER_EMAIL, USER_PASSWORD);
     updateGame(gameRetrieved.getId(), gameRetrieved, token);
   }
 
-  private void allGamePlayersAreDeleted() throws Exception {
+  private void allGamePlayersAreDeleted() {
     getGame(gameId);
     String token = login(USER_EMAIL, USER_PASSWORD);
     for (GamePlayer gamePlayer : gameRetrieved.getPlayers()) {
@@ -236,7 +236,7 @@ public class GamePlayerIT extends BaseGameIT {
     }
   }
 
-  private void theGamePlayersAreRetrieved() throws Exception {
+  private void theGamePlayersAreRetrieved() {
     getGame(gameId);
     retrievedGamePlayers = gameRetrieved.getPlayers();
   }
@@ -302,7 +302,7 @@ public class GamePlayerIT extends BaseGameIT {
     }
   }
 
-  private void theGamePlayersAreUpdated() throws Exception {
+  private void theGamePlayersAreUpdated() {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       gamePlayer.setKnockedOut(true);
       gamePlayer.setAnnualTocParticipant(true);
@@ -316,7 +316,7 @@ public class GamePlayerIT extends BaseGameIT {
     }
   }
 
-  private void theGamePlayersWithKnockedOut(boolean knockedOut) throws Exception {
+  private void theGamePlayersWithKnockedOut(boolean knockedOut) {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       gamePlayer.setKnockedOut(knockedOut);
     }
@@ -332,7 +332,7 @@ public class GamePlayerIT extends BaseGameIT {
     }
   }
 
-  private void theGamePlayersWithRebuy(boolean knockedOut) throws Exception {
+  private void theGamePlayersWithRebuy(boolean knockedOut) {
     for (GamePlayer gamePlayer : retrievedGamePlayers) {
       gamePlayer.setRebought(knockedOut);
     }
@@ -348,7 +348,7 @@ public class GamePlayerIT extends BaseGameIT {
     }
   }
 
-  private void thereAreNoGamePlayers() throws Exception {
+  private void thereAreNoGamePlayers() {
     getGame(gameId);
     assertEquals("number of players should be zero", 0, gameRetrieved.getPlayers().size());
   }

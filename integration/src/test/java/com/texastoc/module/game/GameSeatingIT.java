@@ -46,7 +46,7 @@ public class GameSeatingIT extends BaseIntegrationTest {
    * Seat 0 players at 1 table with no table requests
    */
   @Test
-  public void zeroAtOneNoRequests() throws Exception {
+  public void zeroAtOneNoRequests() {
     // Arrange
     aGameHasGamePlayers(0);
     seatingIsDoneWithTableAndSeatsAndRequests(1, 10, 0, 0);
@@ -60,7 +60,7 @@ public class GameSeatingIT extends BaseIntegrationTest {
    * Seat 9 players at table 1 with no table requests
    */
   @Test
-  public void nineAtOneNoRequests() throws Exception {
+  public void nineAtOneNoRequests() {
     aGameHasGamePlayers(9);
     seatingIsDoneWithTableAndSeatsAndRequests(1, 9, 0, 0);
     gamePlayersAreSeatedAtTable(9, 1);
@@ -71,7 +71,7 @@ public class GameSeatingIT extends BaseIntegrationTest {
    * Seat 13 players at 2 tables with no table requests
    */
   @Test
-  public void thirteenAtTwoNoRequests() throws Exception {
+  public void thirteenAtTwoNoRequests() {
     aGameHasGamePlayers(13);
     seatingIsDoneWithTableAndSeatsAndRequests(2, 8, 0, 0);
     gamePlayersAreSeatedAtTable(7, 1);
@@ -84,7 +84,7 @@ public class GameSeatingIT extends BaseIntegrationTest {
    * Seat 40 players at 4 tables with 2 table requests to move to table 3
    */
   @Test
-  public void fortyAtFourTwoRequests() throws Exception {
+  public void fortyAtFourTwoRequests() {
     aGameHasGamePlayers(40);
     seatingIsDoneWithTableAndSeatsAndRequests(4, 10, 2, 3);
     requestsAreFulfilled();
@@ -94,13 +94,13 @@ public class GameSeatingIT extends BaseIntegrationTest {
    * Seat 2 players at 1 tables with 1 table requests to move to table 3
    */
   @Test
-  public void twoAtOneOneRequests() throws Exception {
+  public void twoAtOneOneRequests() {
     aGameHasGamePlayers(2);
     seatingIsDoneWithTableAndSeatsAndRequests(1, 10, 1, 3);
     invalidSeating();
   }
 
-  private void aGameHasGamePlayers(int numPlayers) throws Exception {
+  private void aGameHasGamePlayers(int numPlayers) {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     seasonCreated = createSeason(getSeasonStart().getYear(), token);
 
@@ -127,7 +127,7 @@ public class GameSeatingIT extends BaseIntegrationTest {
   }
 
   private void seatingIsDoneWithTableAndSeatsAndRequests(int tables, int seats, int requests,
-      int tableRequested) throws Exception {
+      int tableRequested) {
     String token = login(USER_EMAIL, USER_PASSWORD);
     Seating seatingRequest = new Seating();
     List<SeatsPerTable> seatsPerTables = new ArrayList<>(tables);
@@ -169,7 +169,7 @@ public class GameSeatingIT extends BaseIntegrationTest {
     }
   }
 
-  private void gamePlayersAreSeatedAtTable(int numPlayers, int tableNum) throws Exception {
+  private void gamePlayersAreSeatedAtTable(int numPlayers, int tableNum) {
     List<GameTable> gameTables = seating.getGameTables();
     assertNotNull("tables should not be null", gameTables);
 
@@ -183,7 +183,7 @@ public class GameSeatingIT extends BaseIntegrationTest {
     assertEquals(numPlayers + " are seated", numPlayers, numPlayersSeated);
   }
 
-  private void tableHasDeadStacks(int tableNum, int numDeadStacks) throws Exception {
+  private void tableHasDeadStacks(int tableNum, int numDeadStacks) {
     List<GameTable> gameTables = seating.getGameTables();
     GameTable table = gameTables.get(tableNum - 1);
     List<Seat> seats = table.getSeats();
@@ -196,7 +196,7 @@ public class GameSeatingIT extends BaseIntegrationTest {
     assertEquals("should have " + numDeadStacks + " dead stacks", numDeadStacks, numEmptySeats);
   }
 
-  private void requestsAreFulfilled() throws Exception {
+  private void requestsAreFulfilled() {
     List<GameTable> gameTables = seating.getGameTables();
     List<TableRequest> tableRequests = seating.getTableRequests();
 
@@ -220,7 +220,7 @@ public class GameSeatingIT extends BaseIntegrationTest {
     }
   }
 
-  private void invalidSeating() throws Exception {
+  private void invalidSeating() {
     assertNotNull("exception should have been thrown", exception);
     assertEquals("status should be 400", 400, exception.getStatusCode().value());
   }

@@ -2,6 +2,7 @@ package com.texastoc.module.game;
 
 import static org.junit.Assert.assertEquals;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.module.game.model.Game;
@@ -32,7 +33,7 @@ public class GameCalculationsIT extends BaseGameIT {
    * A game with one (empty) player
    */
   @Test
-  public void gameWithOneEmptyPlayer() throws Exception {
+  public void gameWithOneEmptyPlayer() {
     // Arrange
     aGameIsCreated();
     // Act
@@ -47,7 +48,7 @@ public class GameCalculationsIT extends BaseGameIT {
    * participant, quarterly toc participant and is in first place.
    */
   @Test
-  public void gameWithOnePlayer() throws Exception {
+  public void gameWithOnePlayer() {
     aGameIsCreated();
     addGamePlayers(GAME_PLAYERS.get(1));
     getCalculatedGame();
@@ -58,7 +59,7 @@ public class GameCalculationsIT extends BaseGameIT {
    * A game with two players and then update a player
    */
   @Test
-  public void gameWithTwoPlayers() throws Exception {
+  public void gameWithTwoPlayers() {
     aGameIsCreated();
     addGamePlayers(GAME_PLAYERS.get(2));
     getCalculatedGame();
@@ -72,7 +73,7 @@ public class GameCalculationsIT extends BaseGameIT {
    * A game with 7 players and then add a player will result in another payout
    */
   @Test
-  public void gameWithSevenPlayers() throws Exception {
+  public void gameWithSevenPlayers() {
     aGameIsCreated();
     addGamePlayers(GAME_PLAYERS.get(4));
     getCalculatedGame();
@@ -86,7 +87,7 @@ public class GameCalculationsIT extends BaseGameIT {
    * A game with 8 players and delete a player will result in one less payout
    */
   @Test
-  public void gameWithEightPlayers() throws Exception {
+  public void gameWithEightPlayers() {
     aGameIsCreated();
     addGamePlayers(GAME_PLAYERS.get(6));
     getCalculatedGame();
@@ -101,24 +102,29 @@ public class GameCalculationsIT extends BaseGameIT {
    * participants, 3 are quarterly toc participants and top 2 chopped the pot
    */
   @Test
-  public void gameWithTenPlayers() throws Exception {
+  public void gameWithTenPlayers() {
     aGameIsCreated();
     addGamePlayers(GAME_PLAYERS.get(7));
     getCalculatedGame();
     calcualatedGame(GAME_CALCULATIONS.get(8));
   }
 
-  private void aGameIsCreated() throws Exception {
+  private void aGameIsCreated() {
     super.aSeasonExists();
     super.theGameStartsNow();
     super.theGameIsCreated();
     gameId = gameCreated.getId();
   }
 
-  private void addGamePlayers(String json) throws Exception {
-    List<GamePlayer> gamePlayers = OBJECT_MAPPER.readValue(
-        json, new TypeReference<List<GamePlayer>>() {
-        });
+  private void addGamePlayers(String json) {
+    List<GamePlayer> gamePlayers = null;
+    try {
+      gamePlayers = OBJECT_MAPPER.readValue(
+          json, new TypeReference<List<GamePlayer>>() {
+          });
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     getGame(gameId);
     String token = login(USER_EMAIL, USER_PASSWORD);
     for (GamePlayer gp : gamePlayers) {
@@ -137,18 +143,28 @@ public class GameCalculationsIT extends BaseGameIT {
     }
   }
 
-  private void addingPlayer(String json) throws Exception {
+  private void addingPlayer(String json) {
     getGame(gameId);
     String token = login(USER_EMAIL, USER_PASSWORD);
-    GamePlayer gamePlayer = OBJECT_MAPPER.readValue(json, GamePlayer.class);
+    GamePlayer gamePlayer = null;
+    try {
+      gamePlayer = OBJECT_MAPPER.readValue(json, GamePlayer.class);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     gamePlayer.setGameId(gameId);
     gamePlayer.setFirstName("first");
     gamePlayer.setLastName("last");
     addFirstTimePlayerToGame(gamePlayer, token);
   }
 
-  private void updatePlayer(String json) throws Exception {
-    GamePlayer updateGamePlayerInfo = OBJECT_MAPPER.readValue(json, GamePlayer.class);
+  private void updatePlayer(String json) {
+    GamePlayer updateGamePlayerInfo = null;
+    try {
+      updateGamePlayerInfo = OBJECT_MAPPER.readValue(json, GamePlayer.class);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     getGame(gameId);
     String token = login(USER_EMAIL, USER_PASSWORD);
     for (GamePlayer gp : gameRetrieved.getPlayers()) {
@@ -166,23 +182,28 @@ public class GameCalculationsIT extends BaseGameIT {
     }
   }
 
-  private void deleteGamePlayer() throws Exception {
+  private void deleteGamePlayer() {
     getGame(gameId);
     String token = login(USER_EMAIL, USER_PASSWORD);
     GamePlayer gamePlayer = gameRetrieved.getPlayers().get(0);
     super.deletePlayerFromGame(gameRetrieved.getId(), gamePlayer.getId(), token);
   }
 
-  private void getCalculatedGame() throws Exception {
+  private void getCalculatedGame() {
     getGame(gameId);
   }
 
-  private void calcualatedGame(String json) throws Exception {
-    Game game = OBJECT_MAPPER.readValue(json, Game.class);
+  private void calcualatedGame(String json) {
+    Game game = null;
+    try {
+      game = OBJECT_MAPPER.readValue(json, Game.class);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     assertGame(game, gameRetrieved);
   }
 
-  private void assertGame(Game expected, Game actual) throws Exception {
+  private void assertGame(Game expected, Game actual) {
     assertEquals(expected.getBuyInCollected(), actual.getBuyInCollected());
     assertEquals(expected.getRebuyAddOnCollected(), actual.getRebuyAddOnCollected());
     assertEquals(expected.getAnnualTocCollected(), actual.getAnnualTocCollected());

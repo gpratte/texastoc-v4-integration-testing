@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.texastoc.BaseIntegrationTest;
 import com.texastoc.module.player.model.Player;
 import com.texastoc.module.player.model.Role;
@@ -42,7 +41,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   @Test
-  public void createAndGet() throws Exception {
+  public void createAndGet() {
     // Arrange and Act
     newPlayer();
     // Assert
@@ -51,7 +50,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   @Test
-  public void createMultipleAndGet() throws Exception {
+  public void createMultipleAndGet() {
     newPlayer();
     anotherNewPlayer();
     getPlayers();
@@ -59,7 +58,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   @Test
-  public void updatePlayerAsAdmin() throws Exception {
+  public void updatePlayerAsAdmin() {
     // An admin updates another player
     newPlayer();
     updatePlayer("admin");
@@ -68,7 +67,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   @Test
-  public void updateAnotherPlayerAsNonAdmin() throws Exception {
+  public void updateAnotherPlayerAsNonAdmin() {
     //  A non-admin attempts to update another player
     newPlayer();
     updatePlayer("non-admin");
@@ -76,7 +75,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   @Test
-  public void deletePlayerAsAdmin() throws Exception {
+  public void deletePlayerAsAdmin() {
     //  An admin deletes a player
     newPlayer();
     playerDeleted("admin");
@@ -85,7 +84,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   @Test
-  public void deletePlayerAsNonAdmin() throws Exception {
+  public void deletePlayerAsNonAdmin() {
     //  Delete player as non-admin
     newPlayer();
     playerDeleted("non-admin");
@@ -93,7 +92,7 @@ public class PlayerIT extends BaseIntegrationTest {
     checkForbidden();
   }
 
-  public void addRoleAsAdmin() throws Exception {
+  public void addRoleAsAdmin() {
     //  Add role as admin
     newPlayer();
     addRole("admin");
@@ -101,7 +100,7 @@ public class PlayerIT extends BaseIntegrationTest {
     playerHasTwoRoles();
   }
 
-  public void addRoleAsNonAdmin() throws Exception {
+  public void addRoleAsNonAdmin() {
     //  Add role as non-admin
     newPlayer();
     addRole("non-admin");
@@ -109,7 +108,7 @@ public class PlayerIT extends BaseIntegrationTest {
     checkForbidden();
   }
 
-  public void removeRoleAsAdmin() throws Exception {
+  public void removeRoleAsAdmin() {
     //  An admin adds and then removes a role
     newPlayer();
     addRole("admin");
@@ -119,7 +118,7 @@ public class PlayerIT extends BaseIntegrationTest {
     playerHasOneRole();
   }
 
-  public void removeRoleAsNonAdmin() throws Exception {
+  public void removeRoleAsNonAdmin() {
     // A non-admin attempts to remove a role
     newPlayer();
     addRole("admin");
@@ -129,7 +128,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // Create a new player
-  private void newPlayer() throws Exception {
+  private void newPlayer() {
     playerToCreate = Player.builder()
         .firstName("John")
         .lastName("Luther")
@@ -142,7 +141,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // Another new player
-  private void anotherNewPlayer() throws Exception {
+  private void anotherNewPlayer() {
     anotherPlayerToCreate = Player.builder()
         .firstName("Jane")
         .lastName("Rain")
@@ -151,7 +150,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // The (admin|non-admin) updates the player
-  private void updatePlayer(String who) throws Exception {
+  private void updatePlayer(String who) {
     updatePlayer = Player.builder()
         .id(playerCreated.getId())
         .firstName("updated_" + playerCreated.getFirstName())
@@ -171,7 +170,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // The (admin|non-admin) deletes the player
-  private void playerDeleted(String who) throws Exception {
+  private void playerDeleted(String who) {
     String token = getToken(who);
     try {
       deletePlayer(playerCreated.getId(), token);
@@ -181,7 +180,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // The player is retrieved
-  private void getPlayer() throws Exception {
+  private void getPlayer() {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     try {
       playerRetrieved = getPlayer(playerCreated.getId(), token);
@@ -191,7 +190,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // The (admin|non-admin) adds a role
-  private void addRole(String who) throws Exception {
+  private void addRole(String who) {
     String token = getToken(who);
     try {
       addRole(playerCreated.getId(), Role.builder()
@@ -204,7 +203,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // The (admin|non-admin) removes a role
-  private void removeRole(String who) throws Exception {
+  private void removeRole(String who) {
     String token = getToken(who);
     Role role = StreamSupport.stream(playerRetrieved.getRoles().spliterator(), false)
         .filter(r -> r.getType() == Role.Type.ADMIN)
@@ -218,23 +217,23 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // The players are retrieved
-  private void getPlayers() throws Exception {
+  private void getPlayers() {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     playersRetrieved = getPlayers(token);
   }
 
   // The player matches
-  private void thePlayerMatches() throws Exception {
+  private void thePlayerMatches() {
     playerMatches(playerToCreate, playerRetrieved);
   }
 
   // The updated player matches
-  private void theUpdatePlayerMatches() throws Exception {
+  private void theUpdatePlayerMatches() {
     playerMatches(updatePlayer, playerRetrieved);
   }
 
   // The player has one role
-  private void playerHasOneRole() throws Exception {
+  private void playerHasOneRole() {
     List<Role> roles = StreamSupport.stream(playerRetrieved.getRoles().spliterator(), false)
         .collect(Collectors.toList());
     assertEquals("should only have one role", 1, roles.size());
@@ -242,7 +241,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // The player has two roles
-  private void playerHasTwoRoles() throws Exception {
+  private void playerHasTwoRoles() {
     List<Role> roles = StreamSupport.stream(playerRetrieved.getRoles().spliterator(), false)
         .collect(Collectors.toList());
     assertEquals("should only have two roles", 2, roles.size());
@@ -252,7 +251,7 @@ public class PlayerIT extends BaseIntegrationTest {
 
 
   // A forbidden error happens
-  private void checkForbidden() throws Exception {
+  private void checkForbidden() {
     assertTrue("exception should be HttpClientErrorException",
         (exception instanceof HttpClientErrorException));
     HttpClientErrorException e = (HttpClientErrorException) exception;
@@ -260,14 +259,14 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // A not found error happens
-  private void checkNotFound() throws Exception {
+  private void checkNotFound() {
     assertTrue("exception should be HttpClientErrorException",
         (exception instanceof HttpClientErrorException));
     HttpClientErrorException e = (HttpClientErrorException) exception;
     assertEquals("status should be not found", HttpStatus.NOT_FOUND, e.getStatusCode());
   }
 
-  private void playerMatches(Player request, Player response) throws Exception {
+  private void playerMatches(Player request, Player response) {
     assertEquals("first name should match", request.getFirstName(), response.getFirstName());
     assertEquals("last name should match", request.getLastName(), response.getLastName());
     assertEquals("phone should match", request.getPhone(), response.getPhone());
@@ -282,7 +281,7 @@ public class PlayerIT extends BaseIntegrationTest {
   }
 
   // The players match
-  private void thePlayersMatch() throws Exception {
+  private void thePlayersMatch() {
     boolean firstMatch = false;
     for (Player player : playersRetrieved) {
       if (player.getId() == playerCreated.getId()) {
@@ -307,7 +306,7 @@ public class PlayerIT extends BaseIntegrationTest {
     assertTrue("should have returned the second player created", secondMatch);
   }
 
-  private String getToken(String who) throws JsonProcessingException {
+  private String getToken(String who) {
     if ("admin".equals(who)) {
       return login(ADMIN_EMAIL, ADMIN_PASSWORD);
     } else {

@@ -32,7 +32,7 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
   }
 
   @Test
-  public void calculateASeasonWithOneGame() throws Exception {
+  public void calculateASeasonWithOneGame() {
     // Arrange
     seasonExists();
     gameHasPlayers(GAME_PLAYERS.get(0));
@@ -44,7 +44,7 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
   }
 
   @Test
-  public void calculateASeasonWithTwoGames() throws Exception {
+  public void calculateASeasonWithTwoGames() {
     // Two games with enough players to generate estimated payouts
     seasonExists();
     gameHasPlayers(GAME_PLAYERS.get(1));
@@ -55,11 +55,11 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
     checkSeasonCalculations(SEASON_CALCULATIONS.get(1));
   }
 
-  private void seasonExists() throws Exception {
+  private void seasonExists() {
     aSeasonExists();
   }
 
-  private void gameHasPlayers(String json) throws Exception {
+  private void gameHasPlayers(String json) {
     // Create a game
     Game gameToCreate = Game.builder()
         .date(LocalDate.now())
@@ -70,9 +70,14 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
     String token = login(USER_EMAIL, USER_PASSWORD);
     gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
 
-    List<GamePlayer> gamePlayers = OBJECT_MAPPER.readValue(
-        json, new TypeReference<List<GamePlayer>>() {
-        });
+    List<GamePlayer> gamePlayers = null;
+    try {
+      gamePlayers = OBJECT_MAPPER.readValue(
+          json, new TypeReference<List<GamePlayer>>() {
+          });
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     for (GamePlayer gp : gamePlayers) {
       GamePlayer gamePlayer = GamePlayer.builder()
           .gameId(gameCreated.getId())
@@ -89,7 +94,7 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
     }
   }
 
-  private void gameInProgressAddExistingPlayer(String json) throws Exception {
+  private void gameInProgressAddExistingPlayer(String json) {
     Game gameToCreate = Game.builder()
         .date(LocalDate.now())
         .hostId(1)
@@ -101,9 +106,14 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
 
     List<SeasonPlayer> seasonPlayers = super.getSeason(seasonCreated.getId(), token).getPlayers();
 
-    List<GamePlayer> gamePlayers = OBJECT_MAPPER.readValue(
-        json, new TypeReference<List<GamePlayer>>() {
-        });
+    List<GamePlayer> gamePlayers = null;
+    try {
+      gamePlayers = OBJECT_MAPPER.readValue(
+          json, new TypeReference<List<GamePlayer>>() {
+          });
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     for (GamePlayer gp : gamePlayers) {
       SeasonPlayer seasonPlayer = seasonPlayers.stream()
           .filter(sp -> sp.getName().startsWith(gp.getFirstName()))
@@ -122,17 +132,17 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
     }
   }
 
-  private void finalizedGame() throws JsonProcessingException {
+  private void finalizedGame() {
     String token = login(USER_EMAIL, USER_PASSWORD);
     super.finalizeGame(gameCreated.getId(), token);
   }
 
-  private void finalizeGame() throws Exception {
+  private void finalizeGame() {
     String token = login(USER_EMAIL, USER_PASSWORD);
     finalizeGame(gameCreated.getId(), token);
   }
 
-  private void getCalcuatedSeason(int numGames) throws Exception {
+  private void getCalcuatedSeason(int numGames) {
     final String token = login(USER_EMAIL, USER_PASSWORD);
     Awaitility.await()
         .atMost(15, TimeUnit.SECONDS)
@@ -143,8 +153,13 @@ public class SeasonCalculationsIT extends BaseSeasonIT {
         });
   }
 
-  private void checkSeasonCalculations(String json) throws Exception {
-    Season expectedSeason = OBJECT_MAPPER.readValue(json, Season.class);
+  private void checkSeasonCalculations(String json) {
+    Season expectedSeason = null;
+    try {
+      expectedSeason = OBJECT_MAPPER.readValue(json, Season.class);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
 
     assertEquals(expectedSeason.getBuyInCollected(), seasonRetrieved.getBuyInCollected());
     assertEquals(expectedSeason.getRebuyAddOnCollected(), seasonRetrieved.getRebuyAddOnCollected());

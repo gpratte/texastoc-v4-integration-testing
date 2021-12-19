@@ -18,7 +18,7 @@ public abstract class BaseSeasonIT extends BaseIntegrationTest {
     gameCreated = null;
   }
 
-  protected void aSeasonExists() throws Exception {
+  protected void aSeasonExists() {
     // Arrange
     startYear = getSeasonStart().getYear();
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);

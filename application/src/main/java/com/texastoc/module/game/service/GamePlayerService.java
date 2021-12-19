@@ -138,7 +138,7 @@ public class GamePlayerService {
     if (!optionalGamePlayer.isPresent()) {
       throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
           .target("gamePlayer")
-          .message(gamePlayerId + " not found")
+          .message("with id '" + gamePlayerId + "' not found")
           .build());
     }
     GamePlayer gamePlayer = optionalGamePlayer.get();
@@ -159,7 +159,7 @@ public class GamePlayerService {
     if (!optionalGamePlayer.isPresent()) {
       throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
           .target("gamePlayer")
-          .message(gamePlayerId + " not found")
+          .message("with id '" + gamePlayerId + "' not found")
           .build());
     }
     GamePlayer gamePlayer = optionalGamePlayer.get();

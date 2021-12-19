@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.texastoc.BaseIntegrationTest;
+import com.texastoc.TestUtils;
+import com.texastoc.exception.BLException;
 import com.texastoc.module.player.model.Player;
 import com.texastoc.module.player.model.Role;
 import java.util.List;
@@ -80,7 +82,7 @@ public class PlayerIT extends BaseIntegrationTest {
     newPlayer();
     playerDeleted("admin");
     getPlayer();
-    checkNotFound();
+    checkPlayerNotFound(playerCreated.getId());
   }
 
   @Test
@@ -255,15 +257,25 @@ public class PlayerIT extends BaseIntegrationTest {
     assertTrue("exception should be HttpClientErrorException",
         (exception instanceof HttpClientErrorException));
     HttpClientErrorException e = (HttpClientErrorException) exception;
-    assertEquals("status should be forbidden", HttpStatus.FORBIDDEN, e.getStatusCode());
+    assertThat(e.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    BLException blException = TestUtils.convert(e);
+    assertThat(blException).isNotNull();
+    assertThat(blException.getCode()).isEqualTo("UNAUTHORIZED");
+    assertThat(blException.getMessage()).isEqualTo("Denied");
   }
 
   // A not found error happens
-  private void checkNotFound() {
+  private void checkPlayerNotFound(int id) {
     assertTrue("exception should be HttpClientErrorException",
         (exception instanceof HttpClientErrorException));
     HttpClientErrorException e = (HttpClientErrorException) exception;
-    assertEquals("status should be not found", HttpStatus.NOT_FOUND, e.getStatusCode());
+    assertThat(e.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    BLException blException = TestUtils.convert(e);
+    assertThat(blException).isNotNull();
+    assertThat(blException.getCode()).isEqualTo("INVALID REQUEST");
+    assertThat(blException.getMessage()).isEqualTo("Not found");
+    assertThat(blException.getDetails().getTarget()).isEqualTo("player");
+    assertThat(blException.getDetails().getMessage()).isEqualTo("with id '" + id + "' not found");
   }
 
   private void playerMatches(Player request, Player response) {

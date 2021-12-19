@@ -167,7 +167,7 @@ public class SeasonServiceTest implements TestConstants {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("season")
-              .message("1 not found")
+              .message("with id '1' not found")
               .build());
         });
   }
@@ -281,7 +281,7 @@ public class SeasonServiceTest implements TestConstants {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("season")
-              .message("1 not found")
+              .message("with id '1' not found")
               .build());
         });
   }
@@ -343,7 +343,7 @@ public class SeasonServiceTest implements TestConstants {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("season")
-              .message("1 not found")
+              .message("with id '1' not found")
               .build());
         });
   }

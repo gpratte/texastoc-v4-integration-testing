@@ -81,7 +81,7 @@ public class GameHelperTest {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("game")
-              .message("111 not found")
+              .message("with id '111' not found")
               .build());
         });
   }

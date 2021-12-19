@@ -522,7 +522,7 @@ public class GamePlayerServiceTest implements TestConstants {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("gamePlayer")
-              .message("11 not found")
+              .message("with id '11' not found")
               .build());
         });
   }
@@ -614,7 +614,7 @@ public class GamePlayerServiceTest implements TestConstants {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("gamePlayer")
-              .message("11 not found")
+              .message("with id '11' not found")
               .build());
         });
   }

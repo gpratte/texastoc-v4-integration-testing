@@ -125,7 +125,7 @@ public class SeasonService {
     if (!optionalSeason.isPresent()) {
       throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
           .target("season")
-          .message(id + " not found")
+          .message("with id '" + id + "' not found")
           .build());
     }
     return optionalSeason.get();

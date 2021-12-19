@@ -6,8 +6,8 @@ public enum BLType {
 
   NOT_FOUND(HttpStatus.NOT_FOUND, "INVALID REQUEST", "Not found"),
   CONSTRAINT(HttpStatus.BAD_REQUEST, "INVALID DATA", "Invalid data"),
-  CONFLICT(HttpStatus.CONFLICT, "INVALID REQUEST", "cannot perform operation"),
-  DENIED(HttpStatus.FORBIDDEN, "UNAUTHORIZED", "denied"),
+  CONFLICT(HttpStatus.CONFLICT, "INVALID REQUEST", "Cannot perform operation"),
+  DENIED(HttpStatus.FORBIDDEN, "UNAUTHORIZED", "Denied"),
   UNKNOWN(HttpStatus.INTERNAL_SERVER_ERROR, "SERVER ERROR", "Internal server error");
 
   private final HttpStatus status;

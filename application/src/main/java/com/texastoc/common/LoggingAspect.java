@@ -82,6 +82,7 @@ public class LoggingAspect {
     } catch (Exception e) {
       if (e instanceof BLException) {
         BLException blException = (BLException) e;
+        blException.setCorrelationId(correlationId);
         request.setStatus(blException.getStatus().value());
         request.setBlException(blException);
       } else {

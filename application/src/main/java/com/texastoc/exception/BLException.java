@@ -1,5 +1,6 @@
 package com.texastoc.exception;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,21 +14,26 @@ import org.springframework.http.HttpStatus;
 @Setter
 public class BLException extends RuntimeException {
 
-  private String code;
-  private HttpStatus status;
-  private ErrorDetails details;
   private UUID correlationId;
+  private String code;
+  private String message;
+  private ErrorDetails details;
+  @JsonIgnore
+  private HttpStatus status;
+
+  public BLException() {
+  }
 
   public BLException(BLType blType) {
-    super(blType.getMessage());
+    message = blType.getMessage();
     code = blType.getCode();
     status = blType.getStatus();
   }
 
   public BLException(BLType blType, ErrorDetails details) {
-    super(blType.getMessage());
-    this.code = blType.getCode();
-    this.status = blType.getStatus();
+    message = blType.getMessage();
+    code = blType.getCode();
+    status = blType.getStatus();
     this.details = details;
   }
 
@@ -35,6 +41,7 @@ public class BLException extends RuntimeException {
   public String toString() {
     return "{" +
         "code='" + code + '\'' +
+        ", message=" + message +
         ", status=" + status +
         ", details=" + details +
         ", correlationId=" + correlationId +

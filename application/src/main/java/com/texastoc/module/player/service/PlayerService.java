@@ -97,7 +97,7 @@ public class PlayerService implements PlayerModule {
     if (!optionalPlayer.isPresent()) {
       throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
           .target("player")
-          .message(id + " not found")
+          .message("with id '" + id + "' not found")
           .build());
     }
     Player player = optionalPlayer.get();
@@ -112,7 +112,7 @@ public class PlayerService implements PlayerModule {
     if (players.size() != 1) {
       throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
           .target("player")
-          .message("for email " + email + " not found")
+          .message("with email '" + email + "' not found")
           .build());
     }
     Player player = players.get(0);
@@ -204,7 +204,7 @@ public class PlayerService implements PlayerModule {
     if (!found) {
       throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
           .target("role")
-          .message(roleId + " not found")
+          .message("with id '" + roleId + "' not found")
           .build());
     }
 
@@ -244,7 +244,7 @@ public class PlayerService implements PlayerModule {
       if (players.size() != 1) {
         throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
             .target("player")
-            .message("for email " + email + " not found")
+            .message("with email '" + email + "' not found")
             .build());
       }
       Player loggedInPlayer = players.get(0);

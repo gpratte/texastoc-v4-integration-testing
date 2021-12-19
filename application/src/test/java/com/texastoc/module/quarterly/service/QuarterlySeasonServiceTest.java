@@ -107,7 +107,7 @@ public class QuarterlySeasonServiceTest implements TestConstants {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("quarterlySeason")
-              .message("for date " + now + " not found")
+              .message("with date '" + now + "' not found")
               .build());
         });
 

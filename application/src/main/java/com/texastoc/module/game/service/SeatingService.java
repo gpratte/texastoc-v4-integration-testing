@@ -41,7 +41,7 @@ public class SeatingService {
     if (!optionalGame.isPresent()) {
       throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
           .target("game")
-          .message(seating.getGameId() + " not found")
+          .message("with id '" + seating.getGameId() + "' not found")
           .build());
     }
     Game game = optionalGame.get();

@@ -248,7 +248,7 @@ public class PlayerServiceTest {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("player")
-              .message("123 not found")
+              .message("with id '123' not found")
               .build());
         });
   }
@@ -289,7 +289,7 @@ public class PlayerServiceTest {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("player")
-              .message("123 not found")
+              .message("with id '123' not found")
               .build());
         });
 
@@ -301,7 +301,7 @@ public class PlayerServiceTest {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("player")
-              .message("for email abc not found")
+              .message("with email 'abc' not found")
               .build());
         });
   }
@@ -357,7 +357,7 @@ public class PlayerServiceTest {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("player")
-              .message("123 not found")
+              .message("with id '123' not found")
               .build());
         });
     assertThatThrownBy(() -> {
@@ -386,7 +386,7 @@ public class PlayerServiceTest {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("player")
-              .message("123 not found")
+              .message("with id '123' not found")
               .build());
         });
     assertThatThrownBy(() -> {
@@ -480,7 +480,7 @@ public class PlayerServiceTest {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("player")
-              .message("123 not found")
+              .message("with id '123' not found")
               .build());
         });
     assertThatThrownBy(() -> {
@@ -661,7 +661,7 @@ public class PlayerServiceTest {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("player")
-              .message("123 not found")
+              .message("with id '123' not found")
               .build());
         });
     assertThatThrownBy(() -> {
@@ -671,7 +671,7 @@ public class PlayerServiceTest {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("role")
-              .message("2 not found")
+              .message("with id '2' not found")
               .build());
         });
   }
@@ -709,7 +709,7 @@ public class PlayerServiceTest {
           BLException blException = (BLException) ex;
           TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
               .target("player")
-              .message("123 not found")
+              .message("with id '123' not found")
               .build());
         });
     assertThatThrownBy(() -> {

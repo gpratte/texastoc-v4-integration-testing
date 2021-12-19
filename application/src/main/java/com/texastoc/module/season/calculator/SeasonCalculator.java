@@ -101,7 +101,7 @@ public class SeasonCalculator {
     if (seasonPayoutSettingss.size() < 1) {
       throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
           .target("seasonPayoutSettings")
-          .message("for season" + season.getId() + " not found")
+          .message("with season id '" + season.getId() + "' not found")
           .build());
     }
     SeasonPayoutSettings seasonPayoutSettings = seasonPayoutSettingss.get(0);

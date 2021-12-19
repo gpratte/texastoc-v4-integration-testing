@@ -116,7 +116,7 @@ public class QuarterlySeasonService implements QuarterlySeasonModule {
     }
     throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
         .target("quarterlySeason")
-        .message("for date " + date + " not found")
+        .message("with date '" + date + "' not found")
         .build());
   }
 

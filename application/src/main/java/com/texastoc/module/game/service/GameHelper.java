@@ -58,7 +58,7 @@ public class GameHelper {
     if (!optionalGame.isPresent()) {
       throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
           .target("game")
-          .message(id + " not found")
+          .message("with id '" + id + "' not found")
           .build());
     }
     return optionalGame.get();

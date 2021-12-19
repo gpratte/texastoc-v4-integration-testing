@@ -152,7 +152,7 @@ public class SeatingService {
       if (!optional.isPresent()) {
         throw new BLException(BLType.CONSTRAINT, ErrorDetails.builder()
             .target("seating.tableRequests.tableNum")
-            .message(tableRequestedNum + " is not valid")
+            .message("for '" + tableRequestedNum + "' is not valid")
             .build());
       }
 

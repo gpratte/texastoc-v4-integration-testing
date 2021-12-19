@@ -6,13 +6,15 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.texastoc.TestUtils;
+import com.texastoc.exception.BLException;
 import com.texastoc.module.game.model.Game;
 import java.time.LocalDate;
-import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
 public class GameIT extends BaseGameIT {
@@ -98,13 +100,13 @@ public class GameIT extends BaseGameIT {
   // TODO need to use feature flag to toggle this
   @Ignore
   @Test
-  public void cannotCreateGame() {
+  public void cannotCreateAnotherGame() {
     // Try to create a game when there is a game in progress
     aSeasonExists();
     theGameStartsNow();
     theGameIsCreated();
     anotherGameIsCreated();
-    theNewGameIsNotAllowed();
+    anotherGameIsNotAllowed();
   }
 
   private void theGameSuppliesNeedToBeMoved() {
@@ -201,13 +203,18 @@ public class GameIT extends BaseGameIT {
     assertFalse("game should be unfinalized", gameRetrieved.isFinalized());
   }
 
-  private void the_current_game_has_no_players() {
-    gameHasNoPlayersOrPayouts(gameRetrieved);
-  }
-
-  private void theNewGameIsNotAllowed() {
-    assertNotNull(exception);
-    assertThat(exception.getStatusCode().value()).isEqualTo(HttpStatus.SC_CONFLICT);
+  private void anotherGameIsNotAllowed() {
+    assertTrue("exception should be HttpClientErrorException",
+        (exception instanceof HttpClientErrorException));
+    HttpClientErrorException e = (HttpClientErrorException) exception;
+    assertThat(e.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+    BLException blException = TestUtils.convert(e);
+    assertThat(blException).isNotNull();
+    assertThat(blException.getCode()).isEqualTo("INVALID REQUEST");
+    assertThat(blException.getMessage()).isEqualTo("Cannot perform operation");
+    // TODO flesh out last two asserts
+    //assertThat(blException.getDetails().getTarget()).isEqualTo("game");
+    //assertThat(blException.getDetails().getMessage()).isEqualTo("yada yada");
   }
 
   private void gameHasNoPlayersOrPayouts(Game game) {

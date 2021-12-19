@@ -1,10 +1,13 @@
 package com.texastoc.module.game;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.texastoc.BaseIntegrationTest;
+import com.texastoc.TestUtils;
+import com.texastoc.exception.BLException;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.model.GameTable;
@@ -21,6 +24,7 @@ import java.util.Random;
 import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
 public class GameSeatingIT extends BaseIntegrationTest {
@@ -97,7 +101,7 @@ public class GameSeatingIT extends BaseIntegrationTest {
   public void twoAtOneOneRequests() {
     aGameHasGamePlayers(2);
     seatingIsDoneWithTableAndSeatsAndRequests(1, 10, 1, 3);
-    invalidSeating();
+    invalidSeating(3);
   }
 
   private void aGameHasGamePlayers(int numPlayers) {
@@ -220,8 +224,17 @@ public class GameSeatingIT extends BaseIntegrationTest {
     }
   }
 
-  private void invalidSeating() {
-    assertNotNull("exception should have been thrown", exception);
-    assertEquals("status should be 400", 400, exception.getStatusCode().value());
+  private void invalidSeating(int invalidTableNum) {
+    assertTrue("exception should be HttpClientErrorException",
+        (exception instanceof HttpClientErrorException));
+    HttpClientErrorException e = (HttpClientErrorException) exception;
+    assertThat(e.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    BLException blException = TestUtils.convert(e);
+    assertThat(blException).isNotNull();
+    assertThat(blException.getCode()).isEqualTo("INVALID DATA");
+    assertThat(blException.getMessage()).isEqualTo("Invalid data");
+    assertThat(blException.getDetails().getTarget()).isEqualTo("seating.tableRequests.tableNum");
+    assertThat(blException.getDetails().getMessage()).isEqualTo(
+        "for '" + invalidTableNum + "' is not valid");
   }
 }

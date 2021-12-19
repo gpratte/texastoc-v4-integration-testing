@@ -68,7 +68,7 @@ public class LoggingAspect {
       }
     }
 
-    log.info("request: {}", request);
+    log.info("request: {}", request.requestToString());
 
     try {
       Object result = pjp.proceed(args);
@@ -77,7 +77,7 @@ public class LoggingAspect {
       if (responseStatus != null) {
         request.setStatus(responseStatus.value().value());
       }
-      log.info("response: {}", request);
+      log.info("response: {}", request.responseToString());
       return result;
     } catch (Exception e) {
       if (e instanceof BLException) {
@@ -90,9 +90,9 @@ public class LoggingAspect {
       }
 
       if (request.getStatus() == 500) {
-        log.error("response: {}", request, e);
+        log.error("response: {}", request.errorResponseToString(), e);
       } else {
-        log.info("response: {}", request);
+        log.info("response: {}", request.errorResponseToString());
       }
       throw e;
     } finally {
@@ -111,8 +111,26 @@ public class LoggingAspect {
     private Integer status;
     private BLException blException;
 
-    @Override
-    public String toString() {
+    public String requestToString() {
+      return "{" +
+          "correlationId=" + correlationId +
+          ", action='" + action + '\'' +
+          ", uri='" + uri + '\'' +
+          ", contentType='" + contentType + '\'' +
+          '}';
+    }
+
+    public String responseToString() {
+      return "{" +
+          "correlationId=" + correlationId +
+          ", action='" + action + '\'' +
+          ", uri='" + uri + '\'' +
+          ", contentType='" + contentType + '\'' +
+          ", status=" + status +
+          '}';
+    }
+
+    public String errorResponseToString() {
       return "{" +
           "correlationId=" + correlationId +
           ", action='" + action + '\'' +
@@ -122,5 +140,6 @@ public class LoggingAspect {
           ", blException=" + blException +
           '}';
     }
+
   }
 }

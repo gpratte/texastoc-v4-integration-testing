@@ -8,12 +8,15 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
   private final AuthenticationManager authenticationManager;
@@ -30,9 +33,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   @Override
   public Authentication attemptAuthentication(HttpServletRequest req,
       HttpServletResponse res) throws AuthenticationException {
+    log.info(
+        "request: action={} uri={} contentType={}",
+        req.getMethod(),
+        req.getRequestURI(),
+        req.getContentType());
+
     try {
-      Player player = new ObjectMapper()
-          .readValue(req.getInputStream(), Player.class);
+      Player player = new ObjectMapper().readValue(req.getInputStream(), Player.class);
 
       return authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
@@ -40,8 +48,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
               player.getPassword(),
               new ArrayList<>())
       );
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    } catch (AuthenticationException e) {
+      log.info("response: action={} uri={} status={}",
+          req.getMethod(),
+          req.getRequestURI(),
+          401);
+      throw e;
+    } catch (Exception e) {
+      log.info("response: action={} uri={} status={}",
+          req.getMethod(),
+          req.getRequestURI(),
+          401);
+      throw new BadCredentialsException("bad credentials");
     }
   }
 
@@ -50,6 +68,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       HttpServletResponse res,
       FilterChain chain,
       Authentication auth) throws IOException, ServletException {
+    log.info("response: action={} uri={} status={}",
+        req.getMethod(),
+        req.getRequestURI(),
+        res.getStatus());
     final String token = JwtTokenProvider.generateToken(auth);
 
     // return token in body as json

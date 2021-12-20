@@ -1,5 +1,7 @@
 package com.texastoc.common;
 
+import static com.texastoc.common.LoggingFilter.CORRELATION_ID;
+
 import com.texastoc.exception.BLException;
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -14,11 +16,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * TODO move to an Api gateway.
- * <p>Logs in request/responses of the controller endpoints</p>
+ * Logs module requests/responses
  */
 @Aspect
 @Order(1)
@@ -28,54 +28,22 @@ public class LoggingAspect {
 
   @Around("bean(*Controller)")
   public Object aroundControllerAdvice(ProceedingJoinPoint pjp) throws Throwable {
-    UUID correlationId = UUID.randomUUID();
-    MDC.put("correlationId", correlationId.toString());
-
-    ApiRequest request = new ApiRequest();
-    request.setCorrelationId(correlationId);
 
     Object[] args = pjp.getArgs();
     if (args.length > 0) {
-      for (int i = 0; i < args.length; i++) {
-        if (args[i] instanceof HttpServletRequest) {
-          HttpServletRequest httpServletRequest = (HttpServletRequest) args[i];
-          request.setUri(httpServletRequest.getRequestURI());
-          request.setContentType(httpServletRequest.getContentType());
-          request.setAction(httpServletRequest.getMethod());
+      for (Object arg : args) {
+        if (arg instanceof HttpServletRequest) {
+          HttpServletRequest request = (HttpServletRequest) arg;
+          String correlationId = request.getHeader(CORRELATION_ID);
+          if (correlationId != null) {
+            MDC.put("correlationId", correlationId);
+          }
           break;
         }
       }
     }
-
-    log.info("request: {}", request.requestToString());
-
     try {
-      Object result = pjp.proceed(args);
-
-      MethodSignature signature = (MethodSignature) pjp.getSignature();
-      Method method = signature.getMethod();
-      ResponseStatus responseStatus = method.getAnnotation(ResponseStatus.class);
-      if (responseStatus != null) {
-        request.setStatus(responseStatus.value().value());
-      }
-      log.info("response: {}", request.responseToString());
-      return result;
-    } catch (Exception e) {
-      if (e instanceof BLException) {
-        BLException blException = (BLException) e;
-        blException.setCorrelationId(correlationId);
-        request.setStatus(blException.getStatus().value());
-        request.setBlException(blException);
-      } else {
-        request.setStatus(500);
-      }
-
-      if (request.getStatus() == 500) {
-        log.error("response: {}", request.errorResponseToString(), e);
-      } else {
-        log.info("response: {}", request.errorResponseToString());
-      }
-      throw e;
+      return pjp.proceed(args);
     } finally {
       MDC.clear();
     }
@@ -113,48 +81,6 @@ public class LoggingAspect {
         log.info("response: {}", request.errorResponseToString());
       }
       throw e;
-    }
-  }
-
-  @Getter
-  @Setter
-  static class ApiRequest {
-
-    private UUID correlationId;
-    private String action;
-    private String uri;
-    private String contentType;
-    private Integer status;
-    private BLException blException;
-
-    public String requestToString() {
-      return "{" +
-          "correlationId=" + correlationId +
-          ", action='" + action + '\'' +
-          ", uri='" + uri + '\'' +
-          ", contentType='" + contentType + '\'' +
-          '}';
-    }
-
-    public String responseToString() {
-      return "{" +
-          "correlationId=" + correlationId +
-          ", action='" + action + '\'' +
-          ", uri='" + uri + '\'' +
-          ", contentType='" + contentType + '\'' +
-          ", status=" + status +
-          '}';
-    }
-
-    public String errorResponseToString() {
-      return "{" +
-          "correlationId=" + correlationId +
-          ", action='" + action + '\'' +
-          ", uri='" + uri + '\'' +
-          ", contentType='" + contentType + '\'' +
-          ", status=" + status +
-          ", blException=" + blException +
-          '}';
     }
   }
 

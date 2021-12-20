@@ -1,11 +1,5 @@
 
 2021 season:
-Log request/response
-  move API logging into a servlet filter?
-  √ correlation Id
-  √ log API entry and module entry
-  log around login
-  redact fields that are marked
 Player PII
   Admin can see all player info and does a put to update
   Non-admin can only see his info and others are masked and does a put to update his own
@@ -20,6 +14,10 @@ Composite primary key for game
 UUID for keys (no longer auto increment)
 
 ====== DONE =======
+Log request/response
+  correlation Id
+  log API entry and module entry
+
 NGINX
   frontend file server
   reverse proxy backend

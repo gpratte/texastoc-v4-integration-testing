@@ -1,8 +1,6 @@
 package com.texastoc.common;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.exception.BLException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
@@ -16,45 +14,25 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * TODO move to an Api gateway.
+ * <p>Logs in request/responses of the controller endpoints</p>
+ */
 @Aspect
 @Order(1)
 @Slf4j
 @Component
-/**
- * TODO move to an ApiGateway.
- * <p>Logs in request/responses of the controller endpoints</p>
- */
 public class LoggingAspect {
 
-  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
   @Around("bean(*Controller)")
-  public Object aroundAdvice(ProceedingJoinPoint pjp) throws Throwable {
+  public Object aroundControllerAdvice(ProceedingJoinPoint pjp) throws Throwable {
     UUID correlationId = UUID.randomUUID();
     MDC.put("correlationId", correlationId.toString());
 
     ApiRequest request = new ApiRequest();
     request.setCorrelationId(correlationId);
-
-    MethodSignature signature = (MethodSignature) pjp.getSignature();
-    Method method = signature.getMethod();
-    for (Annotation annotation : method.getDeclaredAnnotations()) {
-      if (annotation.annotationType() == GetMapping.class) {
-        request.setAction("GET");
-      } else if (annotation.annotationType() == PostMapping.class) {
-        request.setAction("POST");
-      } else if (annotation.annotationType() == PutMapping.class) {
-        request.setAction("PUT");
-      } else if (annotation.annotationType() == DeleteMapping.class) {
-        request.setAction("DELETE");
-      }
-    }
 
     Object[] args = pjp.getArgs();
     if (args.length > 0) {
@@ -63,6 +41,7 @@ public class LoggingAspect {
           HttpServletRequest httpServletRequest = (HttpServletRequest) args[i];
           request.setUri(httpServletRequest.getRequestURI());
           request.setContentType(httpServletRequest.getContentType());
+          request.setAction(httpServletRequest.getMethod());
           break;
         }
       }
@@ -73,6 +52,8 @@ public class LoggingAspect {
     try {
       Object result = pjp.proceed(args);
 
+      MethodSignature signature = (MethodSignature) pjp.getSignature();
+      Method method = signature.getMethod();
       ResponseStatus responseStatus = method.getAnnotation(ResponseStatus.class);
       if (responseStatus != null) {
         request.setStatus(responseStatus.value().value());
@@ -97,6 +78,41 @@ public class LoggingAspect {
       throw e;
     } finally {
       MDC.clear();
+    }
+  }
+
+  @Around("bean(*ModuleImpl)")
+  public Object aroundModuleAdvice(ProceedingJoinPoint pjp) throws Throwable {
+    MethodSignature signature = (MethodSignature) pjp.getSignature();
+    Method method = signature.getMethod();
+    Object[] args = pjp.getArgs();
+
+    MethodRequest request = new MethodRequest();
+    UUID correlationId =
+        MDC.get("correlationId") == null ? null : UUID.fromString(MDC.get("correlationId"));
+    request.setCorrelationId(correlationId);
+    request.setName(method.getDeclaringClass().getName() + "." + method.getName());
+
+    log.info("request: {}", request.requestToString());
+
+    try {
+      Object result = pjp.proceed(args);
+      log.info("response: {}", request.responseToString());
+      return result;
+    } catch (Exception e) {
+      request.setException(e);
+      int status = 500;
+      if (e instanceof BLException) {
+        BLException blException = (BLException) e;
+        status = blException.getStatus().value();
+      }
+
+      if (status == 500) {
+        log.error("response: {}", request.errorResponseToString(), e);
+      } else {
+        log.info("response: {}", request.errorResponseToString());
+      }
+      throw e;
     }
   }
 
@@ -140,6 +156,37 @@ public class LoggingAspect {
           ", blException=" + blException +
           '}';
     }
-
   }
+
+  @Getter
+  @Setter
+  static class MethodRequest {
+
+    private UUID correlationId;
+    private String name;
+    private Exception exception;
+
+    public String requestToString() {
+      return "{" +
+          "correlationId=" + correlationId +
+          ", name='" + name + '\'' +
+          '}';
+    }
+
+    public String responseToString() {
+      return "{" +
+          "correlationId=" + correlationId +
+          ", name='" + name + '\'' +
+          '}';
+    }
+
+    public String errorResponseToString() {
+      return "{" +
+          "correlationId=" + correlationId +
+          ", name='" + name + '\'' +
+          ", exception=" + exception +
+          '}';
+    }
+  }
+
 }

@@ -1,5 +1,7 @@
 
 2021 season:
+BLException error details (field is not valid)
+Log date/time
 Player PII
   Admin can see all player info and does a put to update
   Non-admin can only see his info and others are masked and does a put to update his own

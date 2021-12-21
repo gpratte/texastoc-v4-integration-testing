@@ -26,7 +26,7 @@ public class ChaosAspect {
     log.info("integrationTestingConfig={}", integrationTestingConfig);
   }
 
-  @Before("bean(*Controller)")
+  @Before("execution(public * com.texastoc.module.*.service..*(..))")
   public void chaos(JoinPoint joinPoint) {
     if (!integrationTestingConfig.isAllowChaos()) {
       return;

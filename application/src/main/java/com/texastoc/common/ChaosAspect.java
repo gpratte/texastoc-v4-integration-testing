@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -32,11 +33,13 @@ public class ChaosAspect {
       return;
     }
     if (RANDOM.nextInt(integrationTestingConfig.getChaosFrequency()) == 0) {
-      log.info("chaos throwing RuntimeException");
+      String correlationId = MDC.get("correlationId") == null ? null : MDC.get("correlationId");
+      log.info("correlationId=" + correlationId + ", chaos throwing RuntimeException");
       throw new RuntimeException("chaos");
     }
     if (RANDOM.nextInt(integrationTestingConfig.getChaosFrequency()) == 0) {
-      log.info("chaos throwing DENIED");
+      String correlationId = MDC.get("correlationId") == null ? null : MDC.get("correlationId");
+      log.info("correlationId=" + correlationId + ", chaos throwing DENIED");
       throw new BLException(BLType.DENIED);
     }
   }

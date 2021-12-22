@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 
 /**
+ * May be better suited to an API gateway than a servlet filter.
  * <p>Logs http requests/responses</p>
  */
 @Order(1)

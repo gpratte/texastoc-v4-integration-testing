@@ -15,16 +15,20 @@ public class IntegrationTestingConfig {
   private final boolean allowMultipleSeasons;
   private final boolean allowChaos;
   private final int chaosFrequency;
+  private final int repeatChaos;
 
   public IntegrationTestingConfig(
       @Value("${test.allowMultipleSeasons:false}") boolean allowMultipleSeasons,
       @Value("${test.allowChaos:false}") boolean allowChaos,
-      @Value("${test.chaosFrequency:10}") int chaosFrequency) {
+      @Value("${test.chaosFrequency:10}") int chaosFrequency,
+      @Value("${test.repeatChaos:0}") int repeatChaos) {
     log.info("allowMultipleSeasons: {}", allowMultipleSeasons);
     log.info("allowChaos: {}", allowChaos);
     log.info("chaosFrequency: {}", chaosFrequency);
+    log.info("repeatChaos: {}", repeatChaos);
     this.allowMultipleSeasons = allowMultipleSeasons;
     this.allowChaos = allowChaos;
     this.chaosFrequency = chaosFrequency;
+    this.repeatChaos = repeatChaos;
   }
 }

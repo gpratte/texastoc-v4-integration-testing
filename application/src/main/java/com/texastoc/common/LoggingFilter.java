@@ -22,7 +22,7 @@ import org.springframework.core.annotation.Order;
 @Slf4j
 public class LoggingFilter implements Filter {
 
-  public static final String CORRELATION_ID = "CORRELATION_ID";
+  public static final String CORRELATION_ID = "Correlation-Id";
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -31,9 +31,12 @@ public class LoggingFilter implements Filter {
     HttpServletRequest req = (HttpServletRequest) request;
     HttpServletResponse res = (HttpServletResponse) response;
 
+    final String correlationId =
+        req.getHeader(CORRELATION_ID) != null ? req.getHeader(CORRELATION_ID)
+            : UUID.randomUUID().toString();
+
     if (req.getHeader(CORRELATION_ID) == null) {
       // No CORRELATION_ID header so provide it
-      String correlationId = UUID.randomUUID().toString();
       req = new HttpServletRequestWrapper((HttpServletRequest) request) {
         @Override
         public String getHeader(String name) {
@@ -44,6 +47,8 @@ public class LoggingFilter implements Filter {
         }
       };
     }
+
+    res.setHeader(CORRELATION_ID, correlationId);
 
     log.info(
         "request: correlationId={} action={} uri={} contentType={}",

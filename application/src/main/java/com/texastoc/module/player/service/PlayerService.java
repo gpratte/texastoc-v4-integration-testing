@@ -210,7 +210,7 @@ public class PlayerService implements PlayerModule {
 
     // found the role, now make sure it is not the only role
     if (existingRoles.size() < 2) {
-      throw new BLException(BLType.CONSTRAINT, ErrorDetails.builder()
+      throw new BLException(BLType.BAD_REQUEST, ErrorDetails.builder()
           .target("player.roles")
           .message("cannot remove the last role")
           .build());

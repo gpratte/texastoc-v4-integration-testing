@@ -75,7 +75,7 @@ public class SeasonService {
       });
       seasons.forEach(season -> {
         if (season.getStart().getYear() == startYear) {
-          throw new BLException(BLType.CONSTRAINT, ErrorDetails.builder()
+          throw new BLException(BLType.BAD_REQUEST, ErrorDetails.builder()
               .target("season.start")
               .message("a season with start year " + startYear + " already exists")
               .build());

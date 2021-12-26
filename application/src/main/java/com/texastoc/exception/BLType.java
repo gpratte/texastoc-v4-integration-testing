@@ -4,10 +4,10 @@ import org.springframework.http.HttpStatus;
 
 public enum BLType {
 
-  NOT_FOUND(HttpStatus.NOT_FOUND, "INVALID REQUEST", "Not found"),
-  CONSTRAINT(HttpStatus.BAD_REQUEST, "INVALID DATA", "Invalid data"),
-  CONFLICT(HttpStatus.CONFLICT, "INVALID REQUEST", "Cannot perform operation"),
+  BAD_REQUEST(HttpStatus.BAD_REQUEST, "INVALID DATA", "Invalid data"),
   DENIED(HttpStatus.FORBIDDEN, "UNAUTHORIZED", "Denied"),
+  NOT_FOUND(HttpStatus.NOT_FOUND, "INVALID REQUEST", "Not found"),
+  CONFLICT(HttpStatus.CONFLICT, "INVALID REQUEST", "Cannot fulfill request"),
   UNKNOWN(HttpStatus.INTERNAL_SERVER_ERROR, "SERVER ERROR", "Internal server error");
 
   private final HttpStatus status;

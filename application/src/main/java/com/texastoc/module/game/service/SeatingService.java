@@ -150,7 +150,7 @@ public class SeatingService {
           .filter(gameTable -> gameTable.getTableNum() == tableRequestedNum)
           .findFirst();
       if (!optional.isPresent()) {
-        throw new BLException(BLType.CONSTRAINT, ErrorDetails.builder()
+        throw new BLException(BLType.BAD_REQUEST, ErrorDetails.builder()
             .target("seating.tableRequests.tableNum")
             .message("for '" + tableRequestedNum + "' is not valid")
             .build());

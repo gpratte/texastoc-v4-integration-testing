@@ -19,7 +19,7 @@ public class QuarterlySeasonIT extends BaseQuarterlySeasonIT {
   }
 
   @Test
-  public void createQuarterlySeasons() throws Exception {
+  public void createQuarterlySeasons() {
     // Arrange
     seasonStarts();
     // Act
@@ -28,16 +28,16 @@ public class QuarterlySeasonIT extends BaseQuarterlySeasonIT {
     verifyQuarters();
   }
 
-  private void seasonStarts() throws Exception {
+  private void seasonStarts() {
     startYear = getSeasonStart().getYear();
   }
 
-  private void createTheSeason() throws Exception {
+  private void createTheSeason() {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     seasonCreated = createSeason(startYear, token);
   }
 
-  private void verifyQuarters() throws Exception {
+  private void verifyQuarters() {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     List<QuarterlySeason> quarters = getQuarterlySeasons(seasonCreated.getId(), token);
     assertEquals(4, quarters.size());

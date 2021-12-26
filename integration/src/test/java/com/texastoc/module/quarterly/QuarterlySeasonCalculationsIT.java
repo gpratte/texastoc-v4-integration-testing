@@ -3,6 +3,7 @@ package com.texastoc.module.quarterly;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.module.game.model.Game;
@@ -31,7 +32,7 @@ public class QuarterlySeasonCalculationsIT extends BaseQuarterlySeasonIT {
   }
 
   @Test
-  public void calculateAQuarterlySeasonWithOneGame() throws Exception {
+  public void calculateAQuarterlySeasonWithOneGame() {
     // Arrange
     seasonExists();
     gameHasPlayers(GAME_PLAYERS.get(0));
@@ -43,7 +44,7 @@ public class QuarterlySeasonCalculationsIT extends BaseQuarterlySeasonIT {
   }
 
   @Test
-  public void calculateAQuarterlySeasonWithTwoGames() throws Exception {
+  public void calculateAQuarterlySeasonWithTwoGames() {
     // Two games with enough players to generate estimated payouts
     seasonExists();
     gameHasPlayers(GAME_PLAYERS.get(1));
@@ -55,12 +56,12 @@ public class QuarterlySeasonCalculationsIT extends BaseQuarterlySeasonIT {
   }
 
   // A quarterly season started encompassing today
-  private void seasonExists() throws Exception {
+  private void seasonExists() {
     aSeasonExists();
   }
 
   // A running quarterly game has players
-  private void gameHasPlayers(String json) throws Exception {
+  private void gameHasPlayers(String json) {
     // Create a game
     Game gameToCreate = Game.builder()
         .date(LocalDate.now())
@@ -71,9 +72,14 @@ public class QuarterlySeasonCalculationsIT extends BaseQuarterlySeasonIT {
     String token = login(USER_EMAIL, USER_PASSWORD);
     gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
 
-    List<GamePlayer> gamePlayers = OBJECT_MAPPER.readValue(
-        json, new TypeReference<List<GamePlayer>>() {
-        });
+    List<GamePlayer> gamePlayers = null;
+    try {
+      gamePlayers = OBJECT_MAPPER.readValue(
+          json, new TypeReference<List<GamePlayer>>() {
+          });
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     for (GamePlayer gp : gamePlayers) {
       GamePlayer gamePlayer = GamePlayer.builder()
           .gameId(gameCreated.getId())
@@ -91,7 +97,7 @@ public class QuarterlySeasonCalculationsIT extends BaseQuarterlySeasonIT {
   }
 
   // A running quarterly game has existing players
-  private void gameInProgressAddExistingPlayer(String json) throws Exception {
+  private void gameInProgressAddExistingPlayer(String json) {
     // Create a game
     Game gameToCreate = Game.builder()
         .date(LocalDate.now())
@@ -105,9 +111,14 @@ public class QuarterlySeasonCalculationsIT extends BaseQuarterlySeasonIT {
     List<QuarterlySeasonPlayer> qSeasonPlayers = super
         .getCurrentQuarterlySeason(seasonCreated.getId(), token).getPlayers();
 
-    List<QuarterlySeasonPlayer> qsGamePlayers = OBJECT_MAPPER.readValue(
-        json, new TypeReference<List<QuarterlySeasonPlayer>>() {
-        });
+    List<QuarterlySeasonPlayer> qsGamePlayers = null;
+    try {
+      qsGamePlayers = OBJECT_MAPPER.readValue(
+          json, new TypeReference<List<QuarterlySeasonPlayer>>() {
+          });
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     for (QuarterlySeasonPlayer gp : qsGamePlayers) {
       QuarterlySeasonPlayer qSeasonPlayer = qSeasonPlayers.stream()
           .filter(qsp -> qsp.getName().equals(gp.getName()))
@@ -124,13 +135,13 @@ public class QuarterlySeasonCalculationsIT extends BaseQuarterlySeasonIT {
   }
 
   // The finalized game triggers the quarterly season to recalculate
-  private void finalizeGame() throws Exception {
+  private void finalizeGame() {
     String token = login(USER_EMAIL, USER_PASSWORD);
     finalizeGame(gameCreated.getId(), token);
   }
 
   // The calculated quarterly season is retrieved with (\\d+) games played
-  private void getCalcuatedQuarterlySeason(int numGames) throws Exception {
+  private void getCalcuatedQuarterlySeason(int numGames) {
     final String token = login(USER_EMAIL, USER_PASSWORD);
     Awaitility.await()
         .atMost(15, TimeUnit.SECONDS)
@@ -143,8 +154,13 @@ public class QuarterlySeasonCalculationsIT extends BaseQuarterlySeasonIT {
   }
 
   // The quarterly season calculations should be
-  private void checkQuarterlySeasonCalculations(String json) throws Exception {
-    QuarterlySeason expectedSeason = OBJECT_MAPPER.readValue(json, QuarterlySeason.class);
+  private void checkQuarterlySeasonCalculations(String json) {
+    QuarterlySeason expectedSeason = null;
+    try {
+      expectedSeason = OBJECT_MAPPER.readValue(json, QuarterlySeason.class);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
 
     assertEquals(expectedSeason.getQTocCollected(), qSeasonRetrieved.getQTocCollected());
     assertEquals(expectedSeason.getNumGames(), qSeasonRetrieved.getNumGames());

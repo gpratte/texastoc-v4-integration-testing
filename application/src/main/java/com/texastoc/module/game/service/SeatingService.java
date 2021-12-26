@@ -1,7 +1,8 @@
 package com.texastoc.module.game.service;
 
-import com.texastoc.exception.NotFoundException;
-import com.texastoc.module.game.exception.SeatingException;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.model.GameTable;
@@ -38,7 +39,10 @@ public class SeatingService {
   public Seating seatGamePlayers(Seating seating) {
     Optional<Game> optionalGame = gameRepository.findById(seating.getGameId());
     if (!optionalGame.isPresent()) {
-      throw new NotFoundException("Game with id " + seating.getGameId() + " not found");
+      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+          .target("game")
+          .message("with id '" + seating.getGameId() + "' not found")
+          .build());
     }
     Game game = optionalGame.get();
     game.setSeating(seating);
@@ -146,7 +150,10 @@ public class SeatingService {
           .filter(gameTable -> gameTable.getTableNum() == tableRequestedNum)
           .findFirst();
       if (!optional.isPresent()) {
-        throw new SeatingException("Requested invalid table number " + tableRequestedNum);
+        throw new BLException(BLType.BAD_REQUEST, ErrorDetails.builder()
+            .target("seating.tableRequests.tableNum")
+            .message("for '" + tableRequestedNum + "' is not valid")
+            .build());
       }
 
       // Find the seat of the player that wants to swap

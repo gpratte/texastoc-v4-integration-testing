@@ -1,7 +1,9 @@
 package com.texastoc.module.game.service;
 
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.event.GameEventProducer;
-import com.texastoc.module.game.exception.GameInProgressException;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.repository.GameRepository;
@@ -52,7 +54,10 @@ public class GameService {
     List<Game> otherGames = gameRepository.findBySeasonId(currentSeason.getId());
     for (Game otherGame : otherGames) {
       if (!otherGame.isFinalized()) {
-        throw new GameInProgressException();
+        throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+            .target("game")
+            .message(otherGame.getId() + " is not finalized")
+            .build());
       }
     }
 
@@ -200,8 +205,10 @@ public class GameService {
 
     Season season = getSeasonModule().get(gameToOpen.getSeasonId());
     if (season.isFinalized()) {
-      // TODO throw a unique exception and handle in controller
-      throw new RuntimeException("Cannot open a game when season is finalized");
+      throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+          .target("season")
+          .message(season.getId() + " is finalized")
+          .build());
     }
 
     // Make sure no other game is open
@@ -211,7 +218,10 @@ public class GameService {
         continue;
       }
       if (!game.isFinalized()) {
-        throw new GameInProgressException();
+        throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+            .target("game")
+            .message(game.getId() + " is not finalized")
+            .build());
       }
     }
 

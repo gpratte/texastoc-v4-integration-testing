@@ -1,5 +1,10 @@
 package com.texastoc;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.settings.model.Payout;
 import com.texastoc.module.settings.model.TocConfig;
@@ -11,6 +16,32 @@ import java.util.Map;
 public class TestUtils implements TestConstants {
 
   private static final Map<Integer, List<Payout>> PAYOUTS;
+
+  public static void verifyBLException(BLException blException, BLType blType) {
+    verifyBLException(blException, blType, null);
+  }
+
+  public static void verifyBLException(BLException blException, BLType blType,
+      ErrorDetails errorDetails) {
+    assertThat(blException.getCode()).isEqualTo(blType.getCode());
+    assertThat(blException.getMessage()).isEqualTo(blType.getMessage());
+    assertThat(blException.getStatus()).isEqualTo(blType.getStatus());
+    assertThat(blException.getDetails()).isEqualTo(errorDetails);
+  }
+
+  public static void populateGameCosts(Game game) {
+    TocConfig tocConfig = TestConstants.getTocConfig();
+    game.setAnnualTocCost(tocConfig.getAnnualTocCost());
+    game.setQuarterlyTocCost(tocConfig.getQuarterlyTocCost());
+    game.setKittyCost(tocConfig.getKittyDebit());
+    game.setBuyInCost(tocConfig.getRegularBuyInCost());
+    game.setRebuyAddOnCost(tocConfig.getRegularRebuyCost());
+    game.setRebuyAddOnTocDebitCost(tocConfig.getRegularRebuyTocDebit());
+  }
+
+  static Map<Integer, List<Payout>> getPayouts() {
+    return PAYOUTS;
+  }
 
   static {
     PAYOUTS = new HashMap<>();
@@ -258,19 +289,4 @@ public class TestUtils implements TestConstants {
         .build());
     PAYOUTS.put(10, payouts);
   }
-
-  public static void populateGameCosts(Game game) {
-    TocConfig tocConfig = TestConstants.getTocConfig();
-    game.setAnnualTocCost(tocConfig.getAnnualTocCost());
-    game.setQuarterlyTocCost(tocConfig.getQuarterlyTocCost());
-    game.setKittyCost(tocConfig.getKittyDebit());
-    game.setBuyInCost(tocConfig.getRegularBuyInCost());
-    game.setRebuyAddOnCost(tocConfig.getRegularRebuyCost());
-    game.setRebuyAddOnTocDebitCost(tocConfig.getRegularRebuyTocDebit());
-  }
-
-  static Map<Integer, List<Payout>> getPayouts() {
-    return PAYOUTS;
-  }
-
 }

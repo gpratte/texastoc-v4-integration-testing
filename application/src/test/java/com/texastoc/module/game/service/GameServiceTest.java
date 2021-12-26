@@ -14,8 +14,11 @@ import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableList;
 import com.texastoc.TestConstants;
+import com.texastoc.TestUtils;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.event.GameEventProducer;
-import com.texastoc.module.game.exception.GameInProgressException;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.repository.GameRepository;
 import com.texastoc.module.player.PlayerModule;
@@ -179,14 +182,21 @@ public class GameServiceTest implements TestConstants {
     // One other games is not finalized
     when(gameRepository.findBySeasonId(16))
         .thenReturn(ImmutableList.of(Game.builder()
+            .id(23)
             .finalized(false)
             .build()));
 
     // Act & Assert
     assertThatThrownBy(() -> {
       gameService.create(new Game(), 16);
-    }).isInstanceOf(GameInProgressException.class)
-        .hasMessageContaining("Action cannot be completed because there is a game in progress");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+              .target("game")
+              .message("23 is not finalized")
+              .build());
+        });
   }
 
   @Test
@@ -381,8 +391,14 @@ public class GameServiceTest implements TestConstants {
     // Act & Assert
     assertThatThrownBy(() -> {
       gameService.unfinalize(1);
-    }).isInstanceOf(RuntimeException.class)
-        .hasMessageContaining("Cannot open a game when season is finalized");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+              .target("season")
+              .message("16 is finalized")
+              .build());
+        });
   }
 
   @Test
@@ -404,14 +420,21 @@ public class GameServiceTest implements TestConstants {
     // One other game is unfinalized
     when(gameRepository.findBySeasonId(16))
         .thenReturn(ImmutableList.of(Game.builder()
+            .id(22)
             .finalized(false)
             .build()));
 
     // Act & Assert
     assertThatThrownBy(() -> {
       gameService.unfinalize(1);
-    }).isInstanceOf(GameInProgressException.class)
-        .hasMessageContaining("Action cannot be completed because there is a game in progress");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+              .target("game")
+              .message("22 is not finalized")
+              .build());
+        });
   }
 
 }

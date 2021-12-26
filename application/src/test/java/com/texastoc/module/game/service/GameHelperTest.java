@@ -7,11 +7,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.texastoc.exception.NotFoundException;
+import com.texastoc.TestUtils;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.calculator.GameCalculator;
 import com.texastoc.module.game.calculator.PayoutCalculator;
 import com.texastoc.module.game.calculator.PointsCalculator;
-import com.texastoc.module.game.exception.GameIsFinalizedException;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.repository.GameRepository;
 import com.texastoc.module.player.PlayerModule;
@@ -74,8 +76,14 @@ public class GameHelperTest {
     // Act & Assert
     assertThatThrownBy(() -> {
       gameHelper.get(111);
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("Game with id 111 not found");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("game")
+              .message("with id '111' not found")
+              .build());
+        });
   }
 
   @Test
@@ -96,14 +104,21 @@ public class GameHelperTest {
     // Arrange
     LocalDate now = LocalDate.now();
     Game game = Game.builder()
+        .id(1)
         .finalized(true)
         .build();
 
     // Act & Assert
     assertThatThrownBy(() -> {
       gameHelper.checkFinalized(game);
-    }).isInstanceOf(GameIsFinalizedException.class)
-        .hasMessage("Action cannot be completed because the game is finalized");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+              .target("game")
+              .message("1 is not finalized")
+              .build());
+        });
   }
 
   @Test

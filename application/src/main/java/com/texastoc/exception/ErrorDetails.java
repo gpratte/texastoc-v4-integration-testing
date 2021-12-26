@@ -1,19 +1,28 @@
 package com.texastoc.exception;
 
-import java.util.Date;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class ErrorDetails {
 
-  private Date timestamp;
+  private String target;
   private String message;
-  private String details;
 
-  public ErrorDetails(Date timestamp, String message, String details) {
-    super();
-    this.timestamp = timestamp;
-    this.message = message;
-    this.details = details;
+  @Override
+  public String toString() {
+    return "{" +
+        "target='" + target + '\'' +
+        ", message='" + message + '\'' +
+        '}';
   }
 }

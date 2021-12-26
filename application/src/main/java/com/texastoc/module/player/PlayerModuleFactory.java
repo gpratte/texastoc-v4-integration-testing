@@ -1,6 +1,5 @@
 package com.texastoc.module.player;
 
-import com.texastoc.module.player.service.PlayerService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -8,8 +7,8 @@ public class PlayerModuleFactory {
 
   private static PlayerModule PLAYER_MODULE;
 
-  public PlayerModuleFactory(PlayerService playerService) {
-    PLAYER_MODULE = playerService;
+  public PlayerModuleFactory(PlayerModuleImpl playerModule) {
+    PLAYER_MODULE = playerModule;
   }
 
   /**

@@ -1,6 +1,5 @@
 package com.texastoc.module.quarterly;
 
-import com.texastoc.module.quarterly.service.QuarterlySeasonService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -8,8 +7,8 @@ public class QuarterlySeasonModuleFactory {
 
   private static QuarterlySeasonModule QUARTERLY_SEASON_MODULE;
 
-  public QuarterlySeasonModuleFactory(QuarterlySeasonService quarterlySeasonService) {
-    QUARTERLY_SEASON_MODULE = quarterlySeasonService;
+  public QuarterlySeasonModuleFactory(QuarterlySeasonModuleImpl quarterlySeasonModule) {
+    QUARTERLY_SEASON_MODULE = quarterlySeasonModule;
   }
 
   /**

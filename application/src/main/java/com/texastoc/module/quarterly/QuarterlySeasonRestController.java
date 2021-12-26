@@ -1,7 +1,6 @@
 package com.texastoc.module.quarterly;
 
 import com.texastoc.module.quarterly.model.QuarterlySeason;
-import com.texastoc.module.quarterly.service.QuarterlySeasonService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,16 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v4")
 public class QuarterlySeasonRestController {
 
-  private final QuarterlySeasonService qSeasonService;
+  private final QuarterlySeasonModule quarterlySeasonModule;
 
   public QuarterlySeasonRestController(
-      QuarterlySeasonService qSeasonService) {
-    this.qSeasonService = qSeasonService;
+      QuarterlySeasonModuleImpl quarterlySeasonModule) {
+    this.quarterlySeasonModule = quarterlySeasonModule;
   }
 
   @GetMapping("/seasons/{id}/quarterlies")
   public List<QuarterlySeason> getQuarterlySeasons(@PathVariable("id") int seasonId) {
-    return qSeasonService.getBySeasonId(seasonId);
+    return quarterlySeasonModule.getBySeasonId(seasonId);
   }
-
 }

@@ -1,7 +1,9 @@
 package com.texastoc.module.game.service;
 
 import com.google.common.collect.ImmutableSet;
-import com.texastoc.exception.NotFoundException;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.repository.GameRepository;
@@ -134,7 +136,10 @@ public class GamePlayerService {
         .filter(gp -> gp.getId() == gamePlayerId)
         .findFirst();
     if (!optionalGamePlayer.isPresent()) {
-      throw new NotFoundException("Game player with id " + gamePlayerId + " not found");
+      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+          .target("gamePlayer")
+          .message("with id '" + gamePlayerId + "' not found")
+          .build());
     }
     GamePlayer gamePlayer = optionalGamePlayer.get();
     gamePlayer.setKnockedOut(!gamePlayer.isKnockedOut());
@@ -152,7 +157,10 @@ public class GamePlayerService {
         .filter(gp -> gp.getId() == gamePlayerId)
         .findFirst();
     if (!optionalGamePlayer.isPresent()) {
-      throw new NotFoundException("Game player with id " + gamePlayerId + " not found");
+      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+          .target("gamePlayer")
+          .message("with id '" + gamePlayerId + "' not found")
+          .build());
     }
     GamePlayer gamePlayer = optionalGamePlayer.get();
     gamePlayer.setRebought(!gamePlayer.isRebought());

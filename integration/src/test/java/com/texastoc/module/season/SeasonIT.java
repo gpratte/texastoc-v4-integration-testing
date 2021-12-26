@@ -17,7 +17,7 @@ public class SeasonIT extends BaseSeasonIT {
   }
 
   @Test
-  public void createASeason() throws Exception {
+  public void createASeason() {
     // Arrange
     seasonStarts();
     // Act
@@ -28,7 +28,7 @@ public class SeasonIT extends BaseSeasonIT {
   }
 
   @Test
-  public void createAndRetriveASeason() throws Exception {
+  public void createAndRetriveASeason() {
     // create and retrieve a season
     seasonExists();
     getSeason();
@@ -37,7 +37,7 @@ public class SeasonIT extends BaseSeasonIT {
   }
 
   @Test
-  public void createAndEndASeason() throws Exception {
+  public void createAndEndASeason() {
     seasonExists();
     endSeason();
     getSeason();
@@ -45,7 +45,7 @@ public class SeasonIT extends BaseSeasonIT {
   }
 
   @Test
-  public void createAndEndAndOpenASeason() throws Exception {
+  public void createAndEndAndOpenASeason() {
     seasonExists();
     endSeason();
     openSeason();
@@ -56,60 +56,60 @@ public class SeasonIT extends BaseSeasonIT {
   // TODO add test with season players and make sure they become historical season players
 
   // A season starts encompassing today
-  private void seasonStarts() throws Exception {
+  private void seasonStarts() {
     startYear = getSeasonStart().getYear();
   }
 
   // A season encompassing today exists
-  private void seasonExists() throws Exception {
+  private void seasonExists() {
     aSeasonExists();
   }
 
   // The season is created
-  private void theSeasonIsCreated() throws Exception {
+  private void theSeasonIsCreated() {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     seasonCreated = createSeason(startYear, token);
   }
 
   // The season is ended
-  private void endSeason() throws Exception {
+  private void endSeason() {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     super.endSeason(seasonCreated.getId(), token);
   }
 
   // The season is opened
-  private void openSeason() throws Exception {
+  private void openSeason() {
     String token = login(ADMIN_EMAIL, ADMIN_PASSWORD);
     super.openSeason(seasonCreated.getId(), token);
   }
 
   // The season is retrieved
-  private void getSeason() throws Exception {
+  private void getSeason() {
     String token = login(USER_EMAIL, USER_PASSWORD);
     seasonRetrieved = super.getSeason(seasonCreated.getId(), token);
   }
 
   // The start date should be May first
-  private void verifyStartDate() throws Exception {
+  private void verifyStartDate() {
     assertEquals(getSeasonStart(), seasonCreated.getStart());
   }
 
   // The season costs should be set
-  private void verifySeasonCosts() throws Exception {
+  private void verifySeasonCosts() {
     verifySeasonCosts(seasonCreated);
   }
 
   // The retrieved season should be ended
-  private void verifyRetrievedIsEnded() throws Exception {
+  private void verifyRetrievedIsEnded() {
     assertTrue(seasonRetrieved.isFinalized());
   }
 
   // The retrieved season should not be ended
-  private void verifyRetrievedIsNotEnded() throws Exception {
+  private void verifyRetrievedIsNotEnded() {
     assertFalse(seasonRetrieved.isFinalized());
   }
 
-  private void verifySeasonCosts(Season season) throws Exception {
+  private void verifySeasonCosts(Season season) {
     Assert.assertEquals(KITTY_PER_GAME, season.getKittyPerGameCost());
     Assert.assertEquals(TOC_PER_GAME, season.getTocPerGameCost());
     Assert.assertEquals(QUARTERLY_TOC_PER_GAME, season.getQuarterlyTocPerGameCost());

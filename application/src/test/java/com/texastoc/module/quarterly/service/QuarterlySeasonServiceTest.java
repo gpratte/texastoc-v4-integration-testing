@@ -1,6 +1,7 @@
 package com.texastoc.module.quarterly.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -10,7 +11,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.texastoc.TestConstants;
-import com.texastoc.exception.NotFoundException;
+import com.texastoc.TestUtils;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.quarterly.calculator.QuarterlySeasonCalculator;
 import com.texastoc.module.quarterly.model.Quarter;
 import com.texastoc.module.quarterly.model.QuarterlySeason;
@@ -25,7 +29,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -94,12 +97,19 @@ public class QuarterlySeasonServiceTest implements TestConstants {
   @Test
   public void getByDate() {
     // Arrange
+    LocalDate now = LocalDate.now();
     when(qSeasonRepository.findByDate(any())).thenReturn(Collections.emptyList());
     // Act and assert
-    Assertions.assertThatThrownBy(() -> {
-      qSeasonService.getByDate(LocalDate.now());
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageStartingWith("Could not find a quarterly for date");
+    assertThatThrownBy(() -> {
+      qSeasonService.getByDate(now);
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("quarterlySeason")
+              .message("with date '" + now + "' not found")
+              .build());
+        });
 
     // Arrange
     when(qSeasonRepository.findByDate(any()))

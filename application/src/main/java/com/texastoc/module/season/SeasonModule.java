@@ -1,8 +1,6 @@
 package com.texastoc.module.season;
 
 import com.texastoc.common.GameFinalizedEvent;
-import com.texastoc.exception.NotFoundException;
-import com.texastoc.module.season.exception.GameInProgressException;
 import com.texastoc.module.season.model.HistoricalSeason;
 import com.texastoc.module.season.model.Season;
 import java.util.List;
@@ -22,27 +20,25 @@ public interface SeasonModule {
    *
    * @param id the season id
    * @return the season
-   * @throws NotFoundException
    */
   Season get(int id);
+
+  List<Season> getAll();
 
   /**
    * Finalizes the season for the given season Id. Creates an historical season entry.
    *
    * @param seasonId the season's id
-   * @throws GameInProgressException
-   * @throws NotFoundException
    */
-  void end(int seasonId);
+  Season end(int seasonId);
 
   /**
    * Unfinalizes the season for the given season Id. Removes the historical season entry if one
    * exists.
    *
    * @param seasonId the season's id
-   * @throws NotFoundException
    */
-  void open(int seasonId);
+  Season open(int seasonId);
 
   /**
    * Return a list of the past seasons
@@ -58,5 +54,4 @@ public interface SeasonModule {
    * @param gameFinalizedEvent
    */
   void gameFinalized(GameFinalizedEvent gameFinalizedEvent);
-
 }

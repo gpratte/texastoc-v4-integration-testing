@@ -1,10 +1,11 @@
 package com.texastoc.module.game.service;
 
-import com.texastoc.exception.NotFoundException;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.calculator.GameCalculator;
 import com.texastoc.module.game.calculator.PayoutCalculator;
 import com.texastoc.module.game.calculator.PointsCalculator;
-import com.texastoc.module.game.exception.GameIsFinalizedException;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.repository.GameRepository;
 import com.texastoc.module.player.PlayerModule;
@@ -55,14 +56,20 @@ public class GameHelper {
   public Game get(int id) {
     Optional<Game> optionalGame = gameRepository.findById(id);
     if (!optionalGame.isPresent()) {
-      throw new NotFoundException("Game with id " + id + " not found");
+      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+          .target("game")
+          .message("with id '" + id + "' not found")
+          .build());
     }
     return optionalGame.get();
   }
 
   public void checkFinalized(Game game) {
     if (game.isFinalized()) {
-      throw new GameIsFinalizedException();
+      throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+          .target("game")
+          .message(game.getId() + " is not finalized")
+          .build());
     }
   }
 

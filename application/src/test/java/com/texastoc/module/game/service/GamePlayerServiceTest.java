@@ -13,7 +13,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.texastoc.TestConstants;
-import com.texastoc.exception.NotFoundException;
+import com.texastoc.TestUtils;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.repository.GameRepository;
@@ -514,8 +517,14 @@ public class GamePlayerServiceTest implements TestConstants {
 
     assertThatThrownBy(() -> {
       gamePlayerService.toggleGamePlayerKnockedOut(55, 11);
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("Game player with id 11 not found");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("gamePlayer")
+              .message("with id '11' not found")
+              .build());
+        });
   }
 
   @Test
@@ -600,8 +609,14 @@ public class GamePlayerServiceTest implements TestConstants {
 
     assertThatThrownBy(() -> {
       gamePlayerService.toggleGamePlayerRebuy(55, 11);
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("Game player with id 11 not found");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("gamePlayer")
+              .message("with id '11' not found")
+              .build());
+        });
   }
 
   @Test

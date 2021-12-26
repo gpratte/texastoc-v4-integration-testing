@@ -14,12 +14,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.texastoc.TestConstants;
+import com.texastoc.TestUtils;
 import com.texastoc.config.IntegrationTestingConfig;
-import com.texastoc.exception.NotFoundException;
+import com.texastoc.exception.BLException;
+import com.texastoc.exception.BLType;
+import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.quarterly.QuarterlySeasonModule;
-import com.texastoc.module.season.exception.GameInProgressException;
 import com.texastoc.module.season.model.HistoricalSeason;
 import com.texastoc.module.season.model.HistoricalSeason.HistoricalSeasonPlayer;
 import com.texastoc.module.season.model.Season;
@@ -59,7 +61,7 @@ public class SeasonServiceTest implements TestConstants {
     seasonRepository = mock(SeasonRepository.class);
     seasonHistoryRepository = mock(SeasonHistoryRepository.class);
     IntegrationTestingConfig integrationTestingConfig = new IntegrationTestingConfig(false, false,
-        1);
+        1, 0);
     seasonService = new SeasonService(seasonRepository, seasonHistoryRepository,
         integrationTestingConfig);
     settingsModule = mock(SettingsModule.class);
@@ -160,8 +162,14 @@ public class SeasonServiceTest implements TestConstants {
     // Act and Assert
     assertThatThrownBy(() -> {
       seasonService.get(1);
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("Season with id 1 not found");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("season")
+              .message("with id '1' not found")
+              .build());
+        });
   }
 
   @Test
@@ -268,8 +276,14 @@ public class SeasonServiceTest implements TestConstants {
     // Act and Assert
     assertThatThrownBy(() -> {
       seasonService.end(1);
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("Season with id 1 not found");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("season")
+              .message("with id '1' not found")
+              .build());
+        });
   }
 
   @Test
@@ -277,14 +291,21 @@ public class SeasonServiceTest implements TestConstants {
     // Arrange
     when(seasonRepository.findById(1)).thenReturn(Optional.of(Season.builder().id(1).build()));
     when(gameModule.getBySeasonId(1)).thenReturn(Arrays.asList(Game.builder()
+        .id(1)
         .finalized(false)
         .build()));
 
     // Act and Assert
     assertThatThrownBy(() -> {
       seasonService.end(1);
-    }).isInstanceOf(GameInProgressException.class)
-        .hasMessageContaining("There is a game in progress");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+              .target("game")
+              .message("1 is not finalized")
+              .build());
+        });
   }
 
   @Test
@@ -317,8 +338,14 @@ public class SeasonServiceTest implements TestConstants {
     // Act and Assert
     assertThatThrownBy(() -> {
       seasonService.open(1);
-    }).isInstanceOf(NotFoundException.class)
-        .hasMessageContaining("Season with id 1 not found");
+    }).isInstanceOf(BLException.class)
+        .satisfies(ex -> {
+          BLException blException = (BLException) ex;
+          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+              .target("season")
+              .message("with id '1' not found")
+              .build());
+        });
   }
 
   @Test

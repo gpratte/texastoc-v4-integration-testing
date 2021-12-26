@@ -6,17 +6,19 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.texastoc.TestUtils;
+import com.texastoc.exception.BLException;
 import com.texastoc.module.game.model.Game;
 import java.time.LocalDate;
-import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
 public class GameIT extends BaseGameIT {
-  
+
   @Before
   public void before() {
     // Before each scenario
@@ -24,7 +26,7 @@ public class GameIT extends BaseGameIT {
   }
 
   @Test
-  public void createSimpleGame() throws Exception {
+  public void createSimpleGame() {
     // Arrange
     aSeasonExists();
     theGameStartsNow();
@@ -36,7 +38,7 @@ public class GameIT extends BaseGameIT {
   }
 
   @Test
-  public void gameRequiresTransportSupplies() throws Exception {
+  public void gameRequiresTransportSupplies() {
     aSeasonExists();
     theGameSuppliesNeedToBeMoved();
     theGameIsCreated();
@@ -44,7 +46,7 @@ public class GameIT extends BaseGameIT {
   }
 
   @Test
-  public void createRetrieveSimpleGame() throws Exception {
+  public void createRetrieveSimpleGame() {
     aSeasonExists();
     theGameStartsNow();
     theGameIsCreatedAndRetrieved();
@@ -53,7 +55,7 @@ public class GameIT extends BaseGameIT {
   }
 
   @Test
-  public void createRetrieveSimpleGameBySeason() throws Exception {
+  public void createRetrieveSimpleGameBySeason() {
     aSeasonExists();
     theGameStartsNow();
     theGameIsCreated();
@@ -62,7 +64,7 @@ public class GameIT extends BaseGameIT {
   }
 
   @Test
-  public void createAndUpdateSimpleGame() throws Exception {
+  public void createAndUpdateSimpleGame() {
     aSeasonExists();
     theGameStartsNow();
     theGameIsCreatedAndRetrieved();
@@ -71,7 +73,7 @@ public class GameIT extends BaseGameIT {
   }
 
   @Test
-  public void createAndFinalizeSimpleGame() throws Exception {
+  public void createAndFinalizeSimpleGame() {
     aSeasonExists();
     theGameStartsNow();
     theGameIsCreated();
@@ -81,7 +83,7 @@ public class GameIT extends BaseGameIT {
   }
 
   @Test
-  public void createFinalizeAndUnfinalizeSimpleGame() throws Exception {
+  public void createFinalizeAndUnfinalizeSimpleGame() {
     aSeasonExists();
     theGameStartsNow();
     theGameIsCreated();
@@ -98,13 +100,13 @@ public class GameIT extends BaseGameIT {
   // TODO need to use feature flag to toggle this
   @Ignore
   @Test
-  public void cannotCreateGame() throws Exception {
+  public void cannotCreateAnotherGame() {
     // Try to create a game when there is a game in progress
     aSeasonExists();
     theGameStartsNow();
     theGameIsCreated();
     anotherGameIsCreated();
-    theNewGameIsNotAllowed();
+    anotherGameIsNotAllowed();
   }
 
   private void theGameSuppliesNeedToBeMoved() {
@@ -115,7 +117,7 @@ public class GameIT extends BaseGameIT {
         .build();
   }
 
-  private void anotherGameIsCreated() throws Exception {
+  private void anotherGameIsCreated() {
     String token = login(USER_EMAIL, USER_PASSWORD);
     try {
       createGame(Game.builder()
@@ -128,17 +130,17 @@ public class GameIT extends BaseGameIT {
     }
   }
 
-  private void theGameIsFinalized() throws Exception {
+  private void theGameIsFinalized() {
     String token = login(USER_EMAIL, USER_PASSWORD);
     finalizeGame(gameCreated.getId(), token);
   }
 
-  private void theGameIsUnfinalized() throws Exception {
+  private void theGameIsUnfinalized() {
     String token = login(USER_EMAIL, USER_PASSWORD);
     unfinalizeGame(gameCreated.getId(), token);
   }
 
-  private void theGameRetrievedIsUpdatedAndRetrieved() throws Exception {
+  private void theGameRetrievedIsUpdatedAndRetrieved() {
     Game gameToUpdate = Game.builder()
         .hostId(gameRetrieved.getHostId())
         .date(gameRetrieved.getDate())
@@ -151,66 +153,71 @@ public class GameIT extends BaseGameIT {
     gameRetrieved = getGame(gameCreated.getId(), token);
   }
 
-  private void theGameIsCreatedAndRetrieved() throws Exception {
+  private void theGameIsCreatedAndRetrieved() {
     String token = login(USER_EMAIL, USER_PASSWORD);
     gameCreated = createGame(gameToCreate, seasonCreated.getId(), token);
     gameRetrieved = getGame(gameCreated.getId(), token);
   }
 
-  private void theGameIsRetrievedBySeasonId() throws Exception {
+  private void theGameIsRetrievedBySeasonId() {
     String token = login(USER_EMAIL, USER_PASSWORD);
     gameRetrieved = getGameBySeasonId(gameCreated.getSeasonId(), token);
   }
 
-  private void theGameIsRetrieved() throws Exception {
+  private void theGameIsRetrieved() {
     super.getGame(gameCreated.getId());
   }
 
-  private void currentGameExists() throws Exception {
+  private void currentGameExists() {
     assertNotNull(gameRetrieved);
   }
 
-  private void theGameIsNormal() throws Exception {
+  private void theGameIsNormal() {
     assertNewGame(gameCreated);
   }
 
-  private void theGameIsNotTransportRequired() throws Exception {
+  private void theGameIsNotTransportRequired() {
     Assert.assertFalse("transport required should be false", gameCreated.isTransportRequired());
   }
 
-  private void theGameTransportSuppliesFlagIsSet() throws Exception {
+  private void theGameTransportSuppliesFlagIsSet() {
     assertNotNull("game create should not be null", gameCreated);
 
     // Game setup variables
     assertTrue("transport required should be true", gameCreated.isTransportRequired());
   }
 
-  private void theGameRetrievedIsNormal() throws Exception {
+  private void theGameRetrievedIsNormal() {
     assertNewGame(gameRetrieved);
   }
 
-  private void theGameRetrievedHasNoPlayersOrPayouts() throws Exception {
+  private void theGameRetrievedHasNoPlayersOrPayouts() {
     gameHasNoPlayersOrPayouts(gameRetrieved);
   }
 
-  private void theGameRetrievedIsFinalized() throws Exception {
+  private void theGameRetrievedIsFinalized() {
     assertTrue("game should be finalized", gameRetrieved.isFinalized());
   }
 
-  private void theGameRetrievedIsUnfinalized() throws Exception {
+  private void theGameRetrievedIsUnfinalized() {
     assertFalse("game should be unfinalized", gameRetrieved.isFinalized());
   }
 
-  private void the_current_game_has_no_players() throws Exception {
-    gameHasNoPlayersOrPayouts(gameRetrieved);
+  private void anotherGameIsNotAllowed() {
+    assertTrue("exception should be HttpClientErrorException",
+        (exception instanceof HttpClientErrorException));
+    HttpClientErrorException e = (HttpClientErrorException) exception;
+    assertThat(e.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+    BLException blException = TestUtils.convert(e);
+    assertThat(blException).isNotNull();
+    assertThat(blException.getCode()).isEqualTo("INVALID REQUEST");
+    assertThat(blException.getMessage()).isEqualTo("Cannot perform operation");
+    // TODO flesh out last two asserts
+    //assertThat(blException.getDetails().getTarget()).isEqualTo("game");
+    //assertThat(blException.getDetails().getMessage()).isEqualTo("yada yada");
   }
 
-  private void theNewGameIsNotAllowed() throws Exception {
-    assertNotNull(exception);
-    assertThat(exception.getStatusCode().value()).isEqualTo(HttpStatus.SC_CONFLICT);
-  }
-
-  private void gameHasNoPlayersOrPayouts(Game game) throws Exception {
+  private void gameHasNoPlayersOrPayouts(Game game) {
     assertNotNull("game players should not be null", game.getPlayers());
     assertEquals("num of game players should be zero", 0, (int) game.getNumPlayers());
     assertEquals("num of game players should be zero", 0, (int) game.getPlayers().size());
@@ -218,7 +225,7 @@ public class GameIT extends BaseGameIT {
     assertEquals("num of game payouts should be zero", 0, (int) game.getPayouts().size());
   }
 
-  private void assertNewGame(Game game) throws Exception {
+  private void assertNewGame(Game game) {
     assertNotNull("game created should not be null", game);
     assertTrue("game id should be greater than 0", game.getId() > 0);
     assertTrue("game season id should be greater than 0", game.getSeasonId() > 0);

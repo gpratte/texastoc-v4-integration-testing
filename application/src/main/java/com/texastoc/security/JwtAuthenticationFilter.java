@@ -1,12 +1,18 @@
 package com.texastoc.security;
 
+import static com.texastoc.common.LoggingFilter.CORRELATION_ID;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.module.player.model.Player;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,12 +39,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   @Override
   public Authentication attemptAuthentication(HttpServletRequest req,
       HttpServletResponse res) throws AuthenticationException {
-    log.info(
-        "request: action={} uri={} contentType={}",
-        req.getMethod(),
-        req.getRequestURI(),
-        req.getContentType());
-
     try {
       Player player = new ObjectMapper().readValue(req.getInputStream(), Player.class);
 
@@ -49,18 +49,53 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
               new ArrayList<>())
       );
     } catch (AuthenticationException e) {
-      log.info("response: action={} uri={} status={}",
-          req.getMethod(),
-          req.getRequestURI(),
-          401);
       throw e;
-    } catch (Exception e) {
-      log.info("response: action={} uri={} status={}",
-          req.getMethod(),
-          req.getRequestURI(),
-          401);
+    } catch (RuntimeException | IOException e) {
+      log.error("Error authenticating", e);
       throw new BadCredentialsException("bad credentials");
     }
+  }
+
+  // Same as the doFilter method in LoggingFiler
+  @Override
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+      throws IOException, ServletException {
+    HttpServletRequest req = (HttpServletRequest) request;
+    HttpServletResponse res = (HttpServletResponse) response;
+
+    final String correlationId =
+        req.getHeader(CORRELATION_ID) != null ? req.getHeader(CORRELATION_ID)
+            : UUID.randomUUID().toString();
+
+    if (req.getHeader(CORRELATION_ID) == null) {
+      // No CORRELATION_ID header so provide it
+      req = new HttpServletRequestWrapper((HttpServletRequest) request) {
+        @Override
+        public String getHeader(String name) {
+          if (CORRELATION_ID.equals(name)) {
+            return correlationId;
+          }
+          return super.getHeader(name);
+        }
+      };
+    }
+
+    res.setHeader(CORRELATION_ID, correlationId);
+
+    log.info(
+        "request: correlationId={} action={} uri={} contentType={}",
+        req.getHeader(CORRELATION_ID),
+        req.getMethod(),
+        req.getRequestURI(),
+        req.getContentType());
+
+    super.doFilter(req, res, chain);
+
+    log.info("response: correlationId={} action={} uri={} status={}",
+        req.getHeader(CORRELATION_ID),
+        req.getMethod(),
+        req.getRequestURI(),
+        res.getStatus());
   }
 
   @Override

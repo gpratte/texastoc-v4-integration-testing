@@ -717,7 +717,7 @@ public class PlayerServiceTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.CONSTRAINT, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, BLType.BAD_REQUEST, ErrorDetails.builder()
               .target("player.roles")
               .message("cannot remove the last role")
               .build());

@@ -310,7 +310,7 @@ public class SeatingServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.CONSTRAINT, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, BLType.BAD_REQUEST, ErrorDetails.builder()
               .target("seating.tableRequests.tableNum")
               .message("for '7' is not valid")
               .build());

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v4")
 public class PlayerRestController {
 
-  private final PlayerModuleImpl playerModule;
+  private final PlayerModule playerModule;
 
   public PlayerRestController(PlayerModuleImpl playerModule) {
     this.playerModule = playerModule;

@@ -260,8 +260,8 @@ public class PlayerIT extends BaseIntegrationTest {
     assertThat(e.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     BLException blException = TestUtils.convert(e);
     assertThat(blException).isNotNull();
-    assertThat(blException.getCode()).isEqualTo("UNAUTHORIZED");
-    assertThat(blException.getMessage()).isEqualTo("Denied");
+    assertThat(blException.getCode()).isEqualTo(HttpStatus.FORBIDDEN.name());
+    assertThat(blException.getMessage()).isEqualTo(HttpStatus.FORBIDDEN.getReasonPhrase());
   }
 
   // A not found error happens
@@ -272,8 +272,8 @@ public class PlayerIT extends BaseIntegrationTest {
     assertThat(e.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     BLException blException = TestUtils.convert(e);
     assertThat(blException).isNotNull();
-    assertThat(blException.getCode()).isEqualTo("INVALID REQUEST");
-    assertThat(blException.getMessage()).isEqualTo("Not found");
+    assertThat(blException.getCode()).isEqualTo(HttpStatus.NOT_FOUND.name());
+    assertThat(blException.getMessage()).isEqualTo(HttpStatus.NOT_FOUND.getReasonPhrase());
     assertThat(blException.getDetails().getTarget()).isEqualTo("player");
     assertThat(blException.getDetails().getMessage()).isEqualTo("with id '" + id + "' not found");
   }

@@ -3,7 +3,6 @@ package com.texastoc.module.quarterly.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.common.GameFinalizedEvent;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.quarterly.QuarterlySeasonModule;
 import com.texastoc.module.quarterly.calculator.QuarterlySeasonCalculator;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -114,7 +114,7 @@ public class QuarterlySeasonService implements QuarterlySeasonModule {
     if (qSeasons.size() > 0) {
       return qSeasons.get(0);
     }
-    throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+    throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
         .target("quarterlySeason")
         .message("with date '" + date + "' not found")
         .build());

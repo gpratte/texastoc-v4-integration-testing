@@ -1,7 +1,6 @@
 package com.texastoc.module.game.service;
 
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
@@ -20,6 +19,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +39,7 @@ public class SeatingService {
   public Seating seatGamePlayers(Seating seating) {
     Optional<Game> optionalGame = gameRepository.findById(seating.getGameId());
     if (!optionalGame.isPresent()) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
           .target("game")
           .message("with id '" + seating.getGameId() + "' not found")
           .build());
@@ -150,7 +150,7 @@ public class SeatingService {
           .filter(gameTable -> gameTable.getTableNum() == tableRequestedNum)
           .findFirst();
       if (!optional.isPresent()) {
-        throw new BLException(BLType.BAD_REQUEST, ErrorDetails.builder()
+        throw new BLException(HttpStatus.BAD_REQUEST, ErrorDetails.builder()
             .target("seating.tableRequests.tableNum")
             .message("for '" + tableRequestedNum + "' is not valid")
             .build());

@@ -2,7 +2,6 @@ package com.texastoc.module.game.service;
 
 import com.google.common.collect.ImmutableSet;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -136,7 +136,7 @@ public class GamePlayerService {
         .filter(gp -> gp.getId() == gamePlayerId)
         .findFirst();
     if (!optionalGamePlayer.isPresent()) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
           .target("gamePlayer")
           .message("with id '" + gamePlayerId + "' not found")
           .build());
@@ -157,7 +157,7 @@ public class GamePlayerService {
         .filter(gp -> gp.getId() == gamePlayerId)
         .findFirst();
     if (!optionalGamePlayer.isPresent()) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
           .target("gamePlayer")
           .message("with id '" + gamePlayerId + "' not found")
           .build());

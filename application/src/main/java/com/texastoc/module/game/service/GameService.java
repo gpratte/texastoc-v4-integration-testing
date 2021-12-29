@@ -1,7 +1,6 @@
 package com.texastoc.module.game.service;
 
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.event.GameEventProducer;
 import com.texastoc.module.game.model.Game;
@@ -20,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -54,7 +54,7 @@ public class GameService {
     List<Game> otherGames = gameRepository.findBySeasonId(currentSeason.getId());
     for (Game otherGame : otherGames) {
       if (!otherGame.isFinalized()) {
-        throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+        throw new BLException(HttpStatus.CONFLICT, ErrorDetails.builder()
             .target("game")
             .message(otherGame.getId() + " is not finalized")
             .build());
@@ -205,7 +205,7 @@ public class GameService {
 
     Season season = getSeasonModule().get(gameToOpen.getSeasonId());
     if (season.isFinalized()) {
-      throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+      throw new BLException(HttpStatus.CONFLICT, ErrorDetails.builder()
           .target("season")
           .message(season.getId() + " is finalized")
           .build());
@@ -218,7 +218,7 @@ public class GameService {
         continue;
       }
       if (!game.isFinalized()) {
-        throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+        throw new BLException(HttpStatus.CONFLICT, ErrorDetails.builder()
             .target("game")
             .message(game.getId() + " is not finalized")
             .build());

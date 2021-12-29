@@ -40,8 +40,7 @@ public class GameRestController {
   // TODO need season path for all these endpoints
   @PostMapping(value = "/seasons/{seasonId}/games", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public Game createGame(@PathVariable("seasonId") int seasonId, @RequestBody Game game,
-      HttpServletRequest request) {
+  public Game createGame(@PathVariable("seasonId") int seasonId, @RequestBody Game game) {
     return gameModule.create(game, seasonId);
   }
 
@@ -90,7 +89,7 @@ public class GameRestController {
   @PostMapping(value = "/games/{id}/players", consumes = CONTENT_TYPE_NEW_GAME_PLAYER)
   @ResponseStatus(HttpStatus.CREATED)
   public GamePlayer createFirstTimeGamePlayer(@PathVariable("id") int id,
-      @RequestBody GamePlayer gamePlayer, HttpServletRequest request) {
+      @RequestBody GamePlayer gamePlayer) {
     gamePlayer.setGameId(id);
     return gameModule.createFirstTimeGamePlayer(gamePlayer);
   }

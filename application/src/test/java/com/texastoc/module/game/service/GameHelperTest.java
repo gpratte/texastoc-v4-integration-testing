@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import com.texastoc.TestUtils;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.calculator.GameCalculator;
 import com.texastoc.module.game.calculator.PayoutCalculator;
@@ -26,6 +25,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class GameHelperTest {
@@ -79,7 +79,7 @@ public class GameHelperTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
               .target("game")
               .message("with id '111' not found")
               .build());
@@ -114,7 +114,7 @@ public class GameHelperTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT, ErrorDetails.builder()
               .target("game")
               .message("1 is not finalized")
               .build());

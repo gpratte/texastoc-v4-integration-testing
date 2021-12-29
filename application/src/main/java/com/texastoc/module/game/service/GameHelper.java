@@ -1,7 +1,6 @@
 package com.texastoc.module.game.service;
 
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.calculator.GameCalculator;
 import com.texastoc.module.game.calculator.PayoutCalculator;
@@ -17,12 +16,14 @@ import com.texastoc.module.quarterly.model.QuarterlySeason;
 import com.texastoc.module.season.SeasonModule;
 import com.texastoc.module.season.SeasonModuleFactory;
 import com.texastoc.module.season.model.Season;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +57,7 @@ public class GameHelper {
   public Game get(int id) {
     Optional<Game> optionalGame = gameRepository.findById(id);
     if (!optionalGame.isPresent()) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
           .target("game")
           .message("with id '" + id + "' not found")
           .build());
@@ -66,7 +67,7 @@ public class GameHelper {
 
   public void checkFinalized(Game game) {
     if (game.isFinalized()) {
-      throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+      throw new BLException(HttpStatus.CONFLICT, ErrorDetails.builder()
           .target("game")
           .message(game.getId() + " is not finalized")
           .build());
@@ -141,7 +142,10 @@ public class GameHelper {
       Season season = null;
       // Wait for the season calculator to finish
       // TODO change to check the season's lastCalculated and the quarterlySeason's
-      //  lastCalculated is after game's lastCalculated
+      //  lastCalculated is after game's lastCalculated.
+      // TODO why did I need to add now.isBefore(begin.plusMinutes(1))?
+      LocalDateTime begin = LocalDateTime.now();
+      LocalDateTime now = LocalDateTime.now();
       do {
         try {
           Thread.sleep(1000l);
@@ -150,7 +154,10 @@ public class GameHelper {
         }
         season = getSeasonModule().get(game.getSeasonId());
         seasonNumGamesPlayed = season.getNumGamesPlayed();
-      } while (seasonNumGamesPlayed != seasonGameNum);
+
+        // Quit after a minute
+        now = LocalDateTime.now();
+      } while (seasonNumGamesPlayed != seasonGameNum && now.isBefore(begin.plusMinutes(1)));
 
       List<Player> players = getPlayerModule().getAll();
       List<QuarterlySeason> quarterlySeasons = getQuarterlySeasonModule()

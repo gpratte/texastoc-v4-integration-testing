@@ -3,7 +3,6 @@ package com.texastoc.module.player.service;
 import com.google.common.collect.ImmutableSet;
 import com.texastoc.common.AuthorizationHelper;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.GameModuleFactory;
@@ -26,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,7 +95,7 @@ public class PlayerService implements PlayerModule {
   public Player get(int id) {
     Optional<Player> optionalPlayer = playerRepository.findById(id);
     if (!optionalPlayer.isPresent()) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
           .target("player")
           .message("with id '" + id + "' not found")
           .build());
@@ -110,7 +110,7 @@ public class PlayerService implements PlayerModule {
   public Player getByEmail(String email) {
     List<Player> players = playerRepository.findByEmail(email);
     if (players.size() != 1) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
           .target("player")
           .message("with email '" + email + "' not found")
           .build());
@@ -127,7 +127,7 @@ public class PlayerService implements PlayerModule {
 
     List<Game> games = getGameModule().getByPlayerId(id);
     if (games.size() > 0) {
-      throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+      throw new BLException(HttpStatus.CONFLICT, ErrorDetails.builder()
           .target("player")
           .message(id + " cannot be deleted")
           .build());
@@ -156,7 +156,7 @@ public class PlayerService implements PlayerModule {
     }
 
     if (email == null) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
           .target("code")
           .message("not found")
           .build());
@@ -202,7 +202,7 @@ public class PlayerService implements PlayerModule {
     }
 
     if (!found) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
           .target("role")
           .message("with id '" + roleId + "' not found")
           .build());
@@ -210,7 +210,7 @@ public class PlayerService implements PlayerModule {
 
     // found the role, now make sure it is not the only role
     if (existingRoles.size() < 2) {
-      throw new BLException(BLType.BAD_REQUEST, ErrorDetails.builder()
+      throw new BLException(HttpStatus.BAD_REQUEST, ErrorDetails.builder()
           .target("player.roles")
           .message("cannot remove the last role")
           .build());
@@ -232,7 +232,7 @@ public class PlayerService implements PlayerModule {
   // verify the user is an admin
   private void verifyLoggedInUserIsAdmin() {
     if (!authorizationHelper.isLoggedInUserHaveRole(Role.Type.ADMIN)) {
-      throw new BLException(BLType.DENIED);
+      throw new BLException(HttpStatus.FORBIDDEN);
     }
   }
 
@@ -242,14 +242,14 @@ public class PlayerService implements PlayerModule {
       String email = authorizationHelper.getLoggedInUserEmail();
       List<Player> players = playerRepository.findByEmail(email);
       if (players.size() != 1) {
-        throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+        throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
             .target("player")
             .message("with email '" + email + "' not found")
             .build());
       }
       Player loggedInPlayer = players.get(0);
       if (loggedInPlayer.getId() != player.getId()) {
-        throw new BLException(BLType.DENIED);
+        throw new BLException(HttpStatus.FORBIDDEN);
       }
     }
   }

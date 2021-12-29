@@ -17,7 +17,6 @@ import com.texastoc.TestConstants;
 import com.texastoc.TestUtils;
 import com.texastoc.config.IntegrationTestingConfig;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.model.Game;
@@ -44,6 +43,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class SeasonServiceTest implements TestConstants {
@@ -165,7 +165,7 @@ public class SeasonServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
               .target("season")
               .message("with id '1' not found")
               .build());
@@ -279,7 +279,7 @@ public class SeasonServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
               .target("season")
               .message("with id '1' not found")
               .build());
@@ -301,7 +301,7 @@ public class SeasonServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT, ErrorDetails.builder()
               .target("game")
               .message("1 is not finalized")
               .build());
@@ -341,7 +341,7 @@ public class SeasonServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
               .target("season")
               .message("with id '1' not found")
               .build());

@@ -16,7 +16,6 @@ import com.google.common.collect.ImmutableList;
 import com.texastoc.TestConstants;
 import com.texastoc.TestUtils;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.event.GameEventProducer;
 import com.texastoc.module.game.model.Game;
@@ -35,6 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class GameServiceTest implements TestConstants {
@@ -192,7 +192,7 @@ public class GameServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT, ErrorDetails.builder()
               .target("game")
               .message("23 is not finalized")
               .build());
@@ -394,7 +394,7 @@ public class GameServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT, ErrorDetails.builder()
               .target("season")
               .message("16 is finalized")
               .build());
@@ -430,7 +430,7 @@ public class GameServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT, ErrorDetails.builder()
               .target("game")
               .message("22 is not finalized")
               .build());

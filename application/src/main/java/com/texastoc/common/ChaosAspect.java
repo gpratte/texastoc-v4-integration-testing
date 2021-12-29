@@ -4,7 +4,6 @@ import static com.texastoc.common.ChaosAspect.ExceptionType.RUNTIME_EXCEPTION;
 
 import com.texastoc.config.IntegrationTestingConfig;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import java.util.Random;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +14,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -108,7 +108,7 @@ public class ChaosAspect {
   private void throwDenied() {
     String correlationId = MDC.get("correlationId") == null ? null : MDC.get("correlationId");
     log.info("correlationId=" + correlationId + ", chaos throwing DENIED");
-    throw new BLException(BLType.DENIED);
+    throw new BLException(HttpStatus.FORBIDDEN);
   }
 
   @AllArgsConstructor

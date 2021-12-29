@@ -3,7 +3,6 @@ package com.texastoc;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
 import com.texastoc.exception.ErrorDetails;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.settings.model.Payout;
@@ -12,20 +11,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 public class TestUtils implements TestConstants {
 
   private static final Map<Integer, List<Payout>> PAYOUTS;
 
-  public static void verifyBLException(BLException blException, BLType blType) {
-    verifyBLException(blException, blType, null);
+  public static void verifyBLException(BLException blException, HttpStatus status) {
+    verifyBLException(blException, status, null);
   }
 
-  public static void verifyBLException(BLException blException, BLType blType,
+  public static void verifyBLException(BLException blException, HttpStatus status,
       ErrorDetails errorDetails) {
-    assertThat(blException.getCode()).isEqualTo(blType.getCode());
-    assertThat(blException.getMessage()).isEqualTo(blType.getMessage());
-    assertThat(blException.getStatus()).isEqualTo(blType.getStatus());
+    assertThat(blException.getStatus()).isEqualTo(status);
     assertThat(blException.getDetails()).isEqualTo(errorDetails);
   }
 

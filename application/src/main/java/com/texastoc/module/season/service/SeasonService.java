@@ -3,7 +3,7 @@ package com.texastoc.module.season.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.config.IntegrationTestingConfig;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.GameModuleFactory;
 import com.texastoc.module.game.model.Game;
@@ -69,18 +69,18 @@ public class SeasonService {
       List<Season> seasons = getAll();
       seasons.forEach(season -> {
         if (!season.isFinalized()) {
-          throw new BLException(HttpStatus.CONFLICT, ErrorDetails.builder()
+          throw new BLException(HttpStatus.CONFLICT, List.of(ErrorDetail.builder()
               .target("season")
               .message(season.getId() + " is not finalized")
-              .build());
+              .build()));
         }
       });
       seasons.forEach(season -> {
         if (season.getStart().getYear() == startYear) {
-          throw new BLException(HttpStatus.BAD_REQUEST, ErrorDetails.builder()
+          throw new BLException(HttpStatus.BAD_REQUEST, List.of(ErrorDetail.builder()
               .target("season.start")
               .message("a season with start year " + startYear + " already exists")
-              .build());
+              .build()));
         }
       });
     }
@@ -125,10 +125,10 @@ public class SeasonService {
   public Season get(int id) {
     Optional<Season> optionalSeason = seasonRepository.findById(id);
     if (!optionalSeason.isPresent()) {
-      throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, List.of(ErrorDetail.builder()
           .target("season")
           .message("with id '" + id + "' not found")
-          .build());
+          .build()));
     }
     return optionalSeason.get();
 
@@ -148,10 +148,10 @@ public class SeasonService {
     List<Game> games = getGameModule().getBySeasonId(seasonId);
     for (Game game : games) {
       if (!game.isFinalized()) {
-        throw new BLException(HttpStatus.CONFLICT, ErrorDetails.builder()
+        throw new BLException(HttpStatus.CONFLICT, List.of(ErrorDetail.builder()
             .target("game")
             .message(game.getId() + " is not finalized")
-            .build());
+            .build()));
       }
     }
 

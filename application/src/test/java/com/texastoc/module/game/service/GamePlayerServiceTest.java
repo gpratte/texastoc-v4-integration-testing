@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 import com.texastoc.TestConstants;
 import com.texastoc.TestUtils;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.repository.GameRepository;
@@ -23,6 +23,7 @@ import com.texastoc.module.player.PlayerModule;
 import com.texastoc.module.player.model.Player;
 import com.texastoc.module.player.model.Role;
 import java.util.Arrays;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -520,10 +521,11 @@ public class GamePlayerServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("gamePlayer")
-              .message("with id '11' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("gamePlayer")
+                  .message("with id '11' not found")
+                  .build()));
         });
   }
 
@@ -612,10 +614,11 @@ public class GamePlayerServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("gamePlayer")
-              .message("with id '11' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("gamePlayer")
+                  .message("with id '11' not found")
+                  .build()));
         });
   }
 

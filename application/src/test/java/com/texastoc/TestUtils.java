@@ -3,7 +3,7 @@ package com.texastoc;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.settings.model.Payout;
 import com.texastoc.module.settings.model.TocConfig;
@@ -22,7 +22,7 @@ public class TestUtils implements TestConstants {
   }
 
   public static void verifyBLException(BLException blException, HttpStatus status,
-      ErrorDetails errorDetails) {
+      List<ErrorDetail> errorDetails) {
     assertThat(blException.getStatus()).isEqualTo(status);
     assertThat(blException.getDetails()).isEqualTo(errorDetails);
   }

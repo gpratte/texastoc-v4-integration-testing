@@ -3,7 +3,7 @@ package com.texastoc.module.quarterly.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.common.GameFinalizedEvent;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.quarterly.QuarterlySeasonModule;
 import com.texastoc.module.quarterly.calculator.QuarterlySeasonCalculator;
 import com.texastoc.module.quarterly.model.Quarter;
@@ -114,10 +114,10 @@ public class QuarterlySeasonService implements QuarterlySeasonModule {
     if (qSeasons.size() > 0) {
       return qSeasons.get(0);
     }
-    throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
+    throw new BLException(HttpStatus.NOT_FOUND, List.of(ErrorDetail.builder()
         .target("quarterlySeason")
         .message("with date '" + date + "' not found")
-        .build());
+        .build()));
   }
 
   private LocalDate findNextThursday(LocalDate day) {

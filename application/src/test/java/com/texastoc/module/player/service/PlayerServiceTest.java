@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableSet;
 import com.texastoc.TestUtils;
 import com.texastoc.common.AuthorizationHelper;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.notification.NotificationModule;
@@ -246,10 +246,11 @@ public class PlayerServiceTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("player")
-              .message("with id '123' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("player")
+                  .message("with id '123' not found")
+                  .build()));
         });
   }
 
@@ -287,10 +288,11 @@ public class PlayerServiceTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("player")
-              .message("with id '123' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("player")
+                  .message("with id '123' not found")
+                  .build()));
         });
 
     // Act and Assert
@@ -299,10 +301,11 @@ public class PlayerServiceTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("player")
-              .message("with email 'abc' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("player")
+                  .message("with email 'abc' not found")
+                  .build()));
         });
   }
 
@@ -355,20 +358,22 @@ public class PlayerServiceTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("player")
-              .message("with id '123' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("player")
+                  .message("with id '123' not found")
+                  .build()));
         });
     assertThatThrownBy(() -> {
       playerService.delete(1);
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT, ErrorDetails.builder()
-              .target("player")
-              .message("1 cannot be deleted")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT,
+              List.of(ErrorDetail.builder()
+                  .target("player")
+                  .message("1 cannot be deleted")
+                  .build()));
         });
   }
 
@@ -384,10 +389,11 @@ public class PlayerServiceTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("player")
-              .message("with id '123' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("player")
+                  .message("with id '123' not found")
+                  .build()));
         });
     assertThatThrownBy(() -> {
       playerService.delete(1);
@@ -478,20 +484,22 @@ public class PlayerServiceTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("player")
-              .message("with id '123' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("player")
+                  .message("with id '123' not found")
+                  .build()));
         });
     assertThatThrownBy(() -> {
       playerService.resetPassword(code, password);
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("code")
-              .message("not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("code")
+                  .message("not found")
+                  .build()));
         });
   }
 
@@ -659,20 +667,22 @@ public class PlayerServiceTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("player")
-              .message("with id '123' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("player")
+                  .message("with id '123' not found")
+                  .build()));
         });
     assertThatThrownBy(() -> {
       playerService.removeRole(1, 2);
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("role")
-              .message("with id '2' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("role")
+                  .message("with id '2' not found")
+                  .build()));
         });
   }
 
@@ -707,20 +717,22 @@ public class PlayerServiceTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("player")
-              .message("with id '123' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("player")
+                  .message("with id '123' not found")
+                  .build()));
         });
     assertThatThrownBy(() -> {
       playerService.removeRole(1, 1);
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.BAD_REQUEST, ErrorDetails.builder()
-              .target("player.roles")
-              .message("cannot remove the last role")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.BAD_REQUEST,
+              List.of(ErrorDetail.builder()
+                  .target("player.roles")
+                  .message("cannot remove the last role")
+                  .build()));
         });
   }
 }

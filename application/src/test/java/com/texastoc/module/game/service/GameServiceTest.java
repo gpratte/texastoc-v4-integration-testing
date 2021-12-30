@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableList;
 import com.texastoc.TestConstants;
 import com.texastoc.TestUtils;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.event.GameEventProducer;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.repository.GameRepository;
@@ -192,10 +192,11 @@ public class GameServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT, ErrorDetails.builder()
-              .target("game")
-              .message("23 is not finalized")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT,
+              List.of(ErrorDetail.builder()
+                  .target("game")
+                  .message("23 is not finalized")
+                  .build()));
         });
   }
 
@@ -394,10 +395,11 @@ public class GameServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT, ErrorDetails.builder()
-              .target("season")
-              .message("16 is finalized")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT,
+              List.of(ErrorDetail.builder()
+                  .target("season")
+                  .message("16 is finalized")
+                  .build()));
         });
   }
 
@@ -430,10 +432,11 @@ public class GameServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT, ErrorDetails.builder()
-              .target("game")
-              .message("22 is not finalized")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT,
+              List.of(ErrorDetail.builder()
+                  .target("game")
+                  .message("22 is not finalized")
+                  .build()));
         });
   }
 

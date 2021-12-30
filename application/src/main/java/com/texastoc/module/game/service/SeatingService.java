@@ -1,7 +1,7 @@
 package com.texastoc.module.game.service;
 
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.model.GameTable;
@@ -39,10 +39,10 @@ public class SeatingService {
   public Seating seatGamePlayers(Seating seating) {
     Optional<Game> optionalGame = gameRepository.findById(seating.getGameId());
     if (!optionalGame.isPresent()) {
-      throw new BLException(HttpStatus.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, List.of(ErrorDetail.builder()
           .target("game")
           .message("with id '" + seating.getGameId() + "' not found")
-          .build());
+          .build()));
     }
     Game game = optionalGame.get();
     game.setSeating(seating);
@@ -150,10 +150,10 @@ public class SeatingService {
           .filter(gameTable -> gameTable.getTableNum() == tableRequestedNum)
           .findFirst();
       if (!optional.isPresent()) {
-        throw new BLException(HttpStatus.BAD_REQUEST, ErrorDetails.builder()
+        throw new BLException(HttpStatus.BAD_REQUEST, List.of(ErrorDetail.builder()
             .target("seating.tableRequests.tableNum")
             .message("for '" + tableRequestedNum + "' is not valid")
-            .build());
+            .build()));
       }
 
       // Find the seat of the player that wants to swap

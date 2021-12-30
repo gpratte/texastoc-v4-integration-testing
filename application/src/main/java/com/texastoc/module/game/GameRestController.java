@@ -5,6 +5,7 @@ import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.model.Seating;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,7 +41,7 @@ public class GameRestController {
   // TODO need season path for all these endpoints
   @PostMapping(value = "/seasons/{seasonId}/games", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public Game createGame(@PathVariable("seasonId") int seasonId, @RequestBody Game game) {
+  public Game createGame(@PathVariable("seasonId") int seasonId, @Valid @RequestBody Game game) {
     return gameModule.create(game, seasonId);
   }
 

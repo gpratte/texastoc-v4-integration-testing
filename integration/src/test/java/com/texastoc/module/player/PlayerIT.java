@@ -274,8 +274,10 @@ public class PlayerIT extends BaseIntegrationTest {
     assertThat(blException).isNotNull();
     assertThat(blException.getCode()).isEqualTo(HttpStatus.NOT_FOUND.name());
     assertThat(blException.getMessage()).isEqualTo(HttpStatus.NOT_FOUND.getReasonPhrase());
-    assertThat(blException.getDetails().getTarget()).isEqualTo("player");
-    assertThat(blException.getDetails().getMessage()).isEqualTo("with id '" + id + "' not found");
+    assertThat(blException.getDetails().size()).isEqualTo(1);
+    assertThat(blException.getDetails().get(0).getTarget()).isEqualTo("player");
+    assertThat(blException.getDetails().get(0).getMessage()).isEqualTo(
+        "with id '" + id + "' not found");
   }
 
   private void playerMatches(Player request, Player response) {

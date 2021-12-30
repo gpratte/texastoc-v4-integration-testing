@@ -1,7 +1,7 @@
 package com.texastoc.module.game.service;
 
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.event.GameEventProducer;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
@@ -54,10 +54,10 @@ public class GameService {
     List<Game> otherGames = gameRepository.findBySeasonId(currentSeason.getId());
     for (Game otherGame : otherGames) {
       if (!otherGame.isFinalized()) {
-        throw new BLException(HttpStatus.CONFLICT, ErrorDetails.builder()
+        throw new BLException(HttpStatus.CONFLICT, List.of(ErrorDetail.builder()
             .target("game")
             .message(otherGame.getId() + " is not finalized")
-            .build());
+            .build()));
       }
     }
 
@@ -205,10 +205,10 @@ public class GameService {
 
     Season season = getSeasonModule().get(gameToOpen.getSeasonId());
     if (season.isFinalized()) {
-      throw new BLException(HttpStatus.CONFLICT, ErrorDetails.builder()
+      throw new BLException(HttpStatus.CONFLICT, List.of(ErrorDetail.builder()
           .target("season")
           .message(season.getId() + " is finalized")
-          .build());
+          .build()));
     }
 
     // Make sure no other game is open
@@ -218,10 +218,10 @@ public class GameService {
         continue;
       }
       if (!game.isFinalized()) {
-        throw new BLException(HttpStatus.CONFLICT, ErrorDetails.builder()
+        throw new BLException(HttpStatus.CONFLICT, List.of(ErrorDetail.builder()
             .target("game")
             .message(game.getId() + " is not finalized")
-            .build());
+            .build()));
       }
     }
 

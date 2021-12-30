@@ -1,6 +1,7 @@
 package com.texastoc.exception;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ public class BLException extends RuntimeException {
 
   private String code;
   private String message;
-  private ErrorDetails details;
+  private List<ErrorDetail> details;
   @JsonIgnore
   private HttpStatus status;
 
@@ -26,7 +27,7 @@ public class BLException extends RuntimeException {
     this(status, null);
   }
 
-  public BLException(HttpStatus status, ErrorDetails details) {
+  public BLException(HttpStatus status, List<ErrorDetail> details) {
     this.status = status;
     code = status.name();
     message = status.getReasonPhrase();

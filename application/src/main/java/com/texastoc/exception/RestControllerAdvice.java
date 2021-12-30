@@ -1,17 +1,22 @@
 package com.texastoc.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Slf4j
 @ControllerAdvice
 public class RestControllerAdvice extends ResponseEntityExceptionHandler {
 
@@ -40,12 +45,19 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
     return super.handleExceptionInternal(ex, Response.builder()
         .code(status.name())
         .message(status.getReasonPhrase())
-        .details(ErrorDetails.builder()
+        .details(List.of(ErrorDetail.builder()
             .message("Message not readable")
-            .build())
+            .build()))
         .build(), headers, status, request);
   }
 
+  @Override
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+      HttpHeaders headers, HttpStatus status, WebRequest request) {
+    BindingResult bindingResult = ex.getBindingResult();
+    log.info("!!! " + bindingResult);
+    return this.handleExceptionInternal(ex, (Object) null, headers, status, request);
+  }
 
   @Override
   protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
@@ -62,6 +74,6 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
 
     String code;
     String message;
-    ErrorDetails details;
+    List<ErrorDetail> details;
   }
 }

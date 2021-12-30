@@ -17,7 +17,7 @@ import com.texastoc.TestConstants;
 import com.texastoc.TestUtils;
 import com.texastoc.config.IntegrationTestingConfig;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.quarterly.QuarterlySeasonModule;
@@ -165,10 +165,11 @@ public class SeasonServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("season")
-              .message("with id '1' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("season")
+                  .message("with id '1' not found")
+                  .build()));
         });
   }
 
@@ -279,10 +280,11 @@ public class SeasonServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("season")
-              .message("with id '1' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("season")
+                  .message("with id '1' not found")
+                  .build()));
         });
   }
 
@@ -301,10 +303,11 @@ public class SeasonServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT, ErrorDetails.builder()
-              .target("game")
-              .message("1 is not finalized")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT,
+              List.of(ErrorDetail.builder()
+                  .target("game")
+                  .message("1 is not finalized")
+                  .build()));
         });
   }
 
@@ -341,10 +344,11 @@ public class SeasonServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND, ErrorDetails.builder()
-              .target("season")
-              .message("with id '1' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("season")
+                  .message("with id '1' not found")
+                  .build()));
         });
   }
 

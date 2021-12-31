@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class ErrorDetails {
+public class ErrorDetail {
 
   private String target;
   private String message;

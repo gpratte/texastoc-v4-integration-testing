@@ -11,8 +11,7 @@ import static org.mockito.Mockito.when;
 import com.texastoc.TestConstants;
 import com.texastoc.TestUtils;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.model.GameTable;
@@ -30,6 +29,7 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class SeatingServiceTest implements TestConstants {
@@ -310,10 +310,11 @@ public class SeatingServiceTest implements TestConstants {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.BAD_REQUEST, ErrorDetails.builder()
-              .target("seating.tableRequests.tableNum")
-              .message("for '7' is not valid")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.BAD_REQUEST,
+              List.of(ErrorDetail.builder()
+                  .target("seating.tableRequests.tableNum")
+                  .message("for '7' is not valid")
+                  .build()));
         });
   }
 

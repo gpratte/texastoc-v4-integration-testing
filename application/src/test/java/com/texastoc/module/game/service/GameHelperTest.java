@@ -9,8 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.texastoc.TestUtils;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.calculator.GameCalculator;
 import com.texastoc.module.game.calculator.PayoutCalculator;
 import com.texastoc.module.game.calculator.PointsCalculator;
@@ -21,11 +20,13 @@ import com.texastoc.module.season.SeasonModule;
 import com.texastoc.module.season.model.Season;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class GameHelperTest {
@@ -79,10 +80,11 @@ public class GameHelperTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.NOT_FOUND, ErrorDetails.builder()
-              .target("game")
-              .message("with id '111' not found")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.NOT_FOUND,
+              List.of(ErrorDetail.builder()
+                  .target("game")
+                  .message("with id '111' not found")
+                  .build()));
         });
   }
 
@@ -114,10 +116,11 @@ public class GameHelperTest {
     }).isInstanceOf(BLException.class)
         .satisfies(ex -> {
           BLException blException = (BLException) ex;
-          TestUtils.verifyBLException(blException, BLType.CONFLICT, ErrorDetails.builder()
-              .target("game")
-              .message("1 is not finalized")
-              .build());
+          TestUtils.verifyBLException(blException, HttpStatus.CONFLICT,
+              List.of(ErrorDetail.builder()
+                  .target("game")
+                  .message("1 is not finalized")
+                  .build()));
         });
   }
 

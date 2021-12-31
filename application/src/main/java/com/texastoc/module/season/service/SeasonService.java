@@ -3,8 +3,7 @@ package com.texastoc.module.season.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texastoc.config.IntegrationTestingConfig;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.GameModuleFactory;
 import com.texastoc.module.game.model.Game;
@@ -31,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,23 +62,25 @@ public class SeasonService {
   public Season create(int startYear) {
     LocalDate start = LocalDate.of(startYear, Month.MAY.getValue(), 1);
 
+    // TODO validate start year - this year or next?
+
     // Make sure not overlapping with another season
     if (!integrationTestingConfig.isAllowMultipleSeasons()) {
       List<Season> seasons = getAll();
       seasons.forEach(season -> {
         if (!season.isFinalized()) {
-          throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+          throw new BLException(HttpStatus.CONFLICT, List.of(ErrorDetail.builder()
               .target("season")
               .message(season.getId() + " is not finalized")
-              .build());
+              .build()));
         }
       });
       seasons.forEach(season -> {
         if (season.getStart().getYear() == startYear) {
-          throw new BLException(BLType.BAD_REQUEST, ErrorDetails.builder()
+          throw new BLException(HttpStatus.BAD_REQUEST, List.of(ErrorDetail.builder()
               .target("season.start")
               .message("a season with start year " + startYear + " already exists")
-              .build());
+              .build()));
         }
       });
     }
@@ -123,10 +125,10 @@ public class SeasonService {
   public Season get(int id) {
     Optional<Season> optionalSeason = seasonRepository.findById(id);
     if (!optionalSeason.isPresent()) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, List.of(ErrorDetail.builder()
           .target("season")
           .message("with id '" + id + "' not found")
-          .build());
+          .build()));
     }
     return optionalSeason.get();
 
@@ -146,10 +148,10 @@ public class SeasonService {
     List<Game> games = getGameModule().getBySeasonId(seasonId);
     for (Game game : games) {
       if (!game.isFinalized()) {
-        throw new BLException(BLType.CONFLICT, ErrorDetails.builder()
+        throw new BLException(HttpStatus.CONFLICT, List.of(ErrorDetail.builder()
             .target("game")
             .message(game.getId() + " is not finalized")
-            .build());
+            .build()));
       }
     }
 

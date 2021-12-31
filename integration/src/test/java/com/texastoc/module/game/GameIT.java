@@ -210,7 +210,7 @@ public class GameIT extends BaseGameIT {
     assertThat(e.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
     BLException blException = TestUtils.convert(e);
     assertThat(blException).isNotNull();
-    assertThat(blException.getCode()).isEqualTo("INVALID REQUEST");
+    assertThat(blException.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(blException.getMessage()).isEqualTo("Cannot perform operation");
     // TODO flesh out last two asserts
     //assertThat(blException.getDetails().getTarget()).isEqualTo("game");

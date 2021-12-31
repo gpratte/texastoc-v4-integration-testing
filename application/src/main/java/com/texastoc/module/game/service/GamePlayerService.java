@@ -2,8 +2,7 @@ package com.texastoc.module.game.service;
 
 import com.google.common.collect.ImmutableSet;
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.model.Game;
 import com.texastoc.module.game.model.GamePlayer;
 import com.texastoc.module.game.repository.GameRepository;
@@ -12,9 +11,11 @@ import com.texastoc.module.player.PlayerModuleFactory;
 import com.texastoc.module.player.model.Player;
 import com.texastoc.module.player.model.Role;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -136,10 +137,10 @@ public class GamePlayerService {
         .filter(gp -> gp.getId() == gamePlayerId)
         .findFirst();
     if (!optionalGamePlayer.isPresent()) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, List.of(ErrorDetail.builder()
           .target("gamePlayer")
           .message("with id '" + gamePlayerId + "' not found")
-          .build());
+          .build()));
     }
     GamePlayer gamePlayer = optionalGamePlayer.get();
     gamePlayer.setKnockedOut(!gamePlayer.isKnockedOut());
@@ -157,10 +158,10 @@ public class GamePlayerService {
         .filter(gp -> gp.getId() == gamePlayerId)
         .findFirst();
     if (!optionalGamePlayer.isPresent()) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, List.of(ErrorDetail.builder()
           .target("gamePlayer")
           .message("with id '" + gamePlayerId + "' not found")
-          .build());
+          .build()));
     }
     GamePlayer gamePlayer = optionalGamePlayer.get();
     gamePlayer.setRebought(!gamePlayer.isRebought());

@@ -1,5 +1,6 @@
 package com.texastoc.module.player.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Player implements Comparable<Player> {
 
   @Id

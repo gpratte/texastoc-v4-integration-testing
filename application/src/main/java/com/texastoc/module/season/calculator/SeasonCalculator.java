@@ -1,8 +1,7 @@
 package com.texastoc.module.season.calculator;
 
 import com.texastoc.exception.BLException;
-import com.texastoc.exception.BLType;
-import com.texastoc.exception.ErrorDetails;
+import com.texastoc.exception.ErrorDetail;
 import com.texastoc.module.game.GameModule;
 import com.texastoc.module.game.GameModuleFactory;
 import com.texastoc.module.game.model.Game;
@@ -23,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -99,10 +99,10 @@ public class SeasonCalculator {
     List<SeasonPayoutSettings> seasonPayoutSettingss = seasonPayoutSettingsRepository
         .findByStartYear(season.getStart().getYear());
     if (seasonPayoutSettingss.size() < 1) {
-      throw new BLException(BLType.NOT_FOUND, ErrorDetails.builder()
+      throw new BLException(HttpStatus.NOT_FOUND, List.of(ErrorDetail.builder()
           .target("seasonPayoutSettings")
           .message("with season id '" + season.getId() + "' not found")
-          .build());
+          .build()));
     }
     SeasonPayoutSettings seasonPayoutSettings = seasonPayoutSettingss.get(0);
     int total = season.getTotalCombinedAnnualTocCalculated();

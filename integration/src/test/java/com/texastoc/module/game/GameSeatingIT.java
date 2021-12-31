@@ -231,10 +231,12 @@ public class GameSeatingIT extends BaseIntegrationTest {
     assertThat(e.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     BLException blException = TestUtils.convert(e);
     assertThat(blException).isNotNull();
-    assertThat(blException.getCode()).isEqualTo("INVALID DATA");
-    assertThat(blException.getMessage()).isEqualTo("Invalid data");
-    assertThat(blException.getDetails().getTarget()).isEqualTo("seating.tableRequests.tableNum");
-    assertThat(blException.getDetails().getMessage()).isEqualTo(
+    assertThat(blException.getCode()).isEqualTo(HttpStatus.BAD_REQUEST.name());
+    assertThat(blException.getMessage()).isEqualTo(HttpStatus.BAD_REQUEST.getReasonPhrase());
+    assertThat(blException.getDetails().size()).isEqualTo(1);
+    assertThat(blException.getDetails().get(0).getTarget()).isEqualTo(
+        "seating.tableRequests.tableNum");
+    assertThat(blException.getDetails().get(0).getMessage()).isEqualTo(
         "for '" + invalidTableNum + "' is not valid");
   }
 }

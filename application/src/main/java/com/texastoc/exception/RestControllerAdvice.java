@@ -1,6 +1,7 @@
 package com.texastoc.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -55,8 +58,29 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
       HttpHeaders headers, HttpStatus status, WebRequest request) {
     BindingResult bindingResult = ex.getBindingResult();
-    log.info("!!! " + bindingResult);
-    return this.handleExceptionInternal(ex, (Object) null, headers, status, request);
+    List<ErrorDetail> errorDetails = null;
+    if (bindingResult.getErrorCount() > 0) {
+      String target = bindingResult.getObjectName();
+      errorDetails = new LinkedList<>();
+      for (FieldError fieldError : bindingResult.getFieldErrors()) {
+        errorDetails.add(ErrorDetail.builder()
+            .target(target + "." + fieldError.getField())
+            .message(fieldError.getDefaultMessage())
+            .build());
+      }
+      for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
+        errorDetails.add(ErrorDetail.builder()
+            .target(error.getObjectName())
+            .message(error.getDefaultMessage())
+            .build());
+      }
+    }
+
+    return super.handleExceptionInternal(ex, Response.builder()
+        .code(status.name())
+        .message(status.getReasonPhrase())
+        .details(errorDetails)
+        .build(), headers, status, request);
   }
 
   @Override

@@ -310,7 +310,8 @@ Choose the branch from the github list of branches to see the readme for that br
 
 To see the code for a branch compare the branch to the previous branch.
 
-## Current Branch: 15-chaos
-Configured AOP to intermittently throw exceptions when an is called (when a Controller method is invoked).
+## Current Branch: 17-better-mvc-exception-handling
 
-It will be interesting to see how this looks in New Relic.
+Return a consistent body for any exception. Business Logic Exceptions (BLException) can have extra
+info and some internal Spring exceptions (MethodArgumentNotValidException,
+HttpMessageNotReadableException) have extra info.

@@ -32,7 +32,7 @@ public class PlayerRestController {
 
   @PostMapping("/players")
   @ResponseStatus(HttpStatus.CREATED)
-  public Player create(@RequestBody Player player, HttpServletRequest request) {
+  public Player create(@RequestBody Player player) {
     return playerModule.create(player);
   }
 
@@ -41,10 +41,6 @@ public class PlayerRestController {
   public Player update(@PathVariable("id") int id, @RequestBody @Valid Player player,
       HttpServletRequest request) {
     player.setId(id);
-    return update(player);
-  }
-
-  public Player update(Player player) {
     return playerModule.update(player);
   }
 
@@ -56,19 +52,19 @@ public class PlayerRestController {
 
   @GetMapping("/players/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public Player get(@PathVariable("id") int id, HttpServletRequest request) {
+  public Player get(@PathVariable("id") int id) {
     return playerModule.get(id);
   }
 
   @DeleteMapping("/players/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("id") int id, HttpServletRequest request) {
+  public void delete(@PathVariable("id") int id) {
     playerModule.delete(id);
   }
 
   @PostMapping(value = "/password/reset", consumes = "application/vnd.texastoc.password-forgot+json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void forgot(@RequestBody Forgot forgot, HttpServletRequest request) {
+  public void forgot(@RequestBody Forgot forgot) {
     forgotPassword(forgot.getEmail());
   }
 
@@ -78,7 +74,7 @@ public class PlayerRestController {
 
   @PostMapping(value = "/password/reset", consumes = "application/vnd.texastoc.password-reset+json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void reset(@RequestBody Reset reset, HttpServletRequest request) {
+  public void reset(@RequestBody Reset reset) {
     resetPassword(reset.getCode(), reset.getPassword());
   }
 

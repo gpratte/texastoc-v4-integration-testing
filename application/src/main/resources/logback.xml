@@ -4,7 +4,7 @@
   <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
     <layout class="ch.qos.logback.classic.PatternLayout">
       <Pattern>
-        %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+        %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): correlationId=%X{correlationId} %msg%n%throwable
       </Pattern>
     </layout>
   </appender>
@@ -12,7 +12,7 @@
   <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>logs/texastoc/texastoc.log</file>
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-      <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+      <Pattern>%d %p %C{1.} [%t] correlationId=%X{correlationId} %m%n</Pattern>
     </encoder>
 
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">

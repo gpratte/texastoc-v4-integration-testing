@@ -55,7 +55,7 @@ public class GameRestController {
 
   @GetMapping("/games/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public Game getGame(@PathVariable("id") int id, HttpServletRequest request) {
+  public Game getGame(@PathVariable("id") int id) {
     return gameModule.get(id);
   }
 
@@ -68,21 +68,21 @@ public class GameRestController {
 
   @PutMapping(value = "/games/{id}", consumes = CONTENT_TYPE_FINALIZE)
   @ResponseStatus(HttpStatus.OK)
-  public Game finalizeGame(@PathVariable("id") int id, HttpServletRequest request) {
+  public Game finalizeGame(@PathVariable("id") int id) {
     return gameModule.finalize(id);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping(value = "/games/{id}", consumes = CONTENT_TYPE_UNFINALIZE)
   @ResponseStatus(HttpStatus.OK)
-  public Game unfinalizeGame(@PathVariable("id") int id, HttpServletRequest request) {
+  public Game unfinalizeGame(@PathVariable("id") int id) {
     return gameModule.unfinalize(id);
   }
 
   @PostMapping(value = "/games/{id}/players", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public GamePlayer createGamePlayer(@PathVariable("id") int id,
-      @RequestBody GamePlayer gamePlayer, HttpServletRequest request) {
+      @RequestBody GamePlayer gamePlayer) {
     gamePlayer.setGameId(id);
     return gameModule.createGamePlayer(gamePlayer);
   }
@@ -108,21 +108,21 @@ public class GameRestController {
   @PutMapping(value = "/games/{gameId}/players/{gamePlayerId}", consumes = CONTENT_TYPE_KNOCKOUT)
   @ResponseStatus(HttpStatus.OK)
   public GamePlayer toggleKnockedOut(@PathVariable("gameId") int gameId,
-      @PathVariable("gamePlayerId") int gamePlayerId, HttpServletRequest request) {
+      @PathVariable("gamePlayerId") int gamePlayerId) {
     return gameModule.toggleGamePlayerKnockedOut(gameId, gamePlayerId);
   }
 
   @PutMapping(value = "/games/{gameId}/players/{gamePlayerId}", consumes = CONTENT_TYPE_REBUY)
   @ResponseStatus(HttpStatus.OK)
   public GamePlayer toggleRebuy(@PathVariable("gameId") int gameId,
-      @PathVariable("gamePlayerId") int gamePlayerId, HttpServletRequest request) {
+      @PathVariable("gamePlayerId") int gamePlayerId) {
     return gameModule.toggleGamePlayerRebuy(gameId, gamePlayerId);
   }
 
   @DeleteMapping("/games/{gameId}/players/{gamePlayerId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteGamePlayer(@PathVariable("gameId") int gameId,
-      @PathVariable("gamePlayerId") int gamePlayerId, HttpServletRequest request) {
+      @PathVariable("gamePlayerId") int gamePlayerId) {
     gameModule.deleteGamePlayer(gameId, gamePlayerId);
   }
 
@@ -136,7 +136,7 @@ public class GameRestController {
 
   @PostMapping(value = "/games/{gameId}/seats", consumes = CONTENT_TYPE_NOTIFY_SEATING)
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void notifySeating(@PathVariable("gameId") int gameId, HttpServletRequest request) {
+  public void notifySeating(@PathVariable("gameId") int gameId) {
     gameModule.notifySeating(gameId);
   }
 }

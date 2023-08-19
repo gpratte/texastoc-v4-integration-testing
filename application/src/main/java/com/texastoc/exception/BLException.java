@@ -36,9 +36,6 @@ public class BLException extends RuntimeException {
 
   @Override
   public String toString() {
-    return "{" +
-        "status='" + status + '\'' +
-        ", details=" + details +
-        '}';
+    return "{code=" + code + " message=" + message + " details=" + details + "}";
   }
 }

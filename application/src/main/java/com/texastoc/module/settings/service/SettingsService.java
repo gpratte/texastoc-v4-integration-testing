@@ -28,11 +28,14 @@ public class SettingsService implements SettingsModule {
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+  // Poor man's cache
+  private SystemSettings systemSettings;
+
   private final SettingsRepository settingsRepository;
   private final String payoutsFileName;
 
   private Map<Integer, List<Payout>> payouts;
-  private Map<Integer, Map<Integer, Integer>> points;
+  private final Map<Integer, Map<Integer, Integer>> points;
 
   public SettingsService(SettingsRepository settingsRepository, @Value("${payouts.fileName}")
       String payoutsFileName, PointsGenerator pointsGenerator) {
@@ -57,9 +60,13 @@ public class SettingsService implements SettingsModule {
   // TODO cache
   @Override
   public SystemSettings get() {
-    Settings settings = settingsRepository.findById(1).get();
-    return new SystemSettings(settings.getId(), settings.getVersion(), settings.getTocConfigs(),
-        payouts, points);
+    if (systemSettings == null) {
+      Settings settings = settingsRepository.findById(1).get();
+      systemSettings = new SystemSettings(settings.getId(), settings.getVersion(),
+          settings.getTocConfigs(),
+          payouts, points);
+    }
+    return systemSettings;
   }
 
   private String getPayoutsAsJson() throws IOException {

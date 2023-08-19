@@ -28,13 +28,13 @@ public class SeasonRestController {
   @PreAuthorize("hasRole('ADMIN')")
   @PostMapping("/seasons")
   @ResponseStatus(HttpStatus.CREATED)
-  public Season createSeason(@RequestBody SeasonStart seasonStart, HttpServletRequest request) {
+  public Season createSeason(@RequestBody SeasonStart seasonStart) {
     return seasonModule.create(seasonStart.getStartYear());
   }
 
   @GetMapping("/seasons/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public Season getSeason(@PathVariable("id") int id, HttpServletRequest request) {
+  public Season getSeason(@PathVariable("id") int id) {
     return seasonModule.get(id);
   }
 
@@ -47,14 +47,14 @@ public class SeasonRestController {
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping(value = "/seasons/{id}", consumes = "application/vnd.texastoc.finalize+json")
   @ResponseStatus(HttpStatus.OK)
-  public Season finalizeSeason(@PathVariable("id") int id, HttpServletRequest request) {
+  public Season finalizeSeason(@PathVariable("id") int id) {
     return seasonModule.end(id);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping(value = "/seasons/{id}", consumes = "application/vnd.texastoc.unfinalize+json")
   @ResponseStatus(HttpStatus.OK)
-  public Season unfinalizeSeason(@PathVariable("id") int id, HttpServletRequest request) {
+  public Season unfinalizeSeason(@PathVariable("id") int id) {
     return seasonModule.open(id);
   }
 

@@ -9,16 +9,16 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 
 /**
  * May be better suited to an API gateway than a servlet filter.
  * <p>Logs http requests/responses</p>
  */
-@Order(1)
+@Order(2)
 @Slf4j
 public class LoggingFilter implements Filter {
 
@@ -35,35 +35,25 @@ public class LoggingFilter implements Filter {
         req.getHeader(CORRELATION_ID) != null ? req.getHeader(CORRELATION_ID)
             : UUID.randomUUID().toString();
 
-    if (req.getHeader(CORRELATION_ID) == null) {
-      // No CORRELATION_ID header so provide it
-      req = new HttpServletRequestWrapper((HttpServletRequest) request) {
-        @Override
-        public String getHeader(String name) {
-          if (CORRELATION_ID.equals(name)) {
-            return correlationId;
-          }
-          return super.getHeader(name);
-        }
-      };
+    try {
+      MDC.put("correlationId", correlationId);
+      res.setHeader(CORRELATION_ID, correlationId);
+
+      log.info(
+          "request={action={} uri={} contentType={}}",
+          req.getMethod(),
+          req.getRequestURI(),
+          req.getContentType());
+
+      chain.doFilter(req, res);
+
+      log.info("response={action={} uri={} status={}}",
+          req.getMethod(),
+          req.getRequestURI(),
+          res.getStatus());
+    } finally {
+      MDC.clear();
     }
-
-    res.setHeader(CORRELATION_ID, correlationId);
-
-    log.info(
-        "request: correlationId={} action={} uri={} contentType={}",
-        req.getHeader(CORRELATION_ID),
-        req.getMethod(),
-        req.getRequestURI(),
-        req.getContentType());
-
-    chain.doFilter(req, res);
-
-    log.info("response: correlationId={} action={} uri={} status={}",
-        req.getHeader(CORRELATION_ID),
-        req.getMethod(),
-        req.getRequestURI(),
-        res.getStatus());
   }
 
   @Override

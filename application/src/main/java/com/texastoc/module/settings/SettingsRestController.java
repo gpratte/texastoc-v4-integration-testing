@@ -1,7 +1,6 @@
 package com.texastoc.module.settings;
 
 import com.texastoc.module.settings.model.SystemSettings;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,7 @@ public class SettingsRestController {
 
   @GetMapping("/settings")
   @ResponseStatus(HttpStatus.OK)
-  public SystemSettings get(HttpServletRequest request) {
+  public SystemSettings get() {
     return settingsModule.get();
   }
 }

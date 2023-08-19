@@ -5,6 +5,39 @@
 INSERT INTO season_payout_settings
 VALUES (1, 2021, '[
   {
+    "lowRange":14000,
+    "highRange":16000,
+    "guaranteed":[
+      {
+        "place":1,
+        "amount":4000,
+        "percent":20
+      }
+    ],
+    "finalTable":[
+      {
+        "place":2,
+        "amount":3500,
+        "percent":20
+      },
+      {
+        "place":3,
+        "amount":3500,
+        "percent":16
+      },
+      {
+        "place":4,
+        "amount":3000,
+        "percent":14
+      },
+      {
+        "place":5,
+        "amount":0,
+        "percent":30
+      }
+    ]
+  },
+  {
     "lowRange":16000,
     "highRange":20000,
     "guaranteed":[
